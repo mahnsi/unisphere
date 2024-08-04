@@ -1,8 +1,20 @@
 package model;
 
+import java.util.List;
+
 public class Cart {
 	User owner;
 	float total_price;
-	//list of products
+	List <Product> items;
+	
+	public Cart() {
+		
+	}
+	
+	public void add(Product product) {
+		items.add(product);
+	}
 
 }
+
+
