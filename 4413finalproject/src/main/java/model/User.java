@@ -5,6 +5,8 @@ public class User {
 	String first_name;
 	String last_name;
 	String email; //use email regex from lab 1 or 2 when accepting	
+	//cart ??
+	//wishlist ??
 	
 	
 	public User(String username, String email, String first_name, String last_name) {
