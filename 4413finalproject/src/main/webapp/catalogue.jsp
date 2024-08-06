@@ -1,13 +1,14 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Specific Item Page</title>
-    <link rel="stylesheet" href="specificItem.css">
+<meta charset="UTF-8">
+<title>Catalogue</title>
+<link rel="stylesheet" href="specificItem.css">
 </head>
 <body>
-    <header>
+<header>
         <div class="promo-banner">Summer Sale 30% OFF New User</div>
         <div class="navbar">
             <div class="logo">UNISphere</div>
@@ -31,26 +32,14 @@
 			</form>
 
         </nav>
-	</header>
+</header>
+    
     <main>
-        <div class="item-page">
-            <div class="item-image">Item Image</div>
-            <div class="item-details">
-                <h1>Item Name</h1>
-                <p>Item details</p>
-                <div class="rating">★★★★★ 10</div>
-                <div>
-                <select>
-                    <option value="size">Select a size</option>
-                    <!-- Add more options as needed -->
-                </select>                  
-                </div>
-                <div>
-                <button class="addToBag">Add to Bag</button>            
-                <button class="wishlistButton">❤</button>
-            </div>
-            </div>
-        </div>
+    
+    <h2>${param.category}</h2>
+    
+    
     </main>
+
 </body>
 </html>
