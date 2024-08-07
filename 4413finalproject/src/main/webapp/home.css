@@ -58,6 +58,10 @@ header {
     display: inline-block;
     border: none;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: purple;
 }
 
 .nav-links {
@@ -145,4 +149,3 @@ main {
     color: #000;
     border: 1px solid #000;
 }
-
