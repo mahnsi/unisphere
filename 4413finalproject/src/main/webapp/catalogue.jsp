@@ -11,7 +11,25 @@
 <body>
 <%@ include file="header/header.jsp" %>
 
-<h1>${param.category}</h1>
+<%
+        // Retrieve the search term from the request
+        String searchQuery = request.getParameter("search");
+        String category = request.getParameter("category");
+        
+        // Display title based on params
+        if (searchQuery != null && !searchQuery.isEmpty()) {
+            
+            out.println("<h2> Search: " + searchQuery + "</h2>");
+            
+        } else if (category != null) {
+            
+            out.println("<h2>" + category + "</h2>");
+            
+        } else {
+            out.println("<h2>Shop All</h2>");
+            
+        }
+ %>
 
 <main>
         <aside class="filter-box">
@@ -21,17 +39,17 @@
                 <select id="category" name="category">
                 <!-- change into a loop thatbgets subcategories for category -->
                     <option value="all">All ${param.category} </option>
-                    <option value="electronics">Sub 1</option>
-                    <option value="clothing">Sub 2</option>
-                    <option value="home">Sub 3</option>
+                    <option value=" ">Sub 1</option>
+                    <option value=" ">Sub 2</option>
+                    <option value=" ">Sub 3</option>
                 </select>
 
                 <label for="price">Price:</label>
-                <input type="range" id="price" name="price" min="0" max="1000" step="10">
+                <input type="range" id="price" name="price_minmax" min="0" max="1000" step="10">
 
                 
 
-                <button type="submit">Apply Filters</button>
+                <button class = addToBag type="submit">Apply Filters</button>
             </form>
         
         </aside>

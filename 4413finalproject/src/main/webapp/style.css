@@ -40,11 +40,24 @@ header {
     padding: 0;
 }
 
-.search-bar {
-    width: 50%;
-    padding: 5px;
-    font-size: 1rem;
+/* Ensure the form takes full width */
+.search-form {
+    width: 100%;
+    display: flex;
+    justify-content: center; /* Center the search bar horizontally */
+    margin: 0; /* Remove default margins */
 }
+
+/* Style the search input */
+.search-bar {
+    width: 100%;
+    max-width: 800px; /* Set a maximum width to keep it from stretching too wide */
+    padding: 10px; /* Add some padding inside the input */
+    border: 1px solid #ccc; /* Add a border */
+    border-radius: 4px; /* Rounded corners */
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+}
+
 
 .icons {
     display: flex;

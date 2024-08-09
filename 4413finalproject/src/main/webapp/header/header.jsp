@@ -6,15 +6,17 @@
     <div class="promo-banner">Summer Sale 30% OFF New User</div>
     <div class="navbar">
         <div class="logo">UNISphere</div>
-        <input type="text" placeholder="Search" class="search-bar">
+        <form class="search-form" method="get" action="catalogue.jsp">
+            <input type="text" name="search" placeholder="Search" class="search-bar">
+        </form>
         <div class="icons">
-		    <a href="" class="icon user-icon">
+		    <a href="profile.jsp" class="icon user-icon">
 		        <i class="fas fa-user"></i>
 		    </a>
 		    <a href="wishlist.jsp" class="icon wishlist-icon">
 		        <i class="fas fa-heart"></i>
 		    </a>
-		    <a href="" class="icon cart-icon">
+		    <a href="cart.jsp" class="icon cart-icon">
 		        <i class="fas fa-shopping-cart"></i>
 		    </a>
 		</div>
