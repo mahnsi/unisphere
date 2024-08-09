@@ -1,17 +1,25 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<link rel="stylesheet" href="header.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <header>
     <div class="promo-banner">Summer Sale 30% OFF New User</div>
     <div class="navbar">
         <div class="logo">UNISphere</div>
         <input type="text" placeholder="Search" class="search-bar">
         <div class="icons">
-            <button class="icon user-icon"></button>
-            <button class="icon wishlist-icon"></button>
-            <button class="icon cart-icon"></button>
-        </div>
+		    <a href="" class="icon user-icon">
+		        <i class="fas fa-user"></i>
+		    </a>
+		    <a href="wishlist.jsp" class="icon wishlist-icon">
+		        <i class="fas fa-heart"></i>
+		    </a>
+		    <a href="" class="icon cart-icon">
+		        <i class="fas fa-shopping-cart"></i>
+		    </a>
+		</div>
+
+
     </div>
     <nav>
         <form class="nav-form" method="get" action="catalogue.jsp">
