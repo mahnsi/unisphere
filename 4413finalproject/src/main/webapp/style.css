@@ -34,11 +34,27 @@ header {
 .logo {
     font-size: 1.5rem;
     font-weight: bold;
+    color: black;
     background: none;
     border: none;
     cursor: pointer;
     padding: 0;
 }
+
+/* a tag links */
+a:link { 
+  text-decoration: none; 
+} 
+a:visited { 
+  text-decoration: none; 
+} 
+a:hover { 
+  text-decoration: none; 
+} 
+a:active { 
+  text-decoration: none; 
+}
+
 
 /* Ensure the form takes full width */
 .search-form {

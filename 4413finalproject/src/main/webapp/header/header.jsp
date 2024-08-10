@@ -5,7 +5,14 @@
 <header>
     <div class="promo-banner">Summer Sale 30% OFF New User</div>
     <div class="navbar">
-        <div class="logo">UNISphere</div>
+    
+		<div class="logo">
+		<a href="home.jsp" class="logo">
+		UNISphere
+		</a>
+		</div>
+	
+        
         <form class="search-form" method="get" action="catalogue.jsp">
             <input type="text" name="search" placeholder="Search" class="search-bar">
         </form>
