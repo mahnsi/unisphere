@@ -20,7 +20,7 @@
             <label for="password">Password:</label>
             <input type="password" id="password" name="password" required>
             
-            <button type="submit">Sign In</button>
+            <button type="submit" class = addToBag >Sign In</button>
         </form>
         <p>Don't have an account? <a href="signup.jsp">Sign up</a></p>
     </div>
