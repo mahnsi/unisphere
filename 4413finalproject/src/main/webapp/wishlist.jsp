@@ -16,27 +16,25 @@
 <main>
 
 <section class="product-list">
-        
-        <!-- change into a loop that gets products -->
-            <div class="product-item">
+    <!-- change into a loop that gets products -->
+    <div class="product-item">
+        <div class="product-info">
             <a href="specificitem.jsp">
                 <img src="example-product.jpg" alt="Example Product">
             </a>
+            <div class="product-details">
                 <h3>Product Name</h3>
                 <p>$XX.XX</p>
             </div>
-            
-            <div class="product-item">
-            <a href="specificitem.jsp">
-                <img src="example-product.jpg" alt="Example Product">
-            </a>
-                <h3>Product Name 2</h3>
-                <p>Product Description 2</p>
-                <p>$YY.YY</p>
-            </div>
-            <!-- Add more product items here -->
-            <!-- change into a loop -->
-        </section>
+        </div>
+        <div class="remove-item">
+            <button class="remove-btn">
+                <img src="garbage-icon.png" alt="Remove from Wishlist">
+            </button>
+        </div>
+    </div>
+</section>
+
         
         
 </main>

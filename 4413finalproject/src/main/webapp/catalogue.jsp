@@ -64,14 +64,7 @@
                 <p>$XX.XX</p>
             </div>
             
-            <div class="product-item">
-            <a href="specificitem.jsp">
-                <img src="example-product.jpg" alt="Example Product">
-            </a>
-                <h3>Product Name 2</h3>
-                <p>Product Description 2</p>
-                <p>$YY.YY</p>
-            </div>
+       
             <!-- Add more product items here -->
             <!-- change into a loop -->
         </section>
