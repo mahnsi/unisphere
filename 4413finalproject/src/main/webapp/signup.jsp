@@ -16,7 +16,7 @@
 <main>
     <div class="form-container">
         <h2>Create An Account</h2>
-        <form action="#">
+        <form method = "post" action="SignUpServlet">
             <label for="email">Email*</label>
             <input name = email type="email" id="email" placeholder="Enter Email" required>
 
