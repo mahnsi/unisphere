@@ -32,14 +32,16 @@
     </div>
     <nav>
         <form class="nav-form" method="get" action="catalogue.jsp">
-            <ul class="nav-links">
-                <li><button type="submit" name="category" value="Sale" class="nav-button">Sale</button></li>
-                <li><button type="submit" name="category" value="Clothing" class="nav-button">Clothing</button></li>
-                <li><button type="submit" name="category" value="Supplies" class="nav-button">Supplies</button></li>
-                <li><button type="submit" name="category" value="Books" class="nav-button">Books</button></li>
-                <li><button type="submit" name="category" value="Tech" class="nav-button">Tech</button></li>
-                <li><button type="submit" name="category" value="Offers" class="nav-button">Offers</button></li>
-            </ul>
-        </form>
+		    <ul class="nav-links">
+		        <li><button type="submit" name="category" value="Sale" class="nav-button">Sale</button></li>
+		        <li><button type="submit" name="category" value="Clothing" class="nav-button">Clothing</button></li>
+		        <li><button type="submit" name="category" value="Supplies" class="nav-button">Supplies</button></li>
+		        <li><button type="submit" name="category" value="Books" class="nav-button">Books</button></li>
+		        <li><button type="submit" name="category" value="Tech" class="nav-button">Tech</button></li>
+		        <!-- Change the Offers button to a link -->
+		        <li><a href="offers.jsp" class="nav-button">Offers</a></li>
+		    </ul>
+		</form>
+
     </nav>
 </header>
