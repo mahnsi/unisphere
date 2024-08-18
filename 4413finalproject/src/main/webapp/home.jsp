@@ -29,7 +29,7 @@
                 <div class="banner-image">Banner Placeholder 2</div>
                 <div class="banner-content">
                     <h2>New Tech Gear</h2>
-                    <p>Noise Canceling headphones Built for Focus</p>
+                    <p>Noise Canceling Headphones Built for Focus</p>
                     <a href="catalogue.jsp" class="btn">Shop Now</a>
                 </div>
             </div>
