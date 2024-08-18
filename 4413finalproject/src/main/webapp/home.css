@@ -152,7 +152,7 @@ footer a:hover {
     }
 
     .banner-box {
-        flex: 1 1 100%; /* Banners take full width on smaller screens */
+        flex: 1 1 100%;
     }
 
     .item-box {
@@ -163,7 +163,7 @@ footer a:hover {
 @media (max-width: 480px) {
     .banner-box,
     .item-box {
-        flex: 1 1 100%; /* One banner per row on very small screens */
+        flex: 1 1 100%; 
     }
 
     .banner-content h2 {
