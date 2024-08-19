@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wishlist</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="cart_and_wishlist.css">
     
 </head>
 
@@ -15,28 +16,23 @@
 
 <main>
 
-<section class="product-list">
-    <!-- change into a loop that gets products -->
-    <div class="product-item">
-        <div class="product-info">
-            <a href="specificitem.jsp">
-                <img src="example-product.jpg" alt="Example Product">
-            </a>
-            <div class="product-details">
-                <h3>Product Name</h3>
-                <p>$XX.XX</p>
+<section class="cart">
+            <h2>My Wishlist</h2>
+            <div class="cart-items">
+                <div class="product">
+				    <div class="product-image"></div>
+				    <div class="product-details">Product Details</div>
+				    <div class="product-actions">
+				        <div class="product-price">$19.99</div>
+				        <button class="remove-button">Remove</button>
+				    </div>
+				</div>
             </div>
-        </div>
-        <div class="remove-item">
-            <button class="remove-btn">
-                <img src="garbage-icon.png" alt="Remove from Wishlist">
-            </button>
-        </div>
-    </div>
-</section>
-
-        
-        
+            
+		    
+            <button class="continue-shopping">Continue Shopping</button>
+        </section>
+     
 </main>
 
 </body>
