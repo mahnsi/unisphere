@@ -4,9 +4,10 @@ public class User {
 	String username;
 	String first_name;
 	String last_name;
-	String email; //use email regex from lab 1 or 2 when accepting	
+	String email; //use email regex from lab 1 or 2 when accepting	no
 	//cart ??
 	//wishlist ??
+	//boolean isAdmin ??
 	
 	
 	public User(String username, String email, String first_name, String last_name) {

@@ -15,34 +15,6 @@
     gap: 20px;
 }
 
-/* Filter Section */
-.filter-box {
-    flex: 1;
-    background-color: #f0f8ff;
-    padding: 20px;
-    border-radius: 5px;
-}
-
-.filter-box h2 {
-    font-size: 24px;
-    margin-bottom: 20px;
-}
-
-.filter-box form label {
-    display: block;
-    margin-bottom: 10px;
-}
-
-.filter-box select,
-.filter-box input[type="range"],
-.filter-box button {
-    width: 100%;
-    margin-bottom: 15px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-
 /* Product Grid */
 .category-grid {
     display: grid;
@@ -72,25 +44,4 @@
 .product-item p {
     font-size: 16px;
     color: #333;
-}
-
-.page-title {
-    grid-column: 1 / -1;
-    padding: 20px 0;
-    text-align: center; /* Center-align the title */
-}
-
-/* Add to Bag Button */
-.addToBag {
-    background-color: #000;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
-    width: 100%;
-}
-
-.addToBag:hover {
-    background-color: #333;
 }
