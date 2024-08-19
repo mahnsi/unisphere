@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wishlist</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="cart_and_wishlist.css">
+    <link rel="stylesheet" href="cart_wishlist_checkout.css">
     
 </head>
 

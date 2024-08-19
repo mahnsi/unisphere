@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Cart</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="cart_and_wishlist.css">
+    <link rel="stylesheet" href="cart_wishlist_checkout.css">
     
 </head>
 
@@ -38,12 +38,14 @@
         </section>
         
         <section class="order-summary">
+        	
             <h3>Order Summary</h3>
             <p>Shipping:</p>
             <p>Tax:</p>
             <p>Discount:</p>
             <p><strong>Estimated Total $0.00</strong></p>
-            <button class="checkout-button">Checkout</button>
+            <a href="checkout.jsp"><button class="checkout-button">Checkout</button></a>
+            
         </section>
     </main>
 
