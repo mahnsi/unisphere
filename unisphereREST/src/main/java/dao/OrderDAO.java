@@ -1,4 +1,5 @@
 package dao;
+import model.*;
 
 import java.sql.Connection;
 
@@ -12,11 +13,8 @@ public class OrderDAO extends DAO{
         super(context);
     }
     
-    public long getTotal() {
-    	return 1;
-    }
     
-    public String getId() {
+    public Order getOrderbyId() {
     	return null;
     }
     

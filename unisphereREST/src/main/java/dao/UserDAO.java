@@ -15,6 +15,7 @@ public class UserDAO extends DAO {
         super(context);
     }
 
+
     public List<User> getAllUsers() {
     	List<User> users = new ArrayList<>();
 
