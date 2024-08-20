@@ -41,13 +41,6 @@ header {
     padding: 0;
 }
 
-.page-title {
-    grid-column: 1 / -1;
-    padding: 20px 0;
-    text-align: center; /* Center-align the title */
-}
-
-
 /* a tag links */
 a:link { 
   text-decoration: none; 
@@ -253,7 +246,7 @@ main {
 }
 
 .form-container input {
-    padding: 10px;
+    padding: 10px; /* Add some padding for better look */
 }
 
 .form-container button {
@@ -267,107 +260,6 @@ main {
 .form-container button:hover {
     background-color: #45a049; /* Change color on hover */
 }
-
-/* dropdowns */
-
-
-/* stuff with a blue nav panel and view section (catalogue, profile) */
-.container {
-   display: flex;
-   width: 80%;
-   margin: 50px auto;
-   background-color: #fff;
-   border-radius: 10px;
-   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-   flex-direction: row;
-   gap: 20px; /* Space between the two sections */
-}
-
-.nav-panel {
-    width: 25%;
-     flex: 1;
-    background-color: #f0f8ff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Slight shadow for distinction */
-
-}
-
-.nav-panel h2 {
-    font-size: 24px;
-    margin-bottom: 20px;
-}
-
-.nav-panel form label {
-    display: block;
-    margin-bottom: 10px;
-}
-
-.nav-panel select,
-.nav-panel input[type="range"],
-.nav-panel button {
-    width: 100%;
-    margin-bottom: 15px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-
-.nav-panel ul {
-    list-style: none;
-    padding: 0;
-}
-
-.nav-panel ul li {
-    margin: 15px 0;
-}
-
-.nav-panel ul li a {
-    text-decoration: none;
-    color: #333;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.nav-panel ul li a:hover {
-    color: #007bff;
-}
-
-.content-panel {
-    width: 75%;
-    padding: 20px;
-    border-radius: 0 10px 10px 0;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Slight shadow for distinction */
-    
-}
-
-.content-panel h2 {
-    margin-top: 0;
-}
-
-/* specific to order details stuff */
-.order-list {
-    margin: 0;
-    padding: 0;
-}
-
-.order-list li {
-    list-style: none;
-    margin: 10px 0;
-    padding: 10px;
-    background-color: #f0f0f0;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.order-list li:hover {
-    background-color: #e0e0e0;
-}
-
-.active {
-    text-decoration: underline;
-}
-
 
 
 
