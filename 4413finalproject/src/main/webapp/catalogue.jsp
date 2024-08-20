@@ -33,7 +33,7 @@
         
 <main class="category-page-container">
         <div class="category-content">
-            <aside class="filter-box">
+            <aside class="nav-panel">
                 <h2>Filter By</h2>
                 <form>
                     <label for="subcategory">Sub Category:</label>
