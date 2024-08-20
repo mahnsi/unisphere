@@ -19,7 +19,7 @@
           <h2>Order #********</h2>
           
           <div class="button-group">
-	        <a href="checkout.jsp"><button class="confirmation-button">View Order Details</button></a>
+	        <a href="profile.jsp?order=1"><button class="confirmation-button">View Order Details</button></a>
 	        <button class="confirmation-button">Continue Shopping</button>
    		 </div>
  </main>
