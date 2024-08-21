@@ -2,22 +2,75 @@ package model;
 
 public class User {
 	String username;
-	String first_name;
-	String last_name;
-	String email; //use email regex from lab 1 or 2 when accepting	no
-	//cart ??
-	//wishlist ??
-	//boolean isAdmin ??
+	String firstName;
+	String lastName;
+	String email;
+	String password;
+	boolean isAdmin;
 	
 	
-	public User(String username, String email, String first_name, String last_name) {
+	public User(String username, String email, String first_name, String last_name, String password) {
 		this.username = username;
 		this.email = email;
-		this.first_name = first_name;
-		this.last_name = last_name;
+		this.firstName = first_name;
+		this.lastName = last_name;
+		isAdmin = false;
+		this.password = password;
 	}
+	
+	public User() {
+    }
 
+
+	public String getUsername() {
+		return username;
+	}
 	
 
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public boolean getIsAdmin() {
+        return isAdmin;
+    }
+    
+    public String getPassword() {
+    	return password;
+    	
+    }
+
+    // Setters
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setFirstName(String first_name) {
+        this.firstName = first_name;
+    }
+
+    public void setLastName(String last_name) {
+        this.lastName = last_name;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setIsAdmin(boolean isAdmin) {
+        this.isAdmin = isAdmin;
+    }
+    
+    public void setPassword(String password) {
+    	this.password = password;
+    }
 }
 

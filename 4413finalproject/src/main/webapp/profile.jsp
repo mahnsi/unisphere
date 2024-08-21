@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+    
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,7 +14,8 @@
 <body>
     <%@ include file="header/header.jsp" %>
     
-    <h1 class="page-title">Welcome, xxx</h1>
+    <h1 class="page-title">Welcome, <span id = usernameDisplay></span></h1>
+    
 
     <div class="container">
         <!-- Navigation Panel -->
@@ -121,6 +124,33 @@
                 showSection('info', document.getElementById('nav-orders'));
             }
         };
+    </script>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+    $(document).ready(function() {
+        // Make the AJAX request to the backend to get the session data
+        $.ajax({
+            url: 'http://localhost:8080/unisphereREST/rest/Auth/session', // Replace with your session endpoint URL
+            method: 'GET',
+            dataType: 'json',
+            xhrFields: {
+                withCredentials: true // Include cookies in the request
+            },
+            success: function(response) {
+                // Handle the successful response
+                console.log("User data from session:", response);
+
+                // Example: Display the username on the page
+                $('#usernameDisplay').text(response.username);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                // Handle errors
+                console.error("Error fetching session data:", textStatus, errorThrown);
+            }
+        });
+    });
+
     </script>
 </body>
 
