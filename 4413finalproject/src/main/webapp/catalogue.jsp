@@ -52,46 +52,51 @@
                 </form>
             </aside>
 
-            <section class="category-grid">
+            <section class="category-grid" id="productGrid">
                 <!--change into loop that gets these from the db -->
-                <div class="product-item">
-                    <a href="specificitem.jsp">
-                        <img src="example-product.jpg" alt="Example Product">
-                    </a>
-                    <h3>Product Name</h3>
-                    <p>$XX.XX</p>
-                </div>
-                <div class="product-item">
-                    <a href="specificitem.jsp">
-                        <img src="example-product.jpg" alt="Example Product">
-                    </a>
-                    <h3>Product Name</h3>
-                    <p>$XX.XX</p>
-                </div>
-                <div class="product-item">
-                    <a href="specificitem.jsp">
-                        <img src="example-product.jpg" alt="Example Product">
-                    </a>
-                    <h3>Product Name</h3>
-                    <p>$XX.XX</p>
-                </div>
-                <div class="product-item">
-                    <a href="specificitem.jsp">
-                        <img src="example-product.jpg" alt="Example Product">
-                    </a>
-                    <h3>Product Name</h3>
-                    <p>$XX.XX</p>
-                </div>
-                <div class="product-item">
-                    <a href="specificitem.jsp">
-                        <img src="example-product.jpg" alt="Example Product">
-                    </a>
-                    <h3>Product Name</h3>
-                    <p>$XX.XX</p>
-                </div>
+                
                 <!-- Add more product items here based on dynamic content -->
+                
             </section>
         </div>
     </main>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+$(document).ready(function() {
+    $.ajax({
+        url: "http://localhost:8080/unisphereREST/rest/Products",
+        type: "GET",
+        dataType: "json",
+        success: function(products) {
+            var productGrid = $("#productGrid");
+            productGrid.empty(); // Clear the grid before adding new items
+            console.log(products);
+            
+
+            $.each(products, function(index, product) {
+            	console.log(product.id, product.title, product.price);
+
+            	var productItem = '<div class="product-item">' +
+                '<a href="specificItem.jsp?id=' + product.id + '">' +
+                '<img src="product-images/' + product.id + '.jpg" alt="' + product.title + '">' +
+                '</a>' +
+                '<h3>' + product.title + '</h3>' +
+                '<p>$' + product.price.toFixed(2) + '</p>' +
+                '</div>';
+
+            productGrid.append(productItem);
+
+
+
+            });
+        },
+        error: function(xhr, status, error) {
+            console.log("Failed to load products:", error);
+        }
+    });
+});
+
+</script>
 </body>
+
 </html>

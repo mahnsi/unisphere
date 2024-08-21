@@ -2,6 +2,7 @@ package dao;
 import model.*;
 
 import java.sql.Connection;
+import java.util.List;
 
 import javax.servlet.ServletContext;
 
@@ -13,6 +14,14 @@ public class OrderDAO extends DAO{
         super(context);
     }
     
+    
+    public List<Order> getAllOrders() {
+    	return null;
+    }
+    
+    public List<Order> getOrdersByUsername(String username) {
+    	return null;
+    }
     
     public Order getOrderbyId() {
     	return null;

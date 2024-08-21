@@ -12,12 +12,6 @@ public class CartDAO extends DAO{
         super(context);
     }
     
-    public long getTotal() {
-    	return 1;
-    }
     
-    public void add() {
-    	
-    }
 
 }
