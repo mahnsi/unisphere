@@ -147,6 +147,8 @@
 		
 		            // Example: Display the username on the page
 		            $('#usernameDisplay').text(response.username);
+		            
+		            //display all the other user info like addresses and payments
 		        },
 		        error: function(jqXHR, textStatus, errorThrown) {
 		            // Handle errors (user is not signed in or session expired)
