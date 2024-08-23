@@ -24,6 +24,7 @@
                 <li><a id="nav-info" onclick="showSection('info', this)">My Info</a></li>
                 <li><a id="nav-orders" onclick="showSection('orders', this)">Order History</a></li>
                 <li><a id="nav-payments" onclick="showSection('payments', this)">My Payments</a></li>
+                <li><a id="nav-address" onclick="showSection('addresses', this)">My Addresses</a></li>
             </ul>
         </div>
 
@@ -32,8 +33,7 @@
         <div class="content-panel">
             <div id="info" class="section" style="display: none;">
                 <h2>My Info</h2>
-                <p>to do</p>
-                <a href="signin.jsp">Sign In</a>
+                <p id ="userinfo">change firstname lastname username here</p>
                 <button id="logoutButton">Log Out</button>
             </div>
 
@@ -54,7 +54,11 @@
 
             <div id="payments" class="section" style="display: none;">
                 <h2>My Payments</h2>
-                <p>to do</p>
+                <p>add payment button to add payment method</p>
+            </div>
+            <div id="addresses" class="section" style="display: none;">
+                <h2>Addresses</h2>
+                <p>add address button to add address</p>
             </div>
         </div>
     </div>
