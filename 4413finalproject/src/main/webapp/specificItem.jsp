@@ -10,7 +10,7 @@
 </head>
 
 <body>
-<%@ include file="header/header.jsp" %>
+<%@ include file="header.html" %>
 
 <main>
         <div class="item-page">

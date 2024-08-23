@@ -12,7 +12,7 @@
 </head>
 
 <body>
-<%@ include file="header/header.jsp" %>
+<%@ include file="header.html" %>
 
  <main class = "orderconfirmation">
           <h2>Thank You for You Order!</h2>

@@ -11,7 +11,7 @@
 </head>
 
 <body>
-    <%@ include file="header/header.jsp" %>
+    <%@ include file="header.html" %>
 
     <div class="page-title">
         <%

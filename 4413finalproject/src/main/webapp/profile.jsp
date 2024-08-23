@@ -11,7 +11,7 @@
     
 </head>
 <body>
-    <%@ include file="header/header.jsp" %>
+    <%@ include file="header.html" %>
     
     <h1 class="page-title">Welcome, <span id = usernameDisplay></span></h1>
     

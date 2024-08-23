@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    <%@ include file="header.html" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,11 +8,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Offers</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="offers.css">
+    <link rel="stylesheet" href="style/offers.css">
 </head>
 
 <body>
-<%@ include file="header/header.jsp" %>
 
 <main class="offers-main">
     <h2>Offers</h2>

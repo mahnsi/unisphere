@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ include file="header.html" %>
+    
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,7 +12,6 @@
 </head>
 
 <body>
-<%@ include file="../header/header.jsp"  %>
 
 <main >
     <h2>List of All Users</h2>

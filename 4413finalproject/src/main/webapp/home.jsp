@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-    <%@ include file="header/header.jsp" %>
+    <%@ include file="header.html" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -29,8 +29,8 @@
             <div class="banner-box">
                 <div class="banner-image">Banner Placeholder 2</div>
                 <div class="banner-content">
-                    <h2>New Tech Gear</h2>
-                    <p>Noise Canceling Headphones Built for Focus</p>
+                    <h2>Shop our Catalogue</h2>
+                    <p>Books for Focus</p>
                     <a href="catalogue.jsp" class="btn">Shop Now</a>
                 </div>
             </div>
@@ -64,30 +64,6 @@
                 <h3>Product 4</h3>
                 <p>$49.99</p>
                 <a href="specificItem.jsp?id=4" class="btn">View Details</a>
-            </div>
-            <div class="item-box">
-                <div class="item-image">Image Placeholder</div>
-                <h3>Product 5</h3>
-                <p>$59.99</p>
-                <a href="specificItem.jsp?id=5" class="btn">View Details</a>
-            </div>
-            <div class="item-box">
-                <div class="item-image">Image Placeholder</div>
-                <h3>Product 6</h3>
-                <p>$69.99</p>
-                <a href="specificItem.jsp?id=6" class="btn">View Details</a>
-            </div>
-            <div class="item-box">
-                <div class="item-image">Image Placeholder</div>
-                <h3>Product 7</h3>
-                <p>$79.99</p>
-                <a href="specificItem.jsp?id=7" class="btn">View Details</a>
-            </div>
-            <div class="item-box">
-                <div class="item-image">Image Placeholder</div>
-                <h3>Product 8</h3>
-                <p>$89.99</p>
-                <a href="specificItem.jsp?id=8" class="btn">View Details</a>
             </div>
         </div>
     </section>

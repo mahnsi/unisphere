@@ -10,7 +10,7 @@
 </head>
 
 <body>
-<%@ include file="../header/header.jsp" %>
+<%@ include file="header.html" %>
 
 <main class="admin-main">
     <h2>Admin</h2>
@@ -18,7 +18,7 @@
         <form action="salesHistory.jsp">
             <button type="submit" class="admin-btn">View Sales History</button>
         </form>
-        <form action="userlist.jsp">
+        <form action="userlist.html">
             <button type="submit" class="admin-btn">View User List</button>
         </form>
         <form action="inventory.jsp">
