@@ -143,14 +143,14 @@ public class ProductDAO extends DAO {
                 float price = rs.getFloat("price");
                 String title = rs.getString("title");
                 String description = rs.getString("description");
-                int categoryId = rs.getInt("category_id");
+                int subcategoryId = rs.getInt("subcategory_id");
 
                 product = new Product();
                 product.setId(id);
                 product.setPrice(price);
                 product.setTitle(title);
                 product.setDescription(description);
-                product.setCategory(categoryId); // Store category ID directly
+                product.setSubCategory(subcategoryId); // Store category ID directly
             }
 
         } catch (SQLException ex) {
@@ -167,7 +167,7 @@ public class ProductDAO extends DAO {
 
         try {
             connection = getConnection();
-            String query = "INSERT INTO Product (id, price, title, description, category_id) VALUES (?, ?, ?, ?, ?)";
+            String query = "INSERT INTO Product (id, price, title, description, subcategory_id) VALUES (?, ?, ?, ?, ?)";
 
             PreparedStatement stmt = connection.prepareStatement(query);
             
@@ -175,7 +175,7 @@ public class ProductDAO extends DAO {
             stmt.setFloat(2, product.getPrice());
             stmt.setString(3, product.getTitle());
             stmt.setString(4, product.getDescription());
-            stmt.setInt(5, product.getCategoryId()); // Use category ID directly
+            stmt.setInt(5, product.getSubCategoryId()); // Use category ID directly
 
             int rowsAffected = stmt.executeUpdate();
             if (rowsAffected > 0) {
@@ -289,6 +289,43 @@ public class ProductDAO extends DAO {
 
 	    System.out.println(subcategoryNames);
 	    return subcategoryNames;
+	}
+
+	public List<Product> getProductsByKeyword(String key) {
+		List<Product> products = new ArrayList<>();
+
+        try {
+            connection = getConnection();//expiration date on featured
+            String query = "select * from product where title like ? or description like ?";
+            PreparedStatement stmt = connection.prepareStatement(query);
+            stmt.setString(1, key);
+            stmt.setString(2, key);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                float price = rs.getFloat("price");
+                String title = rs.getString("title");
+                String description = rs.getString("description");
+                int categoryId = rs.getInt("category_id");
+
+                Product product = new Product();
+                product.setId(id);
+                product.setPrice(price);
+                product.setTitle(title);
+                product.setDescription(description);
+                product.setCategory(categoryId); // Store category ID directly
+
+                products.add(product);
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            closeConnection(connection);
+        }
+
+        return products;
 	}
 
 

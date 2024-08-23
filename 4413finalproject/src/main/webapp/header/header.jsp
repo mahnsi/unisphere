@@ -2,6 +2,8 @@
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<link rel="stylesheet" href="style/style.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <header>
     <div class="promo-banner">Summer Sale 30% OFF New User</div>
     <div class="navbar">
@@ -44,3 +46,21 @@
 
     </nav>
 </header>
+<script>
+$(document).ready(function() {
+    $.ajax({
+        url: 'http://localhost:8080/unisphereREST/rest/Auth/session',
+        method: 'GET',
+        dataType: 'json',
+        success: function(data) {
+            if (data.isAdmin) {
+                $('.icons').prepend('<a href="admn.jsp" class="icon tool-icon"><i class="fas fa-toolbox"></i></a>');
+                console.log("admi");
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error('Error fetching session data:', error);
+        }
+    });
+});
+</script>

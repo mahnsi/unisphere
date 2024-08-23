@@ -6,12 +6,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin - UNISphere</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="admin.css"> <!-- Link to the admin stylesheet -->
+    <link rel="stylesheet" href="style/admin.css"> <!-- Link to the admin stylesheet -->
 </head>
 
 <body>
-<%@ include file="header/header.jsp" %>
+<%@ include file="../header/header.jsp" %>
 
 <main class="admin-main">
     <h2>Admin</h2>
@@ -19,7 +18,7 @@
         <form action="salesHistory.jsp">
             <button type="submit" class="admin-btn">View Sales History</button>
         </form>
-        <form action="userList.jsp">
+        <form action="userlist.jsp">
             <button type="submit" class="admin-btn">View User List</button>
         </form>
         <form action="inventory.jsp">

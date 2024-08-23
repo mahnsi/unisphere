@@ -66,7 +66,7 @@ $("#signinform").submit(function(e) {
     $(document).ready(function() {
         // Make the AJAX request to the backend to get the session data
         $.ajax({
-            url: 'http://localhost:8080/unisphereREST/rest/Auth/session', // Replace with your session endpoint URL
+            url: 'http://localhost:8080/unisphereREST/rest/Auth/session',
             method: 'GET',
             dataType: 'json',
             xhrFields: {

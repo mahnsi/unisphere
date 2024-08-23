@@ -64,6 +64,17 @@ public class ProductService {
 	}
     
     @GET
+	@Path("/getProductsByKeyword/{key}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Product> getProductsByKeyword(@PathParam("key") String key){
+    	System.out.println("REST getProductsByKeyword called");
+    	List<Product> products = productDAO.getProductsByKeyword(key);
+        return products;
+		
+		
+	}
+    
+    @GET
 	@Path("/getFeaturedProducts")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Product> getUserbyUsername(){

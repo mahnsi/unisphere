@@ -1,18 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ include file="header/header.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Checkout Page</title>
-    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="cart_wishlist_checkout.css">
     
 </head>
 
 <body>
-<%@ include file="header/header.jsp" %>
 
  <main>
         <section class="cart">

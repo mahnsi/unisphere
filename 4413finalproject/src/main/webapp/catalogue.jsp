@@ -6,8 +6,7 @@
     <meta charset="UTF-8">
     <title>Catalogue</title>
     
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="catalogue.css">
+    <link rel="stylesheet" href="style/catalogue.css">
     
 </head>
 
