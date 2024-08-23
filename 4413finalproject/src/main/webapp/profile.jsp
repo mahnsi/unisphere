@@ -34,7 +34,7 @@
                 <h2>My Info</h2>
                 <p>to do</p>
                 <a href="signin.jsp">Sign In</a>
-                <p>log out</p>
+                <button id="logoutButton">Log Out</button>
             </div>
 
             <div id="orders" class="section" style="display: none;">
@@ -128,30 +128,51 @@
     
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
-    $(document).ready(function() {
-        // Make the AJAX request to the backend to get the session data
-        $.ajax({
-            url: 'http://localhost:8080/unisphereREST/rest/Auth/session', // Replace with your session endpoint URL
-            method: 'GET',
-            dataType: 'json',
-            xhrFields: {
-                withCredentials: true // Include cookies in the request
-            },
-            success: function(response) {
-                // Handle the successful response
-                console.log("User data from session:", response);
+		$(document).ready(function() {
+		    // Make the AJAX request to the backend to get the session data
+		    $.ajax({
+		        url: 'http://localhost:8080/unisphereREST/rest/Auth/session', // Replace with your session endpoint URL
+		        method: 'GET',
+		        dataType: 'json',
+		        xhrFields: {
+		            withCredentials: true // Include cookies in the request
+		        },
+		        success: function(response) {
+		            // Handle the successful response
+		            console.log("User data from session:", response);
+		
+		            // Example: Display the username on the page
+		            $('#usernameDisplay').text(response.username);
+		        },
+		        error: function(jqXHR, textStatus, errorThrown) {
+		            // Handle errors (user is not signed in or session expired)
+		            console.error("Error fetching session data:", textStatus, errorThrown);
+		            window.location.href = 'signin.jsp';
+		        }
+		    });
+		
+		    // Handle logout button click
+		    $('#logoutButton').click(function() {
+		        $.ajax({
+		            url: 'http://localhost:8080/unisphereREST/rest/Auth/logout', 
+		            method: 'POST',
+		            xhrFields: {
+		                withCredentials: true // Include cookies in the request
+		            },
+		            success: function(response) {
+		                // Redirect to home page after successful logout
+		                window.location.href = 'home.jsp';
+		            },
+		            error: function(jqXHR, textStatus, errorThrown) {
+		                // Handle errors
+		                console.error("Error logging out:", textStatus, errorThrown);
+		                
+		            }
+		        });
+		    });
+		});
+</script>
 
-                // Example: Display the username on the page
-                $('#usernameDisplay').text(response.username);
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                // Handle errors
-                console.error("Error fetching session data:", textStatus, errorThrown);
-            }
-        });
-    });
-
-    </script>
 </body>
 
 </html>

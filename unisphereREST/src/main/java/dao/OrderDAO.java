@@ -23,11 +23,11 @@ public class OrderDAO extends DAO{
     	return null;
     }
     
-    public Order getOrderbyId() {
+    public Order getOrderbyId(int order_id) {
     	return null;
     }
     
-    public void insert() {
+    public void insert(Order order) {
     	
     }
 

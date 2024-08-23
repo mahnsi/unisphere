@@ -31,15 +31,14 @@ public class ProductDAO extends DAO {
                 float price = rs.getFloat("price");
                 String title = rs.getString("title");
                 String description = rs.getString("description");
-                int categoryId = rs.getInt("category_id");
-                String categoryName = rs.getString("category_id");
+                int categoryId = rs.getInt("subcategory_id");
 
                 Product product = new Product();
                 product.setId(id);
                 product.setPrice(price);
                 product.setTitle(title);
                 product.setDescription(description);
-                product.setCategory(categoryId); // Store category ID directly
+                product.setSubCategory(categoryId); // Store category ID directly
 
                 products.add(product);
             }
@@ -58,8 +57,11 @@ public class ProductDAO extends DAO {
 
         try {
             connection = getConnection();
-            String query = "SELECT * from PRODUCT where category_id = " + category_id;
+            String query = "SELECT * FROM Product p " +
+                    "JOIN Subcategory s ON p.subcategory_id = s.id " +
+                    "WHERE s.category_id = ?";
             PreparedStatement stmt = connection.prepareStatement(query);
+            stmt.setInt(1, category_id); 
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
@@ -67,15 +69,14 @@ public class ProductDAO extends DAO {
                 float price = rs.getFloat("price");
                 String title = rs.getString("title");
                 String description = rs.getString("description");
-                int categoryId = rs.getInt("category_id");
-                String categoryName = rs.getString("category_id");
+                int subcategoryId = rs.getInt("subcategory_id");
 
                 Product product = new Product();
                 product.setId(id);
                 product.setPrice(price);
                 product.setTitle(title);
                 product.setDescription(description);
-                product.setCategory(categoryId); // Store category ID directly
+                product.setSubCategory(subcategoryId);
 
                 products.add(product);
             }
@@ -87,6 +88,45 @@ public class ProductDAO extends DAO {
         }
 
         return products;
+    }
+    
+    public List<Product> getProductsBySubCategory(String category){
+    	System.out.println("getProductsBySubCategory called");
+    	List<Product> products = new ArrayList<>();
+
+        try {
+            connection = getConnection();
+            String query = "SELECT p.* FROM PRODUCT p JOIN SUBCATEGORY s ON p.subcategory_id = s.id WHERE s.desc = ?";
+            PreparedStatement stmt = connection.prepareStatement(query);
+            stmt.setString(1, category); // subcategoryName is the name of the subcategory you are searching for
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                float price = rs.getFloat("price");
+                String title = rs.getString("title");
+                String description = rs.getString("description");
+                int subcategoryId = rs.getInt("subcategory_id");
+
+                Product product = new Product();
+                product.setId(id);
+                product.setPrice(price);
+                product.setTitle(title);
+                product.setDescription(description);
+                product.setSubCategory(subcategoryId); // Store category ID directly
+
+                products.add(product);
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            closeConnection(connection);
+        }
+
+        System.out.println(products);
+        return products;
+    	
     }
 
     public Product getProductById(int id) {
@@ -187,4 +227,69 @@ public class ProductDAO extends DAO {
             closeConnection(connection);
         }
     }
+
+	public List<Product> getFeaturedProducts() {
+		List<Product> products = new ArrayList<>();
+
+        try {
+            connection = getConnection();//expiration date on featured
+            String query = "select * from product join featured_item on product.id = featured_item.product_id";
+            PreparedStatement stmt = connection.prepareStatement(query);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                float price = rs.getFloat("price");
+                String title = rs.getString("title");
+                String description = rs.getString("description");
+                int categoryId = rs.getInt("category_id");
+
+                Product product = new Product();
+                product.setId(id);
+                product.setPrice(price);
+                product.setTitle(title);
+                product.setDescription(description);
+                product.setCategory(categoryId); // Store category ID directly
+
+                products.add(product);
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            closeConnection(connection);
+        }
+
+        return products;
+	}
+	
+	public List<String> getSubcategoriesByCategory(String category) {
+	    List<String> subcategoryNames = new ArrayList<>();
+	    System.out.println("getSubcategoriesByCategory called");
+
+	    try {
+	        connection = getConnection();
+	        String query = "SELECT s.desc " +
+                    "FROM subcategory s " +
+                    "JOIN category c ON s.category_id = c.id " +
+                    "WHERE c.name = ?";
+	        PreparedStatement stmt = connection.prepareStatement(query);
+	        stmt.setString(1, category);
+	        ResultSet rs = stmt.executeQuery();
+
+	        while (rs.next()) {
+	            String name = rs.getString("desc");
+	            subcategoryNames.add(name);
+	        }
+	    } catch (SQLException ex) {
+	        ex.printStackTrace();
+	    } finally {
+	        closeConnection(connection);
+	    }
+
+	    System.out.println(subcategoryNames);
+	    return subcategoryNames;
+	}
+
+
 }

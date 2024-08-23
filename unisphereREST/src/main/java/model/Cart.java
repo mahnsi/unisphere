@@ -31,8 +31,14 @@ public class Cart {
 	}
 	
 	public void updateQuantity(Product product, int x) {
+		//can only be called on a product thats in the cart
 		items.put(product, x);
 		
+	}
+	
+	public float getTotalPrice() {
+		//loop through hashmap and add up prices
+		return 0;
 	}
 
 }

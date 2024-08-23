@@ -44,10 +44,43 @@ public class ProductService {
     @GET
 	@Path("/getProductsByCategory/{catid}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<Product> getUserbyUsername(@PathParam("catid") int catid){
+	public List<Product> getProductsByCategory(@PathParam("catid") int catid){
 		
     	List<Product> products = productDAO.getProductsByCategory(catid);
         return products;
+		
+		
+	}
+    
+    @GET
+	@Path("/getProductsBySubcategory/{cat}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Product> getProductsBySubCategory(@PathParam("cat") String cat){
+    	System.out.println("REST getProductsBySubCategory called");
+    	List<Product> products = productDAO.getProductsBySubCategory(cat);
+        return products;
+		
+		
+	}
+    
+    @GET
+	@Path("/getFeaturedProducts")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Product> getUserbyUsername(){
+		
+    	List<Product> products = productDAO.getFeaturedProducts();
+        return products;
+		
+		
+	}
+    
+    @GET
+	@Path("/getSubcategoriesByCategory/{cat}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<String> getSubcategoriesByCategory(@PathParam("cat") String cat){
+		
+    	List<String> cats = productDAO.getSubcategoriesByCategory(cat);
+        return cats;
 		
 		
 	}

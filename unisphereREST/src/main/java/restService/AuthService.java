@@ -60,13 +60,15 @@ public class AuthService {
     @POST
     @Path("/logout")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response logout(HttpServletRequest request) {
+    public Response logout(@Context HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         if (session != null) {
             session.invalidate();
         }
-        return Response.ok("Logged out successfully").build();
+        // Return a JSON object with a success message
+        return Response.ok("{\"message\":\"Logged out successfully\"}").build();
     }
+
     
     @GET
     @Path("/session")

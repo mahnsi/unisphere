@@ -24,7 +24,7 @@ public abstract class DAO {
     
     protected Connection getConnection() throws SQLException {
         String path = context.getRealPath("/UniSphere.db");
-        System.out.println(path);
+        //System.out.println(path);
         return DriverManager.getConnection("jdbc:sqlite:" + path);
     }
 

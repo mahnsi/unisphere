@@ -27,7 +27,7 @@
     </div>
 </main>
 
-</body>
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
 //Function that's called when the above form is submitted
@@ -62,4 +62,26 @@ $("#signinform").submit(function(e) {
 
 
 </script>
+    <script>
+    $(document).ready(function() {
+        // Make the AJAX request to the backend to get the session data
+        $.ajax({
+            url: 'http://localhost:8080/unisphereREST/rest/Auth/session', // Replace with your session endpoint URL
+            method: 'GET',
+            dataType: 'json',
+            xhrFields: {
+                withCredentials: true // Include cookies in the request
+            },
+            success: function(response) {
+            	window.location.href = 'profile.jsp';
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                // Handle errors
+                console.error("Error fetching session data:", textStatus, errorThrown);
+            }
+        });
+    });
+
+    </script>
+    </body>
 </html>

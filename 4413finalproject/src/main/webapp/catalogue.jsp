@@ -29,74 +29,111 @@
                 out.println("<h1>Shop All</h1>");
             }
         %>
-       </div>
+    </div>
         
 <main class="category-page-container">
-        <div class="category-content">
-            <aside class="nav-panel">
-                <h2>Filter By</h2>
-                <form>
-                    <label for="subcategory">Sub Category:</label>
-                    <select id="subcategory" name="subcategory">
-                        <!-- change to a loop that retrieves subcategories for the selected category from db -->
-                        <option value="all">All ${param.category} </option>
-                        <option value="sub1">Sub 1</option>
-                        <option value="sub2">Sub 2</option>
-                        <option value="sub3">Sub 3</option>
-                    </select>
+    <div class="category-content">
+        <aside class="nav-panel">
+            <h2>Filter By</h2>
+            <form id="filterForm">
+                <label for="subcategory">Sub Category:</label>
+                <select id="subcategory" name="subcategory">
+                    <!-- Subcategories will be populated dynamically -->
+                </select>
 
-                    <label for="price">Price:</label>
-                    <input type="range" id="price" name="price_minmax" min="0" max="1000" step="10">
+                <label for="price">Price:</label>
+                <input type="range" id="price" name="price_minmax" min="0" max="1000" step="10">
 
-                    <button class="addToBag" type="submit">Apply Filters</button>
-                </form>
-            </aside>
+            </form>
+        </aside>
 
-            <section class="category-grid" id="productGrid">
-                <!--change into loop that gets these from the db -->
-                
-                <!-- Add more product items here based on dynamic content -->
-                
-            </section>
-        </div>
-    </main>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <section class="category-grid" id="productGrid">
+            <!-- Products will be populated dynamically -->
+        </section>
+    </div>
+</main>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
 $(document).ready(function() {
-    $.ajax({
-        url: "http://localhost:8080/unisphereREST/rest/Products",
-        type: "GET",
-        dataType: "json",
-        success: function(products) {
-            var productGrid = $("#productGrid");
-            productGrid.empty(); // Clear the grid before adding new items
-            console.log(products);
-            
+    // Get the category from the URL parameters
+    var category = new URLSearchParams(window.location.search).get('category');
 
-            $.each(products, function(index, product) {
-            	console.log(product.id, product.title, product.price);
+    // Populate subcategories based on the selected category
+    if (category) {
+        $.ajax({
+            url: "http://localhost:8080/unisphereREST/rest/Products/getSubcategoriesByCategory/" + encodeURIComponent(category),
+            type: "GET",
+            dataType: "json",
+            success: function(subcategories) {
+                var subcategorySelect = $("#subcategory");
+                subcategorySelect.empty(); // Clear any existing options
 
-            	var productItem = '<div class="product-item">' +
-                '<a href="specificItem.jsp?id=' + product.id + '">' +
-                '<img src="product-images/' + product.id + '.jpg" alt="' + product.title + '">' +
-                '</a>' +
-                '<h3>' + product.title + '</h3>' +
-                '<p>$' + product.price.toFixed(2) + '</p>' +
-                '</div>';
+                // Add an "All" option
+                subcategorySelect.append('<option value="all">All ' + category + '</option>');
 
-            productGrid.append(productItem);
+                // Add options for each subcategory
+                $.each(subcategories, function(index, subcategory) {
+                    subcategorySelect.append('<option value="' + encodeURIComponent(subcategory) + '">' + subcategory + '</option>');
+                });
 
+                // Load products for the initial category (or all if no subcategory is selected)
+                loadProducts();
+            },
+            error: function(xhr, status, error) {
+                console.log("Failed to load subcategories:", error);
+            }
+        });
+    } else {
+        // If no category is specified, just load all products
+        loadProducts();
+    }
 
+    // Load products based on the selected subcategory or all products
+    function loadProducts() {
+        var subcategory = $("#subcategory").val();
+        var url = "http://localhost:8080/unisphereREST/rest/Products/";
 
-            });
-        },
-        error: function(xhr, status, error) {
-            console.log("Failed to load products:", error);
+        if (subcategory && subcategory !== 'all') {
+            url = "http://localhost:8080/unisphereREST/rest/Products/getProductsBySubCategory/" + encodeURIComponent(subcategory);
         }
+
+        $.ajax({
+            url: url,
+            type: "GET",
+            dataType: "json",
+            success: function(products) {
+                var productGrid = $("#productGrid");
+                productGrid.empty(); // Clear the grid before adding new items
+                console.log(products);
+
+                $.each(products, function(index, product) {
+                    console.log(product.id, product.title, product.price);
+
+                    var productItem = '<div class="product-item">' +
+                        '<a href="specificItem.jsp?id=' + product.id + '">' +
+                        '<img src="product-images/' + product.id + '.jpg" alt="' + product.title + '">' +
+                        '</a>' +
+                        '<h3>' + product.title + '</h3>' +
+                        '<p>$' + product.price.toFixed(2) + '</p>' +
+                        '</div>';
+
+                    productGrid.append(productItem);
+                });
+            },
+            error: function(xhr, status, error) {
+                console.log("Failed to load products:", error);
+            }
+        });
+    }
+
+    // Load products when the subcategory is changed
+    $("#subcategory").change(function(event) {
+        loadProducts(); // Reload products based on the selected filters
     });
 });
-
 </script>
-</body>
 
+
+</body>
 </html>
