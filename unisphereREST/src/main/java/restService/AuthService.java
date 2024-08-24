@@ -73,7 +73,7 @@ public class AuthService {
     @GET
     @Path("/session")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getSessionData(@Context HttpServletRequest request) {
+    public Response getSessionUser(@Context HttpServletRequest request) {
         HttpSession session = request.getSession(false); // Get existing session
         if (session != null) {
             User user = (User) session.getAttribute("user");

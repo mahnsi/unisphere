@@ -7,6 +7,7 @@ public class Cart {
 	User owner;
 	float total_price;
 	Map <Product, Integer> items;
+	private int offer_id;
 	
 	public Cart() {
 		items =  new HashMap<>();
@@ -37,9 +38,21 @@ public class Cart {
 	}
 	
 	public float getTotalPrice() {
-		//loop through hashmap and add up prices
-		return 0;
+	    float total = 0;
+	    for (Map.Entry<Product, Integer> entry : items.entrySet()) {
+	        Product product = entry.getKey();
+	        int quantity = entry.getValue();
+	        total += product.getPrice() * quantity;
+	    }
+	    return total;
 	}
+
+	public void setOffer(int offer_id) {
+		this.offer_id = offer_id;
+		
+	}
+
+
 
 }
 

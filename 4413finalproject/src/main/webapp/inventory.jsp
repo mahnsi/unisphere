@@ -128,7 +128,7 @@ $(document).ready(function() {
                                 '<a href="product-detail.jsp?id=' + product.id + '">' +
                                     '<h3>' + product.title + '</h3>' +
                                     '<p>Price: $' + product.price.toFixed(2) + '</p>' +
-                                    '<p>Stock: ' + product.stock + '</p>' +
+                                    '<p>Stock: <span id="STOCKNUM">' +  product.stock + '</span></p>' +
                                     '<p>Sold: ' + product.sold + '</p>' +
                                 '</a>' +
                                 '<label for="update-quantity-' + product.id + '">Update Stock:</label>' +
@@ -200,7 +200,7 @@ $(document).ready(function() {
                 });
             },
             error: function(err) {
-                console.error('Error fetching subcategories:', err);
+                console.error(err);
                 $('#subcategory').html('<option value="">Error loading subcategories</option>');
             }
         });
@@ -208,18 +208,17 @@ $(document).ready(function() {
 
     function updateInventory(productId, quantity) {
         $.ajax({
-            url: `${apiUrl}/updateInventory`,
-            method: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify({
-                id: productId,
-                quantity: quantity
-            }),
+            url: "http://localhost:8080/unisphereREST/rest/Products/updateInventory/?id=" + productId +"&quantity="+ quantity,
+            method: 'PUT',
             success: function(response) {
+            	$('#STOCKNUM').text(quantity);
                 alert('Inventory updated successfully');
+                
             },
-            error: function(err) {
-                console.error('Error updating inventory:', err);
+            error: function(xhr, status, error) {
+                console.error('Request Status:', status); // Log the status of the request
+                console.error('Error Message:', error); // Log the error message
+                console.error('Response Text:', xhr.responseText); // Log the response text from the server
                 alert('Error updating inventory. Please try again later.');
             }
         });

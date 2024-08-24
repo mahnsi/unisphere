@@ -7,6 +7,8 @@ import dao.CartDAO;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -42,7 +44,7 @@ public class CartService {
     @Path("/addToCart")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response addToCart(Cart cart) {
+    public Response addToCart(Cart cart, Product product) {
 		return null;
 
         
@@ -67,6 +69,25 @@ public class CartService {
 		return null;
         
         
+    }
+    
+    @GET
+    @Path("/session")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getSessionCart(@Context HttpServletRequest request) {
+        HttpSession session = request.getSession(false); // Get existing session
+        if (session != null) {
+            Cart cart = (Cart) session.getAttribute("cart");
+            if (cart != null) {
+                return Response.ok(cart).build();
+            } else {
+                return Response.status(Response.Status.UNAUTHORIZED)
+                               .entity("No user in session").build();
+            }
+        } else {
+            return Response.status(Response.Status.UNAUTHORIZED)
+                           .entity("No session found").build();
+        }
     }
 
 }

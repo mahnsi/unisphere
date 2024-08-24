@@ -32,31 +32,47 @@
     
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
-	$(document).ready(function() {
-	    // Get the item ID from the URL
-	    const urlParams = new URLSearchParams(window.location.search);
-	    const itemId = urlParams.get('id');
-	    
-	    if (itemId) {
-	        // Fetch the product data from the server
-	        $.ajax({
-	            url: 'http://localhost:8080/unisphereREST/rest/Products/getProductById/' + itemId,
-	            method: 'GET',
-	            success: function(data) {
-	                // Update the page with the product data
-	                $('#item-name').text(data.title);
-	                $('#item-description').text(data.description);
-	                $('#item-price').text("$" + data.price);
-	                $('#item-image').attr('src', "product-images/" + data.id + ".jpg");
-	            },
-	            error: function(err) {
-	                console.error('Error fetching product data:', err);
-	            }
-	        });
-	    }
-	});
-
-
+$(document).ready(function() {
+    // Get the item ID from the URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const itemId = urlParams.get('id');
+    
+    if (itemId) {
+        // Fetch the product data from the server
+        $.ajax({
+            url: 'http://localhost:8080/unisphereREST/rest/Products/getProductById/' + itemId,
+            method: 'GET',
+            success: function(product) {
+                // dynamically update the page with the product data
+                $('#item-name').text(product.title);
+                $('#item-description').text(product.description);
+                $('#item-price').text("$" + product.price);
+                $('#item-image').attr('src', "product-images/" + product.id + ".jpg");
+                
+                
+                $('#add-to-cart-btn').on('click', function() {
+                    // Fetch the current user session
+                    $.ajax({
+                        url: 'http://localhost:8080/unisphereREST/rest/Cart/addToCart',
+                        method: 'GET',
+                        contentType: 'application/json',
+                        data:JSON.stringify(product),
+                        success: function(response) {
+                            
+                        },
+                        error: function(err) {
+                            console.error('Error adding to cart', err);
+                        }
+                    });
+                });
+            },
+            error: function(err) {
+                console.error('Error fetching product data:', err);
+            }
+        });
+    }
+});
 </script>
+
 </body>
 </html>

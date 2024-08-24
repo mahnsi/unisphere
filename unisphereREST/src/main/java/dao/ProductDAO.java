@@ -383,5 +383,36 @@ public class ProductDAO extends DAO {
 	    return subcategoryNames;
 	}
 
+	public void updateProduct(int id, Product product) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public boolean updateProductQuantity(int id, int quantity) {
+	    // Define the SQL update query
+		System.out.println("DAO updateInventory called");
+	    String sql = "UPDATE product SET inventory_count = ? WHERE id = ?";
+
+	    // Use try-with-resources to ensure resources are closed
+	    try (Connection connection = getConnection(); // Method to obtain a database connection
+	         PreparedStatement statement = connection.prepareStatement(sql)) {
+
+	        // Set parameters for the SQL query
+	        statement.setInt(1, quantity); // Set the quantity
+	        statement.setInt(2, id); // Set the product ID
+
+	        // Execute the update
+	        int rowsAffected = statement.executeUpdate();
+	        System.out.println(rowsAffected);
+	        // Check if the update was successful
+	        return rowsAffected > 0; // Return true if at least one row was updated, otherwise false
+
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        System.out.println("dao fail");
+	        return false;
+	    }
+	}
+
 
 }
