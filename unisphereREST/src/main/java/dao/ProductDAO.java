@@ -32,6 +32,8 @@ public class ProductDAO extends DAO {
                 String title = rs.getString("title");
                 String description = rs.getString("description");
                 int categoryId = rs.getInt("subcategory_id");
+                int stock = rs.getInt("inventory_count");
+                int sold = rs.getInt("purchase_count");
 
                 Product product = new Product();
                 product.setId(id);
@@ -39,6 +41,8 @@ public class ProductDAO extends DAO {
                 product.setTitle(title);
                 product.setDescription(description);
                 product.setSubCategory(categoryId); // Store category ID directly
+                product.setStock(stock);
+                product.setSold(sold);
 
                 products.add(product);
             }
@@ -326,6 +330,57 @@ public class ProductDAO extends DAO {
         }
 
         return products;
+	}
+	
+	public void addProduct(Product product) throws SQLException {
+        String sql = "INSERT INTO products (title, description, subcategory_id, price, inventory_count, purchase_count) VALUES (?, ?, ?, ?, ?, ?)";
+        try (PreparedStatement statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
+            statement.setString(1, product.getTitle());
+            statement.setString(2, product.getDescription());
+            statement.setInt(3, product.getSubCategoryId());
+            statement.setDouble(4, product.getPrice());
+            statement.setInt(5, product.getStock());
+            statement.setInt(6, product.getSold());
+            
+
+            int affectedRows = statement.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("Creating product failed, no rows affected.");
+            }
+
+            // Optionally, retrieve the generated ID and set it to the product object
+            try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    product.setId(generatedKeys.getInt(1));
+                } else {
+                    throw new SQLException("Creating product failed, no ID obtained.");
+                }
+            }
+        }
+    }
+
+	public List<String> getAllCategories() {
+		List<String> subcategoryNames = new ArrayList<>();
+	    System.out.println("DAO getAllCategories called");
+
+	    try {
+	        connection = getConnection();
+	        String query = "SELECT * from category";
+	        PreparedStatement stmt = connection.prepareStatement(query);
+	        ResultSet rs = stmt.executeQuery();
+
+	        while (rs.next()) {
+	            String name = rs.getString("name");
+	            subcategoryNames.add(name);
+	        }
+	    } catch (SQLException ex) {
+	        ex.printStackTrace();
+	    } finally {
+	        closeConnection(connection);
+	    }
+
+	    System.out.println(subcategoryNames);
+	    return subcategoryNames;
 	}
 
 

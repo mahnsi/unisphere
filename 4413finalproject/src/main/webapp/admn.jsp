@@ -15,10 +15,10 @@
 <main class="admin-main">
     <h2>Admin</h2>
     <div class="admin-buttons">
-        <form action="salesHistory.jsp">
+        <form action="saleshistory.jsp">
             <button type="submit" class="admin-btn">View Sales History</button>
         </form>
-        <form action="userlist.html">
+        <form action="userlist.jsp">
             <button type="submit" class="admin-btn">View User List</button>
         </form>
         <form action="inventory.jsp">

@@ -13,10 +13,54 @@
 
 <body>
 
-<main >
+<main>
     <h2>List of All Users</h2>
-    
+    <div id="user-list"></div> <!-- User list container -->
 </main>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+    // URL of the endpoint to fetch users
+    const apiUrl = "http://localhost:8080/unisphereREST/rest/Users";
+    
+    console.log("hi"); // Check if the script is running
+    
+    // Fetch users from the API
+    $.ajax({
+        url: apiUrl,
+        method: 'GET',
+        dataType: 'json',
+        success: function(users) {
+            // Find the user-list container
+            const userList = $('#user-list');
+            
+            // Check if users exist
+            if (users.length > 0) {
+                // Iterate through the list of users and create HTML for each user
+                users.forEach(function(user) {
+                    const userHtml = 
+                        '<div class="user-item">' +
+                            '<h3><a href="profile.jsp?mode=admin&username=' + encodeURIComponent(user.username) + '">' + user.username + '</a></h3>' +
+                            '<p>Email: ' + user.email + '</p>' +
+                            '<p>Role: ' + (user.isAdmin ? 'Admin' : 'User') + '</p>' +
+                        '</div>';
+                    
+                    // Append the user HTML to the user-list container
+                    userList.append(userHtml);
+                });
+            } else {
+                // If no users are found, display a message
+                userList.append('<p>No users found.</p>');
+            }
+        },
+        error: function(err) {
+            console.error('Error fetching users:', err);
+            $('#user-list').append('<p>Error loading users. Please try again later.</p>');
+        }
+    });
+});
+</script>
 
 </body>
 </html>

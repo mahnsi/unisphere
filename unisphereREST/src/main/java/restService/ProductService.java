@@ -92,9 +92,35 @@ public class ProductService {
 		
     	List<String> cats = productDAO.getSubcategoriesByCategory(cat);
         return cats;
-		
-		
-	}
-
+    }
     
-}
+    @GET
+	@Path("/getAllCategories")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<String> getCategories(String cat){
+		
+    	List<String> cats = productDAO.getAllCategories();
+        return cats;
+    }
+		
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response addProduct(Product product) {
+        try {
+            // Add the product using the ProductDAO
+            productDAO.addProduct(product);
+
+            // Return a success response with the created product's ID
+            return Response.status(Response.Status.CREATED)
+                           .entity("Product added successfully with ID: " + product.getId())
+                           .build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Return a server error response in case of failure
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                           .entity("Error adding product: " + e.getMessage())
+                           .build();
+        }
+    }
+    }

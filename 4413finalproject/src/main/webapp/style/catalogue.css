@@ -33,8 +33,10 @@
 .product-item img {
     max-width: 100%;
     height: auto;
+    max-height: 180px; /* Maximum height */
     border-radius: 5px;
 }
+
 
 .product-item h3 {
     font-size: 18px;

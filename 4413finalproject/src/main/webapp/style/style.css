@@ -368,6 +368,32 @@ main {
     text-decoration: underline;
 }
 
+.user-item {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #f9f9f9;
+}
+
+.user-item h3 {
+    margin: 0;
+    font-size: 1.2em;
+}
+
+.user-item p {
+    margin: 5px 0;
+}
+
+.user-item h3 a {
+    color: #333; /* Text color */
+    text-decoration: none; /* Removes underline */
+}
+
+.user-item h3 a:hover {
+    text-decoration: underline; /* Adds underline on hover */
+}
+
+
 
 
 

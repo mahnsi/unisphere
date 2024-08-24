@@ -1,0 +1,36 @@
+@charset "UTF-8";
+/* admin.css */
+
+.product-item {
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin: 10px;
+    text-align: center;
+}
+
+.product-item h3 {
+    margin: 10px 0;
+    font-size: 1.2em;
+}
+
+.product-item p {
+    color: #333;
+    font-size: 1em;
+}
+
+.update-quantity {
+    margin: 5px;
+}
+
+.update-btn {
+    margin-top: 5px;
+    padding: 5px 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.update-btn:hover {
+    background-color: #45a049;
+}

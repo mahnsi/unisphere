@@ -7,6 +7,8 @@ public class Product {
     private String description;
     private int category_id;
     private int subcategory_id;
+    private int stock;
+    private int sold;
     
 
     // Getter and Setter for id
@@ -60,5 +62,21 @@ public class Product {
 
     public void setSubCategory(int category) {
         this.category_id = category;
+    }
+    
+    public int getStock() {
+        return this.stock;
+    }
+
+    public void setStock(int s) {
+        this.stock = s;
+    }
+    
+    public int getSold() {
+        return this.stock;
+    }
+    
+    public void setSold(int s) {
+    	this.sold = s;
     }
 }

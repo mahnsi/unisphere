@@ -53,3 +53,96 @@
         font-size: 0.8rem; 
     }
 }
+
+/* admin.css */
+
+.product-item {
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin: 10px;
+    text-align: center;
+}
+
+.product-item h3 {
+    margin: 10px 0;
+    font-size: 1.2em;
+}
+
+.product-item p {
+    color: #333;
+    font-size: 1em;
+}
+
+.update-quantity {
+    margin: 5px;
+}
+
+.update-btn {
+    margin-top: 5px;
+    padding: 5px 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.update-btn:hover {
+    background-color: #45a049;
+}
+
+/* Scrollable product list container */
+#product-list {
+    max-height: 600px; /* Set a maximum height for the scrollable area */
+    overflow-y: auto;  /* Enable vertical scrolling */
+    border: 1px solid #ddd; /* Optional border for better visibility */
+    padding: 10px; /* Optional padding */
+}
+/* Styles for the add product form */
+#add-product-form {
+    display: none; /* Initially hidden */
+    border: 1px solid #ddd;
+    padding: 20px;
+    margin-top: 20px;
+    background-color: #f9f9f9;
+    width: 300px; /* Adjust width as needed */
+}
+
+#add-product-form input,
+#add-product-form select {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    box-sizing: border-box;
+}
+
+#add-product-form button {
+    padding: 10px 15px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+#add-product-form button:hover {
+    background-color: #45a049;
+}
+
+/* Container for products and form */
+#admin-container {
+    display: flex;
+}
+
+#product-list {
+    max-height: 600px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    padding: 10px;
+    flex: 1; /* Allow this to take up the remaining space */
+}
+
+#add-product-container {
+    margin-left: 20px;
+    flex-shrink: 0; /* Prevent shrinking */
+}
+
+
