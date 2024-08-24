@@ -54,7 +54,7 @@ $(document).ready(function() {
                     // Fetch the current user session
                     $.ajax({
                         url: 'http://localhost:8080/unisphereREST/rest/Cart/addToCart',
-                        method: 'GET',
+                        method: 'POST',
                         contentType: 'application/json',
                         data:JSON.stringify(product),
                         success: function(response) {

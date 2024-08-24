@@ -28,7 +28,7 @@ public class OrderDAO extends DAO{
     }
     
     public void insert(Order order) {
-    	
+    	//for place order
     }
 
 }

@@ -97,7 +97,7 @@ public class ProductService {
     @GET
 	@Path("/getAllCategories")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<String> getCategories(String cat){
+	public List<String> getCategories(){
 		
     	List<String> cats = productDAO.getAllCategories();
         return cats;

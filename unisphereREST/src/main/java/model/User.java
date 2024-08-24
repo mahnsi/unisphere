@@ -7,6 +7,7 @@ public class User {
 	String email;
 	String password;
 	boolean isAdmin;
+	Cart cart;
 	
 	
 	public User(String username, String email, String first_name, String last_name, String password) {
@@ -47,6 +48,10 @@ public class User {
     	return password;
     	
     }
+    
+    public Cart getCart() {
+    	return cart;
+    }
 
     // Setters
     public void setUsername(String username) {
@@ -71,6 +76,10 @@ public class User {
     
     public void setPassword(String password) {
     	this.password = password;
+    }
+    
+    public void setCart(Cart cart) {
+    	this.cart = cart;
     }
 }
 

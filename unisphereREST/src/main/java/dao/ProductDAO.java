@@ -179,7 +179,7 @@ public class ProductDAO extends DAO {
             stmt.setFloat(2, product.getPrice());
             stmt.setString(3, product.getTitle());
             stmt.setString(4, product.getDescription());
-            stmt.setInt(5, product.getSubCategoryId()); // Use category ID directly
+            stmt.setInt(5, product.getSubCategory()); // Use category ID directly
 
             int rowsAffected = stmt.executeUpdate();
             if (rowsAffected > 0) {
@@ -337,7 +337,7 @@ public class ProductDAO extends DAO {
         try (PreparedStatement statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, product.getTitle());
             statement.setString(2, product.getDescription());
-            statement.setInt(3, product.getSubCategoryId());
+            statement.setInt(3, product.getSubCategory());
             statement.setDouble(4, product.getPrice());
             statement.setInt(5, product.getStock());
             statement.setInt(6, product.getSold());

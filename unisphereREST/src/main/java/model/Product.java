@@ -5,8 +5,8 @@ public class Product {
     private float price;
     private String title;
     private String description;
-    private int category_id;
-    private int subcategory_id;
+    private int categoryId;
+    private int subcategory;
     private int stock;
     private int sold;
     
@@ -49,19 +49,19 @@ public class Product {
 
     // Getter and Setter for category
     public int getCategoryId() {
-        return this.category_id;
+        return this.categoryId;
     }
 
     public void setCategory(int category) {
-        this.category_id = category;
+    	this.categoryId = category;
     }
     
-    public int getSubCategoryId() {
-        return this.category_id;
+    public int getSubCategory() {
+        return this.subcategory;
     }
 
     public void setSubCategory(int category) {
-        this.category_id = category;
+        this.subcategory = category;
     }
     
     public int getStock() {

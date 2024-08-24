@@ -1,55 +1,75 @@
 package model;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
 
 public class Cart {
 	User owner;
-	float total_price;
-	Map <Product, Integer> items;
-	private int offer_id;
+	float totalPrice;
+	List <CartItem> items;
+	
+	private int offer;
 	
 	public Cart() {
-		items =  new HashMap<>();
+		items = new ArrayList<>();
 
-		
 	}
 	
 	public void add(Product product) {
-		
-		if (items.containsKey(product)) {
-			items.put(product, items.get(product) + 1);
-			return;
+        // Check if the product already exists in the cart
+        for (CartItem item : items) {
+            if (item.getProduct().getId() == product.getId()) {
+                item.setQuantity(item.getQuantity() + 1);
+                return;
+            }
         }
-		
-		items.put(product, 1);
-	}
+        // If the product is not found, add it as a new CartItem
+        CartItem newItem = new CartItem(product, 1);
+        items.add(newItem);
+    }
 	
 	public void remove(Product product) {
-		//entirley remove
-		items.remove(product);
-		
-	}
+        items.removeIf(item -> item.getProduct().getId()==(product.getId()));
+    }
+
+    // Method to update the quantity of a product in the cart
+    public void updateQuantity(Product product, int quantity) {
+        for (CartItem item : items) {
+            if (item.getProduct().equals(product)) {
+                if (quantity > 0) {
+                    item.setQuantity(quantity);
+                } else {
+                    // If quantity is 0 or less, remove the item from the cart
+                    remove(product);
+                }
+                return;
+            }
+        }
+    }
+
 	
-	public void updateQuantity(Product product, int x) {
-		//can only be called on a product thats in the cart
-		items.put(product, x);
-		
-	}
+    public float getTotalPrice() {
+        float totalPrice = 0.0f;
+        
+        for (CartItem item : items) {
+            totalPrice += item.getProduct().getPrice() * item.getQuantity();
+        }
+        this.totalPrice = totalPrice;
+        return totalPrice;
+    }
 	
-	public float getTotalPrice() {
-	    float total = 0;
-	    for (Map.Entry<Product, Integer> entry : items.entrySet()) {
-	        Product product = entry.getKey();
-	        int quantity = entry.getValue();
-	        total += product.getPrice() * quantity;
-	    }
-	    return total;
+	public List <CartItem> getItems(){
+		return items;
 	}
 
 	public void setOffer(int offer_id) {
-		this.offer_id = offer_id;
+		this.offer = offer_id;
 		
+	}
+	
+	public int getOffer() {
+		return offer;
 	}
 
 

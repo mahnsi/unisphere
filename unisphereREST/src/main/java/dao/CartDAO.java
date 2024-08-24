@@ -20,34 +20,37 @@ public class CartDAO extends DAO{
         Cart cart = new Cart();
 
         try {
-            String query = "SELECT p.id, p.name, p.price, ci.quantity, p.description, c.offer_id " +
-                           "FROM cart_item ci " +
-                           "JOIN product p ON ci.product_id = p.id " +
-                           "JOIN cart c ON ci.added_by = c.owner " +
-                           "JOIN user u ON c.username = u.username " +
-                           "WHERE u.username = ?";
+            String query = "SELECT * from cart_item join product p on product_id = p.id where added_by = '" + username + "'";
             connection = getConnection();
             PreparedStatement statement = connection.prepareStatement(query);
-            statement.setString(1, username);
             ResultSet rs = statement.executeQuery();
             int offer_id = -1;
             while (rs.next()) {
-                int productId = rs.getInt("id");
+                int productId = rs.getInt("product_id");
                 String title = rs.getString("title");
-                String desc = rs.getString("desc");
+                String desc = rs.getString("description");
                 float price = rs.getFloat("price");
                 int quantity = rs.getInt("quantity");
-                offer_id = rs.getInt("offer_id");
+                int sold = rs.getInt("purchase_count");
+                int stock = rs.getInt("inventory_count");
+                int subcategory = rs.getInt("subcategory_id");
+                System.out.println(productId);
+                
+                //offer_id = rs.getInt("offer_id");
 
                 Product product = new Product();
                 product.setId(productId);
                 product.setTitle(title);
-                product.setDescription(username);
+                product.setDescription(desc);
                 product.setPrice(price);
+                product.setStock(stock); 
+                product.setSold(sold); 
+                product.setSubCategory(subcategory);
+                
                 cart.add(product);
                 cart.updateQuantity(product, quantity);
             }
-            cart.setOffer(offer_id);
+            //cart.setOffer(offer_id);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -80,16 +83,18 @@ public class CartDAO extends DAO{
     public void addToCart(String username, Product product) {
         try {
             connection = getConnection();
-
+            System.out.println("addtocart dao called");
             // Check if the product is already in the cart
             String checkQuery = "SELECT quantity FROM CART_ITEM WHERE added_by = ? AND product_id = ?";
             PreparedStatement checkStmt = connection.prepareStatement(checkQuery);
             checkStmt.setString(1, username);
             checkStmt.setInt(2, product.getId());
             ResultSet rs = checkStmt.executeQuery();
+            rs.next();
 
             if (rs.next()) {
                 // Product already in the cart, update quantity
+            	System.out.println("already in cart");
                 int currentQuantity = rs.getInt("quantity");
                 String updateQuery = "UPDATE CART_ITEM SET quantity = ? WHERE added_by = ? AND product_id = ?";
                 PreparedStatement updateStmt = connection.prepareStatement(updateQuery);
@@ -99,6 +104,7 @@ public class CartDAO extends DAO{
                 updateStmt.executeUpdate();
             } else {
                 // Product not in the cart, insert new entry
+            	System.out.println("dao add new entry to cart");
                 String insertQuery = "INSERT INTO CART_ITEM (added_by, product_id, quantity) VALUES (?, ?, ?)";
                 PreparedStatement insertStmt = connection.prepareStatement(insertQuery);
                 insertStmt.setString(1, username);
@@ -129,11 +135,6 @@ public class CartDAO extends DAO{
             closeConnection(connection);
         }
     }
-
-
-
-
-    
     
 
 }

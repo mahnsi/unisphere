@@ -1,3 +1,5 @@
+package restService;
+
 import java.io.IOException;
 import java.security.SecureRandom;
 import java.sql.Connection;
