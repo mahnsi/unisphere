@@ -79,6 +79,39 @@
             <a href="orderconfirmation.jsp"><button class="checkout-button">Proceed to Payment</button></a>
         </section>
     </main>
+    <script>
+	/* JS or jQuery.. to do ajax call */
+	
+	 $(document).ready(function() {
+        $(".shipping-address").submit(function(event) {
+            event.preventDefault(); // Prevent default form submission
+            processOrder();
+        });
 
+        function processOrder() {
+            var formData = {
+                firstName: $("#first-name").val(),
+                lastName: $("#last-name").val(),
+                streetAddress: $("#street-address").val(),
+                apartment: $("#apartment").val(),
+                city: $("#city").val(),
+                province: $("#province").val()
+            };
+
+            $.ajax({
+                type: "POST",
+                url: "processOrder",
+                data: formData,
+                success: function(response) {
+                    window.location.href = "orderconfirmation.jsp?orderNumber=" + response.orderNumber;
+                }
+
+                error: function() {
+                    alert("Error processing your order. Please try again.");
+                }
+            });
+        }
+    });
+    </script>
 </body>
 </html>

@@ -37,13 +37,14 @@
             </div>
 
             <div id="orders" class="section" style="display: none;">
-                <h2>Order History</h2>
-                <ul class="order-list">
-                <!-- change to a loop that actually gets orders from db -->
-                    <li onclick="showOrderDetails('1234')">Order #1234</li>
-                    <li onclick="showOrderDetails('5678')">Order #5678</li>
-                </ul>
-            </div>
+			    <h2>Order History</h2>
+			    <ul class="order-list">
+			        <c:forEach var="order" items="${orders}">
+			            <li onclick="showOrderDetails('${order.id}')">Order #${order.id}</li>
+			        </c:forEach>
+			    </ul>
+			</div>
+
 
             <div id="order-details" class="section" style="display: none;">
                 <h2>Order Details</h2>
@@ -101,11 +102,28 @@
             document.getElementById('order-details').style.display = 'block';
 
             // Set the order details
-            document.getElementById('order-info').innerText = `Details for ${orderId}:
-            \n- Date created
-            \n- Item: Example Product 1
-            \n- Quantity: 2
-            \n- Total: $xxx`;
+            $.ajax({
+                url: `http://localhost:8080/unisphereREST/rest/orders/${orderId}`, // Replace with your endpoint
+                method: 'GET',
+                dataType: 'json',
+                success: function(order) {
+                    // Populate the order-info section with data
+                    let orderDetails = `Details for Order #${order.id}:
+                    \n- Date created: ${order.dateCreated}
+                    \n- Items:`;
+                    
+                    order.items.forEach(function(item) {
+                        orderDetails += `\n- Item: ${item.productName}, Quantity: ${item.quantity}`;
+                    });
+                    
+                    orderDetails += `\n- Total: $${order.total}`;
+                    
+                    document.getElementById('order-info').innerText = orderDetails;
+                },
+                error: function() {
+                    alert('Error fetching order details');
+                }
+            });
         }
 
         // Function to go back to order history
@@ -177,6 +195,7 @@
 		    });
 		});
 </script>
+
 
 </body>
 
