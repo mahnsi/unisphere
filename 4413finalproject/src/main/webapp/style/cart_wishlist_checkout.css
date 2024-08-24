@@ -205,3 +205,8 @@ main {
     width: 200px;
     text-align: center;
 }
+
+.product-image img{
+	max-height: 100%;
+	max-width: 100%;
+}

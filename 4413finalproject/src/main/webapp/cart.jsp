@@ -20,7 +20,7 @@
         
         <section class="order-summary">
             <h3>Order Summary</h3>
-            <p>Shipping: <span id="shipping-cost">$0.00</span></p>
+            <p>Shipping: <span id="shipping-cost">$5.00</span></p>
             <p>Tax: <span id="tax-cost">$0.00</span></p>
             <p>Discount: <span id="discount">$0.00</span></p>
             <p><strong>Estimated Total: <span id="estimated-total">$0.00</span></strong></p>
@@ -54,48 +54,44 @@
             // Function to fetch cart items for a specific user
             function fetchCartItems(username) {
                 $.ajax({
-                    url: "http://localhost:8080/unisphereREST/Cart/getCartByUser/" + username, 
+                    url: "http://localhost:8080/unisphereREST/rest/Cart/getCartByUser/" + username, 
                     method: 'GET',
                     success: function(cart) {
                         let cartItems = cart.items;
-                        let total = 0;
+                        let total = cart.totalPrice;
 
                         // Loop through the cart items
                         $.each(cartItems, function(index, item) {
                             let product = item.product;
                             let quantity = item.quantity;
 
-                            // Calculate total price for each item
-                            let itemTotalPrice = cart.total
-
                             // Generate HTML for each item
-                            let productHTML = `
-                                <div class="product">
-                                    <div class="product-image">
-                                        <img src="${product.imageUrl}" alt="${product.name}">
-                                    </div>
-                                    <div class="product-details">
-                                        <p>${product.name}</p>
-                                        <p>${product.description}</p>
-                                    </div>
-                                    <div class="product-actions">
-                                        <div class="product-price">$${product.price.toFixed(2)}</div>
-                                        <div class="product-quantity">
-                                            <label for="quantity-${index}">Qty:</label>
-                                            <input type="number" id="quantity-${index}" name="quantity" value="${quantity}" min="1">
-                                            <button class="update-button" data-product-id="${product.id}">Update</button>
-                                        </div>
-                                        <button class="remove-button" data-product-id="${product.id}">Remove</button>
-                                    </div>
-                                </div>
-                            `;
+                            let productHTML = 
+							    '<div class="product">' +
+							        '<div class="product-image">' +
+							            '<img src="product-images/' + product.id + '.jpg" alt="' + product.title + '">' +
+							        '</div>' +
+							        '<div class="product-details">' +
+							            '<p>' + product.title + '</p>' +
+							        '</div>' +
+							        '<div class="product-actions">' +
+							            '<div class="product-price">$' + product.price.toFixed(2) + '</div>' +
+							            '<div class="product-quantity">' +
+							                '<label for="quantity-' + index + '">Qty:</label>' +
+							                '<input type="number" id="quantity-' + index + '" name="quantity" value="' + quantity + '" min="1">' +
+							                '<button class="update-button" data-product-id="' + product.id + '">Update</button>' +
+							            '</div>' +
+							            '<button class="remove-button" data-product-id="' + product.id + '">Remove</button>' +
+							        '</div>' +
+							    '</div>';
+
 
                             // Append the generated HTML to the cart-items div
                             $('.cart-items').append(productHTML);
                         });
 
                         // Update the estimated total in the order summary
-                        $('#estimated-total').text(`$${total.toFixed(2)}`);
+                        $('#estimated-total').text(total);
                     },
                     error: function(error) {
                         console.error('Error fetching cart items:', error);

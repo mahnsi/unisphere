@@ -61,7 +61,7 @@
             </div>
             <div class="item-box">
                 <div class="item-image">
-                    <img src="product-images/4.png" alt="Product 3">
+                    <img src="product-images/4.jpg" alt="Product 3">
                 </div>
                 <h3>I heart UniSphere Cap</h3>
                 <p>$39.99</p>

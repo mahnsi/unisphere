@@ -17,6 +17,7 @@ public class CartDAO extends DAO{
     }
     
     public Cart getCartByUsername(String username) {
+    	System.out.println("DAO getcartbyuser called");
         Cart cart = new Cart();
 
         try {

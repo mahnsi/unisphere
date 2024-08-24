@@ -31,6 +31,7 @@ public class CartService {
     @Path("/getCartByUser/{username}")
     @Produces(MediaType.APPLICATION_JSON)
     public Cart getCartByUser(@PathParam("username") String username) {
+    	System.out.println("REST getcartbyuser called");
         Cart cart = cartDAO.getCartByUsername(username);
         if (cart == null) {
         	System.out.println("null cart");
