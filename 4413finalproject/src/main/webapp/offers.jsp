@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-    <%@ include file="header.html" %>
+<%@ include file="header.html" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -17,11 +17,15 @@
     <h2>Offers</h2>
     <div class="offers-container">
         <div class="offer-box">
-            <div class="offer-image">30% off New User</div>
+            <div class="offer-image">
+                <img src="images/offer-user.jpg" alt="30% off New User">
+            </div>
             <button class="apply-btn">Apply</button>
         </div>
         <div class="offer-box">
-            <div class="offer-image">Free Shipping over $100</div>
+            <div class="offer-image">
+                <img src="images/ship.jpg" alt="Free Shipping over $100">
+            </div>
             <button class="apply-btn">Apply</button>
         </div>
     </div>
