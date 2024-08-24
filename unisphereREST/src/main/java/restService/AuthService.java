@@ -88,7 +88,6 @@ public class AuthService {
                            .entity("No session found").build();
         }
     }
-
     
 
 }
