@@ -67,7 +67,7 @@
 
                             // Generate HTML for each item
                             let productHTML = 
-							    '<div class="product">' +
+							    '<div class="product" data-product-id="' + product.id + '">' +
 							        '<div class="product-image">' +
 							            '<img src="product-images/' + product.id + '.jpg" alt="' + product.title + '">' +
 							        '</div>' +
@@ -85,18 +85,80 @@
 							        '</div>' +
 							    '</div>';
 
-
                             // Append the generated HTML to the cart-items div
                             $('.cart-items').append(productHTML);
                         });
 
                         // Update the estimated total in the order summary
-                        $('#estimated-total').text(total);
+                        $('#estimated-total').text('$' + total.toFixed(2));
+
+                        // Attach event listeners for remove and update buttons
+                        $('.cart-items').on('click', '.remove-button', function() {
+                            let productId = $(this).data('product-id');
+                            removeCartItem(productId);
+                        });
+
+                        $('.cart-items').on('click', '.update-button', function() {
+                            let productId = $(this).data('product-id');
+                            let quantity = $('#quantity-' + index).val();
+                            updateCartItem(productId, quantity);
+                        });
                     },
                     error: function(error) {
                         console.error('Error fetching cart items:', error);
                     }
                 });
+            }
+
+            // Function to remove item from the cart
+            function removeCartItem(productId) {
+                $.ajax({
+                    url: 'http://localhost:8080/unisphereREST/rest/Cart/removeFromCart/' + productId,
+                    method: 'DELETE',
+                    success: function(response) {
+                        // Remove the item from the cart view
+                        $('.product[data-product-id="' + productId + '"]').remove();
+
+                        // Optionally update the total after removal
+                        updateCartTotal();
+                    },
+                    error: function(error) {
+                        console.error('Error removing cart item:', error);
+                    }
+                });
+            }
+
+            // Function to update the quantity of an item in the cart
+            function updateCartItem(productId, quantity) {
+                $.ajax({
+                    url: 'http://localhost:8080/unisphereREST/rest/Cart/updateCartItem',
+                    method: 'PUT',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        productId: productId,
+                        quantity: quantity
+                    }),
+                    success: function(response) {
+                        // Optionally update the total after quantity change
+                        updateCartTotal();
+                    },
+                    error: function(error) {
+                        console.error('Error updating cart item:', error);
+                    }
+                });
+            }
+
+            // Function to recalculate and update the cart total
+            function updateCartTotal() {
+                let total = 0.00;
+
+                $('.product').each(function() {
+                    let price = parseFloat($(this).find('.product-price').text().replace('$', ''));
+                    let quantity = parseInt($(this).find('input[name="quantity"]').val());
+                    total += price * quantity;
+                });
+
+                $('#estimated-total').text('$' + total.toFixed(2));
             }
         });
     </script>
