@@ -13,6 +13,7 @@ import java.util.List;
 import javax.servlet.ServletContext;
 
 public class UserDAO extends DAO {
+	 private Connection connection;
 
     public UserDAO(ServletContext context) {
         super(context);
@@ -76,9 +77,9 @@ public class UserDAO extends DAO {
 
     public User getFullUserByUsername(String username) {
         User user = null;
-        String query = "SELECT u.*, a.*, p.* FROM User u " +
-                       "LEFT JOIN Address a ON u.address_id = a.id " +
-                       "LEFT JOIN Payment p ON u.payment_id = p.id " +
+        String query = "SELECT * FROM User u " +
+                       "JOIN Address a ON u.address_id = a.id " +
+                       "JOIN Payment p ON u.payment_id = p.id " +
                        "WHERE u.username = ?";
 
         try (Connection connection = getConnection();
@@ -96,31 +97,25 @@ public class UserDAO extends DAO {
                     user = new User(username, email, firstName, lastName, password);
                     user.setIsAdmin(isAdmin);
 
-                    // Set Address
-                    int addressId = rs.getInt("a.id");
-                    if (addressId > 0) {
-                        Address address = new Address();
-                        address.setId(addressId);
-                        address.setStreetAddress(rs.getString("address_line_1"));
-                        address.setApartment(rs.getString("address_line_2"));
-                        address.setCity(rs.getString("city"));
-                        address.setProvince(rs.getString("province"));
-                        address.setPostalCode(rs.getString("postalcode"));
-                        address.setCountry(rs.getString("country"));
-                        user.setAddress(address);
-                    }
+                    Address address = new Address();
+                    address.setStreetAddress(rs.getString("street_address"));
+                    address.setFirstName(rs.getString("fname"));
+                    address.setLastName(rs.getString("lname"));
+                    address.setApartment(rs.getString("apt"));
+                    address.setCity(rs.getString("city"));
+                    address.setProvince(rs.getString("province"));
+                    address.setPostalCode(rs.getString("postalcode"));
+                    address.setCountry(rs.getString("country"));
+                    user.setAddress(address);
 
-                    // Set Payment
-                    int paymentId = rs.getInt("p.id");
-                    if (paymentId > 0) {
-                        Payment payment = new Payment();
-                        payment.setId(paymentId);
-                        payment.setCardHolderName(rs.getString("card_holder_name"));
-                        payment.setCardNumber(rs.getString("card_number"));
-                        payment.setExpirationDate(rs.getString("expiry"));
-                        payment.setCvv(rs.getString("cvv"));
-                        user.setPayment(payment);
-                    }
+
+                    Payment payment = new Payment();
+                    payment.setCardHolderName(rs.getString("card_holder_name"));
+                    payment.setCardNumber(rs.getString("card_number"));
+                    payment.setExpirationDate(rs.getString("expiry"));
+                    payment.setCvv(rs.getString("cvv"));
+                    user.setPayment(payment);
+                    
                 }
             }
 

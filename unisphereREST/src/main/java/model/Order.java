@@ -13,6 +13,10 @@ public class Order {
 		this.cart = cart;
 	}
 	
+	public Order() {
+		
+	}
+	
 	// Getter and Setter for Cart
 	public Cart getCart() {
 		return cart;
