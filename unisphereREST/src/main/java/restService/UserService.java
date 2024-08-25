@@ -2,6 +2,7 @@ package restService;
 
 import model.User;
 import model.Address;
+import model.Payment;
 import dao.UserDAO;
 
 import java.util.List;
@@ -36,25 +37,22 @@ public class UserService {
     
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<User> getAllUsers(){
-        List<User> ulist = userDao.getAllUsers();
-        return ulist;
+    public List<User> getAllUsers() {
+        return userDao.getAllUsers();
     }
 
     @GET
     @Path("/searchByUsername/{username}")
     @Produces(MediaType.APPLICATION_JSON)
-    public User getUserbyUsername(@PathParam("username") String uname){
-        User user = userDao.getUserByUsername(uname);
-        return user;
+    public User getUserbyUsername(@PathParam("username") String uname) {
+        return userDao.getUserByUsername(uname);
     }
     
     @GET
     @Path("/getAllUserInfo/{username}")
     @Produces(MediaType.APPLICATION_JSON)
-    public User getFullUserbyUsername(@PathParam("username") String uname){
-        User user = userDao.getFullUserByUsername(uname);
-        return user;
+    public User getFullUserbyUsername(@PathParam("username") String uname) {
+        return userDao.getFullUserByUsername(uname);
     }
     
     @POST
@@ -125,5 +123,30 @@ public class UserService {
 
         // Return a success response with the updated address information
         return Response.ok(updatedAddress).build();
+    }
+
+    @PUT
+    @Path("/updatePayment/{username}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updatePayment(@PathParam("username") String username, Payment updatedPayment, @Context HttpServletRequest request) {
+        // Check if the user exists
+        User user = userDao.getFullUserByUsername(username);
+        if (user == null) {
+            return Response.status(Response.Status.NOT_FOUND).entity("{\"message\":\"User not found\"}").build();
+        }
+
+        // Update the user's payment information
+        user.setPayment(updatedPayment);
+        userDao.updatePayment(user, updatedPayment);
+
+        // Update the session with the new payment details
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.setAttribute("user", user);
+        }
+
+        // Return a success response with the updated payment information
+        return Response.ok(updatedPayment).build();
     }
 }

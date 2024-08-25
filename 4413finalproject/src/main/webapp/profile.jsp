@@ -67,6 +67,26 @@
                     <p id="addressUpdateMessage" style="color: green; display: none;">Successfully updated address</p>
                 </form>
             </div>
+
+            <div id="payments" class="section" style="display: none;">
+                <h2>My Payments</h2>
+                <form id="paymentForm">
+                    <label for="cardHolderName">Card Holder Name:</label>
+                    <input type="text" id="cardHolderName" name="cardHolderName"><br>
+
+                    <label for="cardNumber">Card Number:</label>
+                    <input type="text" id="cardNumber" name="cardNumber"><br>
+
+                    <label for="expiry">Expiry Date:</label>
+                    <input type="text" id="expiry" name="expiry"><br>
+
+                    <label for="cvv">CVV:</label>
+                    <input type="text" id="cvv" name="cvv"><br>
+
+                    <button type="button" id="updatePaymentButton">Update Payment</button>
+                    <p id="paymentUpdateMessage" style="color: green; display: none;">Successfully updated payment</p>
+                </form>
+            </div>
         </div>
     </div>
 
@@ -94,6 +114,12 @@
                     $('#province').val(response.address.province);
                     $('#postalCode').val(response.address.postalCode);
                     $('#country').val(response.address.country);
+
+                    // Set the payment fields
+                    $('#cardHolderName').val(response.payment.cardHolderName);
+                    $('#cardNumber').val(response.payment.cardNumber);
+                    $('#expiry').val(response.payment.expirationDate);
+                    $('#cvv').val(response.payment.cvv);
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.error("Error fetching session data:", textStatus, errorThrown);
@@ -149,6 +175,29 @@
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
                         console.error("Error updating address:", textStatus, errorThrown);
+                    }
+                });
+            });
+
+            // Handle the update payment button click
+            $('#updatePaymentButton').click(function() {
+                var updatedPayment = {
+                    cardHolderName: $('#cardHolderName').val(),
+                    cardNumber: $('#cardNumber').val(),
+                    expiry: $('#expiry').val(),
+                    cvv: $('#cvv').val()
+                };
+
+                $.ajax({
+                    url: 'http://localhost:8080/unisphereREST/rest/Auth/updatePayment',
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(updatedPayment),
+                    success: function(response) {
+                        $('#paymentUpdateMessage').show().delay(3000).fadeOut();
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.error("Error updating payment:", textStatus, errorThrown);
                     }
                 });
             });

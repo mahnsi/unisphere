@@ -1,9 +1,7 @@
 package model;
 
 public class Address {
-    private int id;  // Add this line
-    private String firstName;
-    private String lastName;
+    private int id;
     private String streetAddress;
     private String apartment;
     private String city;
@@ -11,34 +9,15 @@ public class Address {
     private String postalCode;
     private String country;
 
-    // Constructor
-    public Address() {
-        // Default constructor
-    }
+    public Address() {}
 
     // Getters and Setters
-    public int getId() {  // Add this getter
+    public int getId() {
         return id;
     }
 
-    public void setId(int id) {  // Add this setter
+    public void setId(int id) {
         this.id = id;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
     }
 
     public String getStreetAddress() {
@@ -89,4 +68,3 @@ public class Address {
         this.country = country;
     }
 }
-

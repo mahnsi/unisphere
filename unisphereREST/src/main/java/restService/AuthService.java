@@ -2,6 +2,7 @@ package restService;
 
 import model.User;
 import model.Address;
+import model.Payment;
 import dao.UserDAO;
 
 import javax.annotation.PostConstruct;
@@ -72,6 +73,7 @@ public class AuthService {
         if (session != null) {
             User user = (User) session.getAttribute("user");
             if (user != null) {
+                user = userDao.getFullUserByUsername(user.getUsername());
                 return Response.ok(user).build();
             } else {
                 return Response.status(Response.Status.UNAUTHORIZED).entity("No user in session").build();
@@ -141,6 +143,38 @@ public class AuthService {
                 session.setAttribute("user", user);
 
                 return Response.ok(updatedAddress).build();
+            } else {
+                return Response.status(Response.Status.UNAUTHORIZED).entity("No user in session").build();
+            }
+        } else {
+            return Response.status(Response.Status.UNAUTHORIZED).entity("No session found").build();
+        }
+    }
+
+    @POST
+    @Path("/updatePayment")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updatePayment(String jsonInput, @Context HttpServletRequest request) {
+        JSONObject json = new JSONObject(jsonInput);
+
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            User user = (User) session.getAttribute("user");
+            if (user != null) {
+                Payment updatedPayment = new Payment();
+                updatedPayment.setCardHolderName(json.getString("cardHolderName"));
+                updatedPayment.setCardNumber(json.getString("cardNumber"));
+                updatedPayment.setExpirationDate(json.getString("expiry"));
+                updatedPayment.setCvv(json.getString("cvv"));
+
+                user.setPayment(updatedPayment);
+                userDao.updatePayment(user, updatedPayment);
+
+                // Update the session with the new payment details
+                session.setAttribute("user", user);
+
+                return Response.ok(updatedPayment).build();
             } else {
                 return Response.status(Response.Status.UNAUTHORIZED).entity("No user in session").build();
             }

@@ -1,17 +1,23 @@
 package model;
 
 public class Payment {
+    private int id;
     private String cardHolderName;
     private String cardNumber;
     private String expirationDate;
     private String cvv;
 
-    // Constructor
-    public Payment() {
-        // Default constructor
-    }
+    public Payment() {}
 
     // Getters and Setters
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public String getCardHolderName() {
         return cardHolderName;
     }
