@@ -35,7 +35,6 @@ public class CartDAO extends DAO{
                 int sold = rs.getInt("purchase_count");
                 int stock = rs.getInt("inventory_count");
                 int subcategory = rs.getInt("subcategory_id");
-                System.out.println(productId);
                 
                 //offer_id = rs.getInt("offer_id");
 
@@ -122,20 +121,24 @@ public class CartDAO extends DAO{
     }
 
 
-    public void removeFromCart(String username, Product product) {
+    public void removeFromCart(String username, int productid) {
+        System.out.println("DAO removeFromCart called");
+        int rowsAffected = 0;
         try {
             connection = getConnection();
             String query = "DELETE FROM CART_ITEM WHERE added_by = ? AND product_id = ?";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, username);
-            statement.setInt(2, product.getId());
-            statement.executeUpdate();
+            statement.setInt(2, productid);
+            rowsAffected = statement.executeUpdate(); // Store the number of rows affected
+            System.out.println("Rows affected: " + rowsAffected);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             closeConnection(connection);
         }
     }
+
     
 
 }

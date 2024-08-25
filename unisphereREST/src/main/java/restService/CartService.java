@@ -1,10 +1,13 @@
 package restService;
 
 import model.Product;
+
 import model.User;
 import model.Cart;
 import dao.CartDAO;
 
+import java.util.Map;
+import javax.json.*;
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -13,6 +16,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 
 @Path("Cart")
 public class CartService {
@@ -43,12 +47,13 @@ public class CartService {
     @POST
     @Path("/addToCart")
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.TEXT_PLAIN)
     public Response addToCart(@Context HttpServletRequest request, Product product) {
     	System.out.println("addtocart service called");
         User user = getSessionUser(request);
         if (user != null) {
             cartDAO.addToCart(user.getUsername(), product);
+            System.out.println("success add to cart -from service");
             return Response.ok("Product added to cart").build();
         } else {
             return Response.status(Response.Status.UNAUTHORIZED)
@@ -57,15 +62,15 @@ public class CartService {
     }
 
 
-    @DELETE
+    @PUT
     @Path("/removeFromCart/{username}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response removeFromCart(@PathParam("username") String username, Product product) {
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response removeFromCart(@PathParam("username") String username, int productid) {
         Cart cart = cartDAO.getCartByUsername(username);
         if (cart != null) {
-            // Logic to remove product from cart
-            //cartDAO.removeFromCart(cart, product);
+            cartDAO.removeFromCart(username, productid);
+            //System.out.println("remove from cart complete -cartservie");
             return Response.ok("Product removed from cart").build();
         } else {
             return Response.status(Response.Status.NOT_FOUND)
@@ -74,19 +79,33 @@ public class CartService {
     }
 
     @PUT
-    @Path("/updateQuantity")
+    @Path("/updateQuantity/{username}")
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response updateQuantity(Cart cart) {
-        if (cart != null) {
-            // Logic to update quantity of items in the cart
-            //cartDAO.updateQuantity(cart);
-            return Response.ok("Cart updated successfully").build();
-        } else {
-            return Response.status(Response.Status.BAD_REQUEST)
-                           .entity("Invalid cart data").build();
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response updateQuantity(@PathParam("username") String username, JsonObject jsonRequest) {
+        try {
+            // Extract values from the JSON object
+            int productId = jsonRequest.getInt("productId");
+            String quantityStr = jsonRequest.getString("quantity");
+            int quantity = Integer.parseInt(quantityStr);
+
+            // Retrieve and update the cart
+            Cart cart = cartDAO.getCartByUsername(username);
+            if (cart != null) {
+                // Logic to update quantity of items in the cart
+                cartDAO.updateQuantity(username, productId, quantity);
+                return Response.ok("Cart updated successfully").build();
+            } else {
+                return Response.status(Response.Status.BAD_REQUEST)
+                               .entity("Invalid cart data").build();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                           .entity("Error processing the request").build();
         }
     }
+
 
     @GET
     @Path("/session")

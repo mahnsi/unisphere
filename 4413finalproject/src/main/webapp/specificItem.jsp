@@ -25,6 +25,7 @@
                 <div>
                 <button id = "add-to-cart-btn" class="addToBag">Add to Bag</button>            
                 <button class="wishlistButton">❤</button>
+                <p id="cart-message"></p>
             </div>
             </div>
         </div>
@@ -58,7 +59,7 @@ $(document).ready(function() {
                         contentType: 'application/json',
                         data:JSON.stringify(product),
                         success: function(response) {
-                            
+                        	$('#cart-message').text("Added to Cart!");
                         },
                         error: function(err) {
                             console.error('Error adding to cart', err);
