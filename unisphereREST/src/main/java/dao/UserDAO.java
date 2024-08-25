@@ -88,13 +88,15 @@ public class UserDAO extends DAO {
                 String password = rs.getString("password");
 
                 // Address object
-                address.setId(rs.getInt("a.id"));  // Ensure this line sets the ID
-                address.setStreetAddress(rs.getString("address_line_1"));
-                address.setApartment(rs.getString("address_line_2"));
+                address.setId(rs.getInt("id"));  // Ensure this line sets the ID
+                address.setStreetAddress(rs.getString("street_address"));
+                address.setApartment(rs.getString("apt"));
                 address.setCity(rs.getString("city"));
                 address.setProvince(rs.getString("province"));
                 address.setPostalCode(rs.getString("postalcode"));
                 address.setCountry(rs.getString("country"));
+                address.setFirstName(rs.getString("fname"));
+                address.setLastName(rs.getString("lname"));
 
                 // Payment object
                 payment.setCardNumber(rs.getString("card_number"));
