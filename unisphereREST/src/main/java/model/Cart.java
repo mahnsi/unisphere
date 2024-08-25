@@ -29,19 +29,19 @@ public class Cart {
         items.add(newItem);
     }
 	
-	public void remove(Product product) {
-        items.removeIf(item -> item.getProduct().getId()==(product.getId()));
+	public void remove(int productid) {
+        items.removeIf(item -> item.getProduct().getId()==(productid));
     }
 
     // Method to update the quantity of a product in the cart
-    public void updateQuantity(Product product, int quantity) {
+    public void updateQuantity(int productid, int quantity) {
         for (CartItem item : items) {
-            if (item.getProduct().equals(product)) {
+            if (item.getProduct().getId() == productid) {
                 if (quantity > 0) {
                     item.setQuantity(quantity);
                 } else {
                     // If quantity is 0 or less, remove the item from the cart
-                    remove(product);
+                    remove(productid);
                 }
                 return;
             }

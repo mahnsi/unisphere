@@ -26,11 +26,10 @@ $(document).ready(function() {
 	$('#submit-product-btn').on('click', function(e) {
 	    e.preventDefault();
 
-	    // Create a JavaScript object with the product data
 	    const productData = {
 	        title: $('#product-title').val(),
-	        price: parseFloat($('#product-price').val()), // Convert price to a number
-	        stock: parseInt($('#product-stock').val(), 10), // Convert stock to an integer
+	        price: parseFloat($('#product-price').val()), 
+	        stock: parseInt($('#product-stock').val(), 10),
 	        description: $('#product-desc').val(),
 	        subCategory: $('#subcategory').val()
 	    };
@@ -43,10 +42,10 @@ $(document).ready(function() {
 	        contentType: 'application/json', // Set the content type to JSON
 	        success: function(response) {
 				//write the image
-				var image =  $('#product-image')[0].files[0]
+				var image =  $('#product-image')[0].files[0];
 				uploadImage(image);
 	            alert('Product added successfully');
-	            location.reload(); // Reload the page to see the new product
+	            location.reload();
 	        },
 	        error: function(err) {
 	            console.error('Error adding product:', err);
@@ -165,6 +164,7 @@ $(document).ready(function() {
     }
 	
 	function uploadImage(image) {
+		console.log("hi");
 	        var fileInput = image
 	        if (fileInput) {
 	            var formData = new FormData();

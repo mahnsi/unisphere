@@ -32,15 +32,21 @@ public class CartService {
     }
 
     @GET
-    @Path("/getCartByUser/{username}")
+    @Path("/getCart")
     @Produces(MediaType.APPLICATION_JSON)
-    public Cart getCartByUser(@PathParam("username") String username) {
-    	System.out.println("REST getcartbyuser called");
-        Cart cart = cartDAO.getCartByUsername(username);
-        if (cart == null) {
-        	System.out.println("null cart");
-            return null;
-        }
+    public Cart getCartByUser(@Context HttpServletRequest request) {
+    	System.out.println("get cart called");
+    	Cart cart;
+        User user = getSessionUser(request);
+        if (user != null) {
+        	cart = cartDAO.getCartByUsername(user.getUsername());
+
+        } else {
+        	//get session cart
+        	System.out.println("get cart for not logged in  user");
+        	cart = getSessionCart(request);
+
+            }
         return cart;
     }
 
@@ -54,51 +60,65 @@ public class CartService {
         if (user != null) {
             cartDAO.addToCart(user.getUsername(), product);
             System.out.println("success add to cart -from service");
-            return Response.ok("Product added to cart").build();
+            return Response.ok("Product added to user cart").build();
         } else {
-            return Response.status(Response.Status.UNAUTHORIZED)
-                           .entity("User not logged in").build();
-        }
+        	//get session cart
+        	Cart cart = getSessionCart(request);
+        	cart.add(product);
+            return Response.ok("Product added to session cart").build();
+            }
     }
 
 
     @PUT
-    @Path("/removeFromCart/{username}")
+    @Path("/removeFromCart")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_PLAIN)
-    public Response removeFromCart(@PathParam("username") String username, int productid) {
-        Cart cart = cartDAO.getCartByUsername(username);
-        if (cart != null) {
-            cartDAO.removeFromCart(username, productid);
-            //System.out.println("remove from cart complete -cartservie");
-            return Response.ok("Product removed from cart").build();
-        } else {
-            return Response.status(Response.Status.NOT_FOUND)
-                           .entity("Cart not found for user: " + username).build();
+    public Response removeFromCart(@Context HttpServletRequest request, int productid) {
+    	Cart cart;
+    	User user = getSessionUser(request);
+        if (user != null) {
+        	cart = cartDAO.getCartByUsername(user.getUsername());
+        	cartDAO.removeFromCart(user.getUsername(), productid);
+        	return Response.ok("Product removed from cart").build();
         }
+        
+        else {
+        	//get session cart
+        	cart = getSessionCart(request);
+        	cart.remove(productid);
+        	return Response.ok("Product removed from session cart").build();
+        }
+        
     }
 
     @PUT
-    @Path("/updateQuantity/{username}")
+    @Path("/updateQuantity")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
-    public Response updateQuantity(@PathParam("username") String username, JsonObject jsonRequest) {
+    public Response updateQuantity(@Context HttpServletRequest request, JsonObject jsonRequest) {
         try {
             // Extract values from the JSON object
             int productId = jsonRequest.getInt("productId");
             String quantityStr = jsonRequest.getString("quantity");
             int quantity = Integer.parseInt(quantityStr);
 
-            // Retrieve and update the cart
-            Cart cart = cartDAO.getCartByUsername(username);
-            if (cart != null) {
-                // Logic to update quantity of items in the cart
-                cartDAO.updateQuantity(username, productId, quantity);
-                return Response.ok("Cart updated successfully").build();
-            } else {
-                return Response.status(Response.Status.BAD_REQUEST)
-                               .entity("Invalid cart data").build();
-            }
+            
+            Cart cart;
+        	User user = getSessionUser(request);
+        	if (user != null) {
+        		cart = cartDAO.getCartByUsername(user.getUsername());
+        		cartDAO.updateQuantity(user.getUsername(), productId, quantity);
+        		return Response.ok("User Cart updated successfully").build();
+        	}
+        	
+        	else {
+        		//get session cart
+            	cart = getSessionCart(request);
+            	cart.updateQuantity(productId, quantity);
+            	return Response.ok("Product quantity updated from session cart").build();
+        	}
+
         } catch (Exception e) {
             e.printStackTrace();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
@@ -107,22 +127,21 @@ public class CartService {
     }
 
 
-    @GET
-    @Path("/session")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getSessionCart(@Context HttpServletRequest request) {
+
+
+    public Cart getSessionCart(@Context HttpServletRequest request) {
         HttpSession session = request.getSession(false); // Get existing session
         if (session != null) {
             Cart cart = (Cart) session.getAttribute("cart");
             if (cart != null) {
-                return Response.ok(cart).build();
+                return cart;
             } else {
-                return Response.status(Response.Status.UNAUTHORIZED)
-                               .entity("No cart found in session").build();
+            	System.out.println("null cart");
+                return null;
             }
         } else {
-            return Response.status(Response.Status.UNAUTHORIZED)
-                           .entity("No session found").build();
+        	System.out.println("null session (getSessionCart)");
+            return null;
         }
     }
 
