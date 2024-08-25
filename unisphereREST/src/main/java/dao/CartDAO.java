@@ -6,6 +6,7 @@ import java.sql.*;
 import javax.servlet.ServletContext;
 
 import model.Cart;
+import model.CartItem;
 import model.Product;
 
 public class CartDAO extends DAO{
@@ -48,7 +49,7 @@ public class CartDAO extends DAO{
                 product.setSubCategory(subcategory);
                 
                 cart.add(product);
-                cart.updateQuantity(product, quantity);
+                cart.updateQuantity(product.getId(), quantity);
             }
             //cart.setOffer(offer_id);
         } catch (Exception e) {
@@ -138,6 +139,38 @@ public class CartDAO extends DAO{
             closeConnection(connection);
         }
     }
+    
+    public void setCartForUser(String username, Cart cart) {
+        try {
+            connection = getConnection();
+
+            // Clear the existing cart items for the user
+            String clearQuery = "DELETE FROM CART_ITEM WHERE added_by = ?";
+            PreparedStatement clearStmt = connection.prepareStatement(clearQuery);
+            clearStmt.setString(1, username);
+            clearStmt.executeUpdate();
+
+            // Insert new cart items for the user
+            String insertQuery = "INSERT INTO CART_ITEM (added_by, product_id, quantity) VALUES (?, ?, ?)";
+            PreparedStatement insertStmt = connection.prepareStatement(insertQuery);
+
+            for (CartItem cartitem : cart.getItems()) {
+                insertStmt.setString(1, username);
+                insertStmt.setInt(2, cartitem.getProduct().getId());
+                insertStmt.setInt(3, cartitem.getQuantity());
+                insertStmt.addBatch();
+            }
+
+            // Execute the batch of insert statements
+            insertStmt.executeBatch();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            closeConnection(connection);
+        }
+    }
+
 
     
 

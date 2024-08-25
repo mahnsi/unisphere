@@ -1,6 +1,7 @@
 package restService;
 
 import model.Catalogue;
+
 import model.Product;
 import model.User;
 import dao.ProductDAO;
@@ -16,9 +17,29 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
+
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
+
+import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.core.Response.ResponseBuilder;
+import javax.ws.rs.core.Response.Status;
+
+import org.glassfish.jersey.media.multipart.FormDataBodyPart;
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+import org.glassfish.jersey.media.multipart.FormDataParam;
+import org.glassfish.jersey.media.multipart.FormDataMultiPart;
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 
 @Path("Products")
 public class ProductService {
@@ -183,24 +204,39 @@ public class ProductService {
         }
     }
     
-    /*
-    @PUT
+    
+    @POST
     @Path("/uploadImage")
-    public Response uploadImage(@Context HttpServletRequest request) {
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    public Response uploadImage(FormDataMultiPart input) {
+    	System.out.println("upload image rest called");
         try {
-            Part filePart = request.getPart("image");
-            String fileName = filePart.getSubmittedFileName();
-            String uploadPath = getServletContext().getRealPath("") + File.separator + "uploads";
-            File uploadDir = new File(uploadPath);
-            if (!uploadDir.exists()) {
-                uploadDir.mkdir();
+            // Retrieve the file part from the input
+            FormDataBodyPart filePart = input.getField("image");
+            if (filePart != null) {
+                FormDataContentDisposition fileDetails = filePart.getFormDataContentDisposition();
+                InputStream inputStream = filePart.getValueAs(InputStream.class);
+
+                // Define the file location
+                String fileName = fileDetails.getFileName();
+                File file = new File("/Users/mahnsi/Downloads" + fileName);
+
+                // Write the file to the server
+                try (OutputStream outputStream = new FileOutputStream(file)) {
+                    byte[] buffer = new byte[1024];
+                    int bytesRead;
+                    while ((bytesRead = inputStream.read(buffer)) != -1) {
+                        outputStream.write(buffer, 0, bytesRead);
+                    }
+                }
+
+                return Response.status(Status.OK).entity("Image uploaded successfully!").build();
+            } else {
+                return Response.status(Status.BAD_REQUEST).entity("No image found in the request.").build();
             }
-            filePart.write(uploadPath + File.separator + fileName);
-            return Response.ok().build();
-        } catch (IOException | ServletException e) {
+        } catch (Exception e) {
             e.printStackTrace();
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+            return Response.status(Status.INTERNAL_SERVER_ERROR).entity("Failed to upload image.").build();
         }
     }
-    */
 }

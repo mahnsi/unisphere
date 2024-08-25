@@ -60,6 +60,12 @@ $("#signUpForm").submit(function(e) {
         password: $("#password").val()
     };
     
+    var urlParams = new URLSearchParams(window.location.search);
+    var redirectUrl = "profile.jsp";
+    if (urlParams.has("redir") && urlParams.get("redir") === "true") {
+        redirectUrl = "checkout.jsp";
+    }
+    
     // Register the user
     $.ajax({
         url: "http://localhost:8080/unisphereREST/rest/Users",
@@ -80,7 +86,7 @@ $("#signUpForm").submit(function(e) {
                 }),
                 success: function(loginResult) {
                     console.log("Login successful");
-                    window.location.href = "profile.jsp";
+                    window.location.href = redirectUrl;
                 },
                 error: function(xhr, status, error) {
                     $("#confirmationMessage").text("Auth error");
