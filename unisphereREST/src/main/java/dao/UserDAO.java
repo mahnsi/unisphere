@@ -1,5 +1,7 @@
 package dao;
 
+import model.Address;
+import model.Payment;
 import model.User;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -50,22 +52,49 @@ public class UserDAO extends DAO {
 
     public User getUserByUsername(String username) {
         User user = null;
+        System.out.println("user:"  + username);
 
         try {
+        	System.out.println("DAO getUSerbyuname called");
             connection = getConnection();
-            String query = "SELECT * FROM User WHERE username = ?";
+            String query = "SELECT *" +
+                    "FROM User u " +
+                    "INNER JOIN Address a ON u.address_id = a.id " +
+                    "INNER JOIN Payment p ON u.payment_id = p.id " +
+                    "WHERE u.username = ?";
+
             PreparedStatement stmt = connection.prepareStatement(query);
             stmt.setString(1, username);
             ResultSet rs = stmt.executeQuery();
+            Address address = new Address();
+            Payment payment = new Payment();
 
             if (rs.next()) {
+            	System.out.println("DAO getUSerbyuname ... user found. getting info");
                 String email = rs.getString("email");
                 String first_name = rs.getString("firstname");
                 String last_name = rs.getString("lastname");
                 boolean isAdmin = rs.getBoolean("is_admin");
                 String password = rs.getString("password");
+                
+                //Address object
+                address.setStreetAddress(rs.getString("street_address"));
+                address.setApartment(rs.getString("apt"));
+                address.setCity(rs.getString("city"));
+                address.setProvince(rs.getString("province"));
+                address.setPostalCode(rs.getString("postalcode"));
+                address.setFirstName(rs.getString("fname"));
+                address.setLastName(rs.getString("lname"));
+
+                //Payment object
+                payment.setCardNumber(rs.getString("card_number"));
+                payment.setCardHolderName(rs.getString("card_holder_name"));
+                payment.setExpirationDate(rs.getString("expiry"));
+                payment.setCvv(rs.getString("cvv"));
 
                 user = new User(username, email, first_name, last_name, password);
+                user.setAddress(address);
+                user.setPayment(payment);
                 user.setIsAdmin(isAdmin);
             }
             

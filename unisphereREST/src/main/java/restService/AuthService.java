@@ -46,7 +46,11 @@ public class AuthService {
         String password = json.getString("password");
 
         User user = userDao.getUserByUsername(username);
-        if (user != null && user.getPassword().equals(password)) {
+        if(user ==null) {
+        	return Response.status(Response.Status.UNAUTHORIZED)
+                    .entity("nonexistent user").build();
+        }
+        else if (user.getPassword().equals(password)) {
             HttpSession session = request.getSession();
             session.setAttribute("user", user);
             return Response.ok(user).build();

@@ -210,3 +210,10 @@ main {
 	max-height: 100%;
 	max-width: 100%;
 }
+
+hr {
+    border: 0;
+    height: 2px;
+    background: linear-gradient(to right, #003366, #66ccff);
+    margin: 20px 0;
+}
