@@ -56,16 +56,17 @@ public class ProductDAO extends DAO {
         return products;
     }
     
-    public List<Product> getProductsByCategory(int category_id){
+    public List<Product> getProductsByCategory(String category){
     	List<Product> products = new ArrayList<>();
 
         try {
             connection = getConnection();
             String query = "SELECT * FROM Product p " +
                     "JOIN Subcategory s ON p.subcategory_id = s.id " +
-                    "WHERE s.category_id = ?";
+                    "JOIN Category c ON c.id = s.category_id "+
+                    "WHERE c.name = ?";
             PreparedStatement stmt = connection.prepareStatement(query);
-            stmt.setInt(1, category_id); 
+            stmt.setString(1, category); 
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {

@@ -42,7 +42,6 @@
 
                 <label for="price">Price:</label>
                 <input type="range" id="price" name="price_minmax" min="0" max="1000" step="10">
-
             </form>
         </aside>
 
@@ -85,6 +84,7 @@ $(document).ready(function() {
         });
     } else {
         // If no category is specified, just load all products
+        $("#subcategory").prop('disabled', true); 
         loadProducts();
     }
 
@@ -93,8 +93,21 @@ $(document).ready(function() {
         var subcategory = $("#subcategory").val();
         var url = "http://localhost:8080/unisphereREST/rest/Products/";
 
+        if (category && category !== 'All') {
+            url += "getProductsByCategory/" + encodeURIComponent(category);
+        }
+        
+        if (category && category == 'All') {
+        	$("#subcategory").empty(); 
+        	$("#subcategory").prop('disabled', true); 
+        }
+
         if (subcategory && subcategory !== 'all') {
-            url = "http://localhost:8080/unisphereREST/rest/Products/getProductsBySubCategory/" + encodeURIComponent(subcategory);
+        	console.log("subcatselected");
+            url = "http://localhost:8080/unisphereREST/rest/Products/getProductsBySubcategory/" + encodeURIComponent(subcategory);
+            console.log(url);
+        } else {
+            url += (category && category !== 'All') ? "/" : "";
         }
 
         $.ajax({
@@ -104,11 +117,8 @@ $(document).ready(function() {
             success: function(products) {
                 var productGrid = $("#productGrid");
                 productGrid.empty(); // Clear the grid before adding new items
-                console.log(products);
 
                 $.each(products, function(index, product) {
-                    console.log(product.id, product.title, product.price);
-
                     var productItem = '<div class="product-item">' +
                         '<a href="specificItem.jsp?id=' + product.id + '">' +
                         '<img src="product-images/' + product.id + '.jpg" alt="' + product.title + '">' +
@@ -132,7 +142,6 @@ $(document).ready(function() {
     });
 });
 </script>
-
 
 </body>
 </html>

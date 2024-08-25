@@ -42,11 +42,11 @@ public class ProductService {
     }
     
     @GET
-	@Path("/getProductsByCategory/{catid}")
+	@Path("/getProductsByCategory/{cat}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<Product> getProductsByCategory(@PathParam("catid") int catid){
+	public List<Product> getProductsByCategory(@PathParam("cat") String cat){
 		
-    	List<Product> products = productDAO.getProductsByCategory(catid);
+    	List<Product> products = productDAO.getProductsByCategory(cat);
         return products;
 		
 		

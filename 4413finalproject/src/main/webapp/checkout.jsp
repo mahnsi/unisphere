@@ -190,23 +190,36 @@
         function processOrder() {
             let addressOption = $("input[name='address-option']:checked").val();
             let paymentOption = $("input[name='payment-option']:checked").val();
+            
             let formData = {
                 addressOption: addressOption,
-                paymentOption: paymentOption,
-                address: addressOption === "new" ? {
-                    firstName: $("#first-name").val(),
-                    lastName: $("#last-name").val(),
-                    streetAddress: $("#street-address").val(),
-                    apartment: $("#apartment").val(),
-                    city: $("#city").val(),
-                    province: $("#province").val()
-                } : {},
-                payment: paymentOption === "new" ? {
-                    cardNumber: $("#card-number").val(),
-                    expiryDate: $("#expiry-date").val(),
-                    cvv: $("#cvv").val()
-                } : {}
+                paymentOption: paymentOption
             };
+
+            // If the user selects a new address, gather the address details
+            if (addressOption === "new") {
+                formData.address = {
+                    firstName: $("#first-name").val() || null,
+                    lastName: $("#last-name").val() || null,
+                    streetAddress: $("#street-address").val() || null,
+                    apartment: $("#apartment").val() || null,
+                    city: $("#city").val() || null,
+                    province: $("#province").val() || null
+                };
+            } else {
+                formData.address = {};  // Empty object if using an existing address
+            }
+
+            // If the user selects a new payment method, gather the payment details
+            if (paymentOption === "new") {
+                formData.payment = {
+                    cardNumber: $("#card-number").val() || null,
+                    expiryDate: $("#expiry-date").val() || null,
+                    cvv: $("#cvv").val() || null
+                };
+            } else {
+                formData.payment = {};  // Empty object if using a saved payment method
+            }
 
             $.ajax({
                 url: "http://localhost:8080/unisphereREST/rest/Orders",
@@ -221,6 +234,7 @@
                 }
             });
         }
+
     });
 </script>
 
