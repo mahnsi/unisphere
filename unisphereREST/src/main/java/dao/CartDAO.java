@@ -48,7 +48,7 @@ public class CartDAO extends DAO{
                 product.setSubCategory(subcategory);
                 
                 cart.add(product);
-                cart.updateQuantity(product, quantity);
+                cart.updateQuantity(product.getId(), quantity);
             }
             //cart.setOffer(offer_id);
         } catch (Exception e) {
