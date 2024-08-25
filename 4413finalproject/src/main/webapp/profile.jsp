@@ -42,7 +42,31 @@
                 <button id="logoutButton">Log Out</button>
             </div>
 
-            <!-- Other sections like Order History, Payments, and Addresses can be added similarly -->
+            <div id="addresses" class="section" style="display: none;">
+                <h2>My Addresses</h2>
+                <form id="addressForm">
+                    <label for="addressLine1">Address Line 1:</label>
+                    <input type="text" id="addressLine1" name="addressLine1"><br>
+
+                    <label for="addressLine2">Address Line 2:</label>
+                    <input type="text" id="addressLine2" name="addressLine2"><br>
+
+                    <label for="city">City:</label>
+                    <input type="text" id="city" name="city"><br>
+
+                    <label for="province">Province:</label>
+                    <input type="text" id="province" name="province"><br>
+
+                    <label for="postalCode">Postal Code:</label>
+                    <input type="text" id="postalCode" name="postalCode"><br>
+
+                    <label for="country">Country:</label>
+                    <input type="text" id="country" name="country"><br>
+
+                    <button type="button" id="updateAddressButton">Update Address</button>
+                    <p id="addressUpdateMessage" style="color: green; display: none;">Successfully updated address</p>
+                </form>
+            </div>
         </div>
     </div>
 
@@ -62,6 +86,14 @@
                     $('#firstName').val(response.firstName);
                     $('#lastName').val(response.lastName);
                     $('#username').val(response.username);
+
+                    // Set the address fields
+                    $('#addressLine1').val(response.address.streetAddress);
+                    $('#addressLine2').val(response.address.apartment);
+                    $('#city').val(response.address.city);
+                    $('#province').val(response.address.province);
+                    $('#postalCode').val(response.address.postalCode);
+                    $('#country').val(response.address.country);
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.error("Error fetching session data:", textStatus, errorThrown);
@@ -92,6 +124,31 @@
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
                         console.error("Error updating user info:", textStatus, errorThrown);
+                    }
+                });
+            });
+
+            // Handle the update address button click
+            $('#updateAddressButton').click(function() {
+                var updatedAddress = {
+                    addressLine1: $('#addressLine1').val(),
+                    addressLine2: $('#addressLine2').val(),
+                    city: $('#city').val(),
+                    province: $('#province').val(),
+                    postalCode: $('#postalCode').val(),
+                    country: $('#country').val()
+                };
+
+                $.ajax({
+                    url: 'http://localhost:8080/unisphereREST/rest/Auth/updateAddress',
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(updatedAddress),
+                    success: function(response) {
+                        $('#addressUpdateMessage').show().delay(3000).fadeOut();
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.error("Error updating address:", textStatus, errorThrown);
                     }
                 });
             });

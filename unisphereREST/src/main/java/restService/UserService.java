@@ -1,6 +1,7 @@
 package restService;
 
 import model.User;
+import model.Address;
 import dao.UserDAO;
 
 import java.util.List;
@@ -34,44 +35,36 @@ public class UserService {
     }
     
     @GET
-	@Produces(MediaType.APPLICATION_JSON)
-	public List<User> getAllUsers(){
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<User> getAllUsers(){
+        List<User> ulist = userDao.getAllUsers();
+        return ulist;
+    }
 
-		List<User> ulist = userDao.getAllUsers();
-		return ulist;
-	}
-
-
-	@GET
-	@Path("/searchByUsername/{username}")
-	@Produces(MediaType.APPLICATION_JSON)
-	public User getUserbyUsername(@PathParam("username") String uname){
-
-		User user = userDao.getUserByUsername(uname);
-		return user;
-
-
-	}
-	
-	@GET
-	@Path("/getAllUserInfo/{username}")
-	@Produces(MediaType.APPLICATION_JSON)
-	public User getFullUserbyUsername(@PathParam("username") String uname){
-
-		User user = userDao.getFullUserByUsername(uname);
-		return user;
-
-
-	}
-	
-	@POST
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response createUser(User user) {//json given in request is automatically converted to User
+    @GET
+    @Path("/searchByUsername/{username}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public User getUserbyUsername(@PathParam("username") String uname){
+        User user = userDao.getUserByUsername(uname);
+        return user;
+    }
+    
+    @GET
+    @Path("/getAllUserInfo/{username}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public User getFullUserbyUsername(@PathParam("username") String uname){
+        User user = userDao.getFullUserByUsername(uname);
+        return user;
+    }
+    
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response createUser(User user) {
         // Check if the user with the same username or email already exists
         User existingUser = userDao.getUserByUsername(user.getUsername());
         if (existingUser != null) {
-            return Response.status(Response.Status.CONFLICT)//sends a 409
+            return Response.status(Response.Status.CONFLICT)
                            .entity("Username already exists").build();
         }
 
@@ -83,7 +76,7 @@ public class UserService {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                            .entity("User could not be created").build();
         }
-	}
+    }
 
     @PUT
     @Path("/update/{username}")
@@ -107,5 +100,30 @@ public class UserService {
 
         // Return a success response with the updated user information
         return Response.ok(updatedUser).build();
+    }
+
+    @PUT
+    @Path("/updateAddress/{username}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateAddress(@PathParam("username") String username, Address updatedAddress, @Context HttpServletRequest request) {
+        // Check if the user exists
+        User user = userDao.getFullUserByUsername(username);
+        if (user == null) {
+            return Response.status(Response.Status.NOT_FOUND).entity("{\"message\":\"User not found\"}").build();
+        }
+
+        // Update the user's address
+        user.setAddress(updatedAddress);
+        userDao.updateAddress(user, updatedAddress);
+
+        // Update the session with the new address details
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.setAttribute("user", user);
+        }
+
+        // Return a success response with the updated address information
+        return Response.ok(updatedAddress).build();
     }
 }

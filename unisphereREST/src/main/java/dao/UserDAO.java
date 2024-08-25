@@ -87,16 +87,16 @@ public class UserDAO extends DAO {
                 boolean isAdmin = rs.getBoolean("is_admin");
                 String password = rs.getString("password");
 
-                //Address object
-                address.setStreetAddress(rs.getString("street_address"));
-                address.setApartment(rs.getString("apt"));
+                // Address object
+                address.setId(rs.getInt("a.id"));  // Ensure this line sets the ID
+                address.setStreetAddress(rs.getString("address_line_1"));
+                address.setApartment(rs.getString("address_line_2"));
                 address.setCity(rs.getString("city"));
                 address.setProvince(rs.getString("province"));
                 address.setPostalCode(rs.getString("postalcode"));
-                address.setFirstName(rs.getString("fname"));
-                address.setLastName(rs.getString("lname"));
+                address.setCountry(rs.getString("country"));
 
-                //Payment object
+                // Payment object
                 payment.setCardNumber(rs.getString("card_number"));
                 payment.setCardHolderName(rs.getString("card_holder_name"));
                 payment.setExpirationDate(rs.getString("expiry"));
@@ -201,6 +201,25 @@ public class UserDAO extends DAO {
 
         return isInserted;
     }
-    
-    
+
+    public void updateAddress(User user, Address updatedAddress) {
+        try {
+            connection = getConnection();
+            String query = "UPDATE Address SET address_line_1 = ?, address_line_2 = ?, city = ?, province = ?, postalcode = ?, country = ? WHERE id = ?";
+            PreparedStatement stmt = connection.prepareStatement(query);
+            stmt.setString(1, updatedAddress.getStreetAddress());
+            stmt.setString(2, updatedAddress.getApartment());
+            stmt.setString(3, updatedAddress.getCity());
+            stmt.setString(4, updatedAddress.getProvince());
+            stmt.setString(5, updatedAddress.getPostalCode());
+            stmt.setString(6, updatedAddress.getCountry());
+            stmt.setInt(7, user.getAddress().getId());  // This should now work correctly
+
+            stmt.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            closeConnection(connection);
+        }
+    }
 }
