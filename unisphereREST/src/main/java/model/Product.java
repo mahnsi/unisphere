@@ -8,7 +8,7 @@ public class Product {
     private int categoryId;
     private int subcategory;
     private int stock;
-    private int sold;
+    private int sold = 0;
     
 
     // Getter and Setter for id

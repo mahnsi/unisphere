@@ -23,34 +23,35 @@ $(document).ready(function() {
     });
 
     // Handle the submission of the new product form
-    $('#submit-product-btn').on('click', function(e) {
-        e.preventDefault();
+	$('#submit-product-btn').on('click', function(e) {
+	    e.preventDefault();
 
-        const formData = new FormData();
-        formData.append('title', $('#product-title').val());
-        formData.append('price', $('#product-price').val());
-        formData.append('stock', $('#product-stock').val());
-        formData.append('description', $('#product-desc').val());
-        formData.append('subcategory_id', $('#subcategory').val());
-        formData.append('image', $('#product-image')[0].files[0]);
+	    // Create a JavaScript object with the product data
+	    const productData = {
+	        title: $('#product-title').val(),
+	        price: parseFloat($('#product-price').val()), // Convert price to a number
+	        stock: parseInt($('#product-stock').val(), 10), // Convert stock to an integer
+	        description: $('#product-desc').val(),
+	        subCategory: $('#subcategory').val()
+	    };
 
-        // Send the new product data to the server
-        $.ajax({
-            url: apiUrl,
-            method: 'POST',
-            data: formData,
-            contentType: false,
-            processData: false,
-            success: function(response) {
-                alert('Product added successfully');
-                location.reload(); // Reload the page to see the new product
-            },
-            error: function(err) {
-                console.error('Error adding product:', err);
-                alert('Error adding product. Please try again later.');
-            }
-        });
-    });
+	    // Send the new product data as JSON to the server
+	    $.ajax({
+	        url: apiUrl,
+	        method: 'POST',
+	        data: JSON.stringify(productData), // Convert the object to a JSON string
+	        contentType: 'application/json', // Set the content type to JSON
+	        success: function(response) {
+	            alert('Product added successfully');
+	            location.reload(); // Reload the page to see the new product
+	        },
+	        error: function(err) {
+	            console.error('Error adding product:', err);
+	            alert('Error adding product. Please try again later.');
+	        }
+	    });
+	});
+
 
     function fetchProducts() {
         $.ajax({
@@ -132,7 +133,7 @@ $(document).ready(function() {
                 const subcategorySelect = $('#subcategory');
                 subcategorySelect.html('<option value="">Select a subcategory</option>');
                 $.each(subcategories, function(index, subcategory) {
-                    subcategorySelect.append('<option value="' + encodeURIComponent(subcategory) + '">' + subcategory + '</option>');
+                    subcategorySelect.append('<option value="' + encodeURIComponent(subcategory.id) + '">' + subcategory.name + '</option>');
                 });
             },
             error: function(err) {

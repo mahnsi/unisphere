@@ -56,6 +56,6 @@
     </div>
 </main>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="inventory.js"></script>
+    <script src="script/inventory.js"></script>
 </body>
 </html>

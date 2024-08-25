@@ -29,7 +29,7 @@
 
                 <!-- Existing Address Section -->
                 <div id="existing-address-section">
-                    <p id="existing-address">Address details will be loaded here...</p>
+                    <p id="existing-address">  Address Info loaded here..</p>
                 </div>
 
                 <!-- New Address Section -->
@@ -81,7 +81,7 @@
 
             <!-- Saved Payment Method Section -->
             <div id="saved-payment-section">
-                <p id="saved-payment">Saved payment details will be loaded here...</p>
+                <p id="saved-payment">saved Payment info loaded here..</p>
             </div>
 
             <!-- New Payment Method Section -->
@@ -159,26 +159,36 @@
 
         function fetchExistingAddressandPayment(username) {
             $.ajax({
-                url: "http://localhost:8080/unisphereREST/rest/Users/searchByUsername/" + username,
+                url: "http://localhost:8080/unisphereREST/rest/Users/getAllUserInfo/" + username,
                 method: "GET",
                 success: function(response) {
-                    let address = response.address; 
-                    let payment = response.payment;
-                    $("#existing-address").text(
-                    	    address.firstName + " " + address.lastName + "\n" +
-                    	    address.streetAddress + ", " + address.apartment + "\n" +
-                    	    address.city + ", " + address.province
-                    	);
-
-                    	$("#saved-payment").text(
-                    	    payment.cardHolderName + "\n" +
-                    	    payment.cardNumber + ", " + payment.expiryDate + "\n" +
-                    	    payment.cvv
-                    	);
+                	console.log("success fetching all user info");
+                	if(response){
+	                    let address = response.address; 
+	                    let payment = response.payment;
+	                    $("#existing-address").text(
+	                    	    address.firstName + " " + address.lastName + "\n" +
+	                    	    address.streetAddress + ", " + address.apartment + "\n" +
+	                    	    address.city + ", " + address.province
+	                    	);
+	
+	                    	$("#saved-payment").text(
+	                    	    payment.cardHolderName + "\n" +
+	                    	    payment.cardNumber + ", " + payment.expiryDate + "\n" +
+	                    	    payment.cvv
+	                    	);
+                	}
+                	
+                	else{
+                		$("#existing-address").text("No Saved Address. Please enter one below or on your profile.");
+	
+	                    $("#saved-payment").text("No Saved Payment. Please enter one below or on your profile.");
+                		
+                	}
 
                 },
                 error: function() {
-                    console.error("Error fetching existing address.");
+                	console.log("hellor");
                 }
             });
         }

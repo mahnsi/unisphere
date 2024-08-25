@@ -3,6 +3,7 @@ package restService;
 import model.Product;
 import model.User;
 import dao.ProductDAO;
+import ds.Tuple;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
@@ -88,9 +89,9 @@ public class ProductService {
     @GET
 	@Path("/getSubcategoriesByCategory/{cat}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<String> getSubcategoriesByCategory(@PathParam("cat") String cat){
+	public List<Tuple> getSubcategoriesByCategory(@PathParam("cat") String cat){
 		
-    	List<String> cats = productDAO.getSubcategoriesByCategory(cat);
+    	List<Tuple> cats = productDAO.getSubcategoriesByCategory(cat);
         return cats;
     }
     
@@ -105,9 +106,10 @@ public class ProductService {
 		
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.TEXT_PLAIN)
     public Response addProduct(Product product) {
         try {
+        	System.out.println("addProduct REST called");
             // Add the product using the ProductDAO
             productDAO.addProduct(product);
 

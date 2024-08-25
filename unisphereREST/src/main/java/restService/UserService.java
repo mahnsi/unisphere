@@ -53,7 +53,20 @@ public class UserService {
 
 	}
 	
+	@GET
+	@Path("/getAllUserInfo/{username}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public User getFullUserbyUsername(@PathParam("username") String uname){
+
+		User user = userDao.getFullUserByUsername(uname);
+		return user;
+
+
+	}
+	
 	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
 	public Response createUser(User user) {//json given in request is automatically converted to User
         // Check if the user with the same username or email already exists
         User existingUser = userDao.getUserByUsername(user.getUsername());

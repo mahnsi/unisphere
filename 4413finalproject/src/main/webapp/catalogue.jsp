@@ -72,7 +72,7 @@ $(document).ready(function() {
 
                 // Add options for each subcategory
                 $.each(subcategories, function(index, subcategory) {
-                    subcategorySelect.append('<option value="' + encodeURIComponent(subcategory) + '">' + subcategory + '</option>');
+                    subcategorySelect.append('<option value="' + subcategory.name + '">' + subcategory.name + '</option>');
                 });
 
                 // Load products for the initial category (or all if no subcategory is selected)

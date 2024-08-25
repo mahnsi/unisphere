@@ -1,5 +1,5 @@
 package dao;
-
+import ds.*;
 import model.Product;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -167,35 +167,7 @@ public class ProductDAO extends DAO {
         return product;
     }
 
-    public boolean insert(Product product) {
-        boolean isInserted = false;
 
-        try {
-            connection = getConnection();
-            String query = "INSERT INTO Product (id, price, title, description, subcategory_id) VALUES (?, ?, ?, ?, ?)";
-
-            PreparedStatement stmt = connection.prepareStatement(query);
-            
-            stmt.setInt(1, product.getId());
-            stmt.setFloat(2, product.getPrice());
-            stmt.setString(3, product.getTitle());
-            stmt.setString(4, product.getDescription());
-            stmt.setInt(5, product.getSubCategory()); // Use category ID directly
-
-            int rowsAffected = stmt.executeUpdate();
-            if (rowsAffected > 0) {
-                isInserted = true;
-                System.out.println("Product " + product.getTitle() + " inserted into the database successfully.");
-            }
-
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        } finally {
-            closeConnection(connection);
-        }
-
-        return isInserted;
-    }
 
     public void update(int id, Product updatedProduct) {
         try {
@@ -268,13 +240,13 @@ public class ProductDAO extends DAO {
         return products;
 	}
 	
-	public List<String> getSubcategoriesByCategory(String category) {
-	    List<String> subcategoryNames = new ArrayList<>();
+	public List<Tuple> getSubcategoriesByCategory(String category) {
+	    List<Tuple> subcategoryNames = new ArrayList<>();
 	    System.out.println("getSubcategoriesByCategory called");
 
 	    try {
 	        connection = getConnection();
-	        String query = "SELECT s.desc " +
+	        String query = "SELECT s.id, s.desc " +
                     "FROM subcategory s " +
                     "JOIN category c ON s.category_id = c.id " +
                     "WHERE c.name = ?";
@@ -283,8 +255,9 @@ public class ProductDAO extends DAO {
 	        ResultSet rs = stmt.executeQuery();
 
 	        while (rs.next()) {
+	        	int id = rs.getInt("id");
 	            String name = rs.getString("desc");
-	            subcategoryNames.add(name);
+	            subcategoryNames.add(new Tuple(id, name));
 	        }
 	    } catch (SQLException ex) {
 	        ex.printStackTrace();
@@ -334,7 +307,9 @@ public class ProductDAO extends DAO {
 	}
 	
 	public void addProduct(Product product) throws SQLException {
-        String sql = "INSERT INTO products (title, description, subcategory_id, price, inventory_count, purchase_count) VALUES (?, ?, ?, ?, ?, ?)";
+		System.out.println("addProduct DAO called");
+        String sql = "INSERT INTO product (title, description, subcategory_id, price, inventory_count, purchase_count) VALUES (?, ?, ?, ?, ?, ?)";
+        connection = getConnection();
         try (PreparedStatement statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, product.getTitle());
             statement.setString(2, product.getDescription());
@@ -382,11 +357,6 @@ public class ProductDAO extends DAO {
 
 	    System.out.println(subcategoryNames);
 	    return subcategoryNames;
-	}
-
-	public void updateProduct(int id, Product product) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	public boolean updateProductQuantity(int id, int quantity) {

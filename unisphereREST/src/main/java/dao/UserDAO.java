@@ -19,13 +19,53 @@ public class UserDAO extends DAO {
     public UserDAO(ServletContext context) {
         super(context);
     }
-
+    
     public User getUserByUsername(String username) {
         User user = null;
         System.out.println("user:"  + username);
 
         try {
         	System.out.println("DAO getUSerbyuname called");
+            connection = getConnection();
+            String query = "SELECT *" +
+                    "FROM User u " +
+                    "WHERE u.username = ?";
+
+            PreparedStatement stmt = connection.prepareStatement(query);
+            stmt.setString(1, username);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+            	System.out.println("DAO getUserbyuname ... user found. getting info");
+                String email = rs.getString("email");
+                String first_name = rs.getString("firstname");
+                String last_name = rs.getString("lastname");
+                boolean isAdmin = rs.getBoolean("is_admin");
+                String password = rs.getString("password");
+
+                user = new User(username, email, first_name, last_name, password);
+                user.setIsAdmin(isAdmin);
+            }
+
+            else {
+            	//user doesnt exist
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            closeConnection(connection);
+        }
+
+        return user;
+    }
+
+    public User getFullUserByUsername(String username) {
+        User user = null;
+        System.out.println("user:"  + username);
+
+        try {
+        	System.out.println("DAO get FULL Userbyuname called");
             connection = getConnection();
             String query = "SELECT *" +
                     "FROM User u " +
