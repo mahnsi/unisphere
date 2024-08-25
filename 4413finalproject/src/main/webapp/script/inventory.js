@@ -42,6 +42,9 @@ $(document).ready(function() {
 	        data: JSON.stringify(productData), // Convert the object to a JSON string
 	        contentType: 'application/json', // Set the content type to JSON
 	        success: function(response) {
+				//write the image
+				var image =  $('#product-image')[0].files[0]
+				uploadImage(image);
 	            alert('Product added successfully');
 	            location.reload(); // Reload the page to see the new product
 	        },
@@ -160,4 +163,29 @@ $(document).ready(function() {
             }
         });
     }
+	
+	function uploadImage(image) {
+	        var fileInput = image
+	        if (fileInput) {
+	            var formData = new FormData();
+	            formData.append('image', fileInput);
+
+	            // Send the image file to the server
+	            $.ajax({
+	                url: 'http://localhost:8080/unisphereREST/rest/Products/uploadImage',
+	                method: 'POST',
+	                data: formData,
+	                contentType: false,
+	                processData: false,
+	                success: function(response) {
+	                    alert('Image uploaded successfully!');
+	                    location.reload(); // Reload to show new product
+	                },
+	                error: function(err) {
+	                    console.error('Error uploading image:', err);
+	                    alert('Failed to upload image.');
+	                }
+	            });
+	        }
+	  }
 });

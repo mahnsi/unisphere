@@ -20,10 +20,9 @@
         
         <section class="order-summary">
             <h3>Order Summary</h3>
-            <p>Shipping: <span id="shipping-cost">$5.00</span></p>
-            <p>Tax: <span id="tax-cost">$0.00</span></p>
-            <p>Discount: <span id="discount">$0.00</span></p>
-            <p><strong>Estimated Total: <span id="estimated-total">$0.00</span></strong></p>
+            <p>Shipping: <span id="shipping-cost">Shipping Calculated at Checkout</span></p>
+            <p>Discount: <span id="discount">Offers applied at checkout</span></p>
+            <p><strong>Subtotal: <span id="estimated-total">$0.00</span></strong></p>
             <a href="checkout.jsp"><button class="checkout-button">Checkout</button></a>
         </section>
     </main>

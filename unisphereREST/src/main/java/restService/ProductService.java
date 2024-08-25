@@ -1,5 +1,6 @@
 package restService;
 
+import model.Catalogue;
 import model.Product;
 import model.User;
 import dao.ProductDAO;
@@ -7,16 +8,23 @@ import ds.Tuple;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.Part;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 @Path("Products")
 public class ProductService {
 
     private ProductDAO productDAO;
+    private Catalogue catalogue = Catalogue.getInstance();
 
     @Context
     private ServletContext context;
@@ -29,9 +37,12 @@ public class ProductService {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Product> getAllProducts() {
-        List<Product> products = productDAO.getAllProducts();
+    	
+    	List<Product> products = productDAO.getAllProducts();
         System.out.println("getAllProducts called");
+        catalogue.setProducts(products);
         return products;
+        
     }
 
     @GET
@@ -48,6 +59,7 @@ public class ProductService {
 	public List<Product> getProductsByCategory(@PathParam("cat") String cat){
 		
     	List<Product> products = productDAO.getProductsByCategory(cat);
+    	catalogue.setProducts(products);
         return products;
 		
 		
@@ -59,6 +71,7 @@ public class ProductService {
 	public List<Product> getProductsBySubCategory(@PathParam("cat") String cat){
     	System.out.println("REST getProductsBySubCategory called");
     	List<Product> products = productDAO.getProductsBySubCategory(cat);
+    	catalogue.setProducts(products);
         return products;
 		
 		
@@ -70,10 +83,23 @@ public class ProductService {
 	public List<Product> getProductsByKeyword(@PathParam("key") String key){
     	System.out.println("REST getProductsByKeyword called");
     	List<Product> products = productDAO.getProductsByKeyword(key);
+    	catalogue.setProducts(products);
         return products;
 		
 		
 	}
+    
+    @GET
+    @Path("/sort/{method}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Product> sort(@PathParam("method") int method) {
+    	System.out.println("rest sort catalogue called");
+    	
+    	List<Product> products = catalogue.getProducts();
+        catalogue.sort(method);
+        return products;
+        
+    }
     
     @GET
 	@Path("/getFeaturedProducts")
@@ -112,7 +138,7 @@ public class ProductService {
         	System.out.println("addProduct REST called");
             // Add the product using the ProductDAO
             productDAO.addProduct(product);
-
+            catalogue.addProduct(product);
             // Return a success response with the created product's ID
             return Response.status(Response.Status.CREATED)
                            .entity("Product added successfully with ID: " + product.getId())
@@ -156,7 +182,25 @@ public class ProductService {
                            .build();
         }
     }
-
     
-    
+    /*
+    @PUT
+    @Path("/uploadImage")
+    public Response uploadImage(@Context HttpServletRequest request) {
+        try {
+            Part filePart = request.getPart("image");
+            String fileName = filePart.getSubmittedFileName();
+            String uploadPath = getServletContext().getRealPath("") + File.separator + "uploads";
+            File uploadDir = new File(uploadPath);
+            if (!uploadDir.exists()) {
+                uploadDir.mkdir();
+            }
+            filePart.write(uploadPath + File.separator + fileName);
+            return Response.ok().build();
+        } catch (IOException | ServletException e) {
+            e.printStackTrace();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
     }
+    */
+}

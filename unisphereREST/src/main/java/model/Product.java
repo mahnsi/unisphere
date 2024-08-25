@@ -79,4 +79,9 @@ public class Product {
     public void setSold(int s) {
     	this.sold = s;
     }
+    
+    @Override
+    public String toString() {
+        return "Product{title='" + title + "', price=" + price + '}';
+    }
 }
