@@ -1,6 +1,7 @@
 package model;
 
 public class Address {
+    private int id;  // Add this line
     private String firstName;
     private String lastName;
     private String streetAddress;
@@ -16,6 +17,14 @@ public class Address {
     }
 
     // Getters and Setters
+    public int getId() {  // Add this getter
+        return id;
+    }
+
+    public void setId(int id) {  // Add this setter
+        this.id = id;
+    }
+
     public String getFirstName() {
         return firstName;
     }
@@ -80,3 +89,4 @@ public class Address {
         this.country = country;
     }
 }
+

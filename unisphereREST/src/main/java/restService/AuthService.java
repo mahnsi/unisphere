@@ -1,6 +1,7 @@
 package restService;
 
 import model.User;
+import model.Address;
 import dao.UserDAO;
 
 import javax.annotation.PostConstruct;
@@ -105,6 +106,41 @@ public class AuthService {
                 session.setAttribute("user", user);
 
                 return Response.ok(user).build();
+            } else {
+                return Response.status(Response.Status.UNAUTHORIZED).entity("No user in session").build();
+            }
+        } else {
+            return Response.status(Response.Status.UNAUTHORIZED).entity("No session found").build();
+        }
+    }
+
+    @POST
+    @Path("/updateAddress")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateAddress(String jsonInput, @Context HttpServletRequest request) {
+        JSONObject json = new JSONObject(jsonInput);
+
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            User user = (User) session.getAttribute("user");
+            if (user != null) {
+                Address updatedAddress = new Address();
+                updatedAddress.setStreetAddress(json.getString("addressLine1"));
+                updatedAddress.setApartment(json.optString("addressLine2"));
+                updatedAddress.setCity(json.getString("city"));
+                updatedAddress.setProvince(json.getString("province"));
+                updatedAddress.setPostalCode(json.getString("postalCode"));
+                updatedAddress.setCountry(json.getString("country"));
+
+                user.setAddress(updatedAddress);
+
+                userDao.updateAddress(user, updatedAddress);
+
+                // Update the session with the new address
+                session.setAttribute("user", user);
+
+                return Response.ok(updatedAddress).build();
             } else {
                 return Response.status(Response.Status.UNAUTHORIZED).entity("No user in session").build();
             }
