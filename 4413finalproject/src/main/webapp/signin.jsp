@@ -23,13 +23,20 @@
             
             <button type="submit" class = addToBag >Sign In</button>
         </form>
-        <p>Don't have an account? <a href="signup.jsp">Sign up</a></p>
+        <p>Don't have an account? <a id = "signup-link" href="signup.jsp">Sign up</a></p>
     </div>
 </main>
 
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
+var redirectUrl = "profile.jsp";
+var urlParams = new URLSearchParams(window.location.search);
+if (urlParams.has("redir") && urlParams.get("redir") === "true") {
+    redirectUrl = "checkout.jsp";
+    $("#signup-link").attr("href","signup.jsp?redir=true");
+}
+
 //Function that's called when the above form is submitted
 $("#signinform").submit(function(e) {
     e.preventDefault();
@@ -47,7 +54,7 @@ $("#signinform").submit(function(e) {
         data: JSON.stringify(credentials), 
         success: function(result) {
             console.log("Login successful");
-            window.location.href = "profile.jsp";
+            window.location.href = redirectUrl;
             
         },
         error: function(xhr, status, error) {

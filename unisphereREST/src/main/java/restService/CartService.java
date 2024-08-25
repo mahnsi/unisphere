@@ -131,19 +131,20 @@ public class CartService {
 
     public Cart getSessionCart(@Context HttpServletRequest request) {
         HttpSession session = request.getSession(false); // Get existing session
-        if (session != null) {
-            Cart cart = (Cart) session.getAttribute("cart");
-            if (cart != null) {
-                return cart;
-            } else {
-            	System.out.println("null cart");
-                return null;
-            }
-        } else {
+        if(session==null) {
         	System.out.println("null session (getSessionCart)");
+        	request.getSession(true);
+        }
+        Cart cart = (Cart) session.getAttribute("cart");
+        
+        if (cart != null) {
+            return cart;
+        } else {
+        	System.out.println("active session, null cart");
             return null;
         }
     }
+
 
     public User getSessionUser(@Context HttpServletRequest request) {
         HttpSession session = request.getSession(false); // Get existing session

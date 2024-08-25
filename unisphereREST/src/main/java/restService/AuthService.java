@@ -2,6 +2,8 @@ package restService;
 
 import model.User;
 import model.Address;
+import model.Cart;
+import dao.CartDAO;
 import dao.UserDAO;
 
 import javax.annotation.PostConstruct;
@@ -23,6 +25,7 @@ import org.json.JSONObject;
 public class AuthService {
 
     private UserDAO userDao;
+    private CartDAO cartDao;
 
     @Context
     private ServletContext servletContext;
@@ -30,6 +33,7 @@ public class AuthService {
     @PostConstruct
     public void init() {
         userDao = new UserDAO(servletContext);
+        cartDao = new CartDAO(servletContext);
     }
 
     @POST
@@ -46,7 +50,10 @@ public class AuthService {
             return Response.status(Response.Status.UNAUTHORIZED).entity("Nonexistent user").build();
         } else if (user.getPassword().equals(password)) {
             HttpSession session = request.getSession();
+            
+            Cart cart = (Cart) session.getAttribute("cart");
             session.setAttribute("user", user);
+            cartDao.setCartForUser(username, cart);
             return Response.ok(user).build();
         } else {
             return Response.status(Response.Status.UNAUTHORIZED).entity("Invalid username or password").build();
@@ -60,7 +67,9 @@ public class AuthService {
         HttpSession session = request.getSession(false);
         if (session != null) {
             session.invalidate();
+            request.getSession(true);
         }
+        
         return Response.ok("{\"message\":\"Logged out successfully\"}").build();
     }
 

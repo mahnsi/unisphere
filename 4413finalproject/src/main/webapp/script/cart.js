@@ -1,7 +1,25 @@
 $(document).ready(function() {
         fetchCartItems();
+		$('.checkout-button').click(function(event) {
+		        event.preventDefault(); // Prevent the default behavior of the button
 
-        // Function to fetch cart items for the session
+		        // Check if the user is authenticated
+		        $.ajax({
+		            url: 'http://localhost:8080/unisphereREST/rest/Auth/session', 
+		            method: 'GET',
+		            success: function(response) {
+
+		               window.location.href = 'checkout.jsp';
+		                
+		            },
+		            error: function(err) {
+						alert('Please sign in to proceed to checkout.');
+						window.location.href = 'signin.jsp?redir=true';
+		            }
+		        });
+		    });
+
+        // function to display cart items for the session
         function fetchCartItems() {
             $.ajax({
                 url: "http://localhost:8080/unisphereREST/rest/Cart/getCart/",
@@ -60,7 +78,7 @@ $(document).ready(function() {
             });
         }
 
-        // Function to remove item from the cart
+        //functions to dynamically update views based on selection
         function removeCartItem(productId) {
             $.ajax({
                 url: 'http://localhost:8080/unisphereREST/rest/Cart/removeFromCart/',

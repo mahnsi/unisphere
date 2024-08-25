@@ -23,7 +23,7 @@
             <p>Shipping: <span id="shipping-cost">Shipping Calculated at Checkout</span></p>
             <p>Discount: <span id="discount">Offers applied at checkout</span></p>
             <p><strong>Subtotal: <span id="estimated-total">$0.00</span></strong></p>
-            <a href="checkout.jsp"><button class="checkout-button">Checkout</button></a>
+            <button class="checkout-button">Checkout</button>
         </section>
     </main>
 
