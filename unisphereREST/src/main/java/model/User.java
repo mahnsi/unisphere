@@ -6,7 +6,10 @@ public class User {
     private String lastName;
     private String email;
     private String password;
-    private boolean isAdmin;
+	Address address;
+	Payment payment;
+	boolean isAdmin;
+	Cart cart;
 
     public User(String username, String email, String firstName, String lastName, String password) {
         this.username = username;
@@ -43,6 +46,18 @@ public class User {
     public String getPassword() {
         return password;
     }
+    
+    public Cart getCart() {
+    	return cart;
+    }
+
+    public Payment getPayment() {
+    	return payment;
+    }
+
+    public Address getAddress() {
+    	return address;
+    }
 
     // Setters
     public void setUsername(String username) {
@@ -67,5 +82,18 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+   
+
+    public void setCart(Cart cart) {
+    	this.cart = cart;
+    }
+
+    public void setPayment(Payment payment) {
+    	this.payment = payment;
+    }
+
+    public void setAddress(Address address) {
+    	this.address = address;
     }
 }
