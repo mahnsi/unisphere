@@ -24,7 +24,7 @@ $(document).ready(function() {
     // URL of the endpoint to fetch users
     const apiUrl = "http://localhost:8080/unisphereREST/rest/Users";
     
-    console.log("hi"); // Check if the script is running
+    console.log("Script running"); // Check if the script is running
     
     // Fetch users from the API
     $.ajax({
@@ -44,6 +44,7 @@ $(document).ready(function() {
                             '<h3><a href="profile.jsp?mode=admin&username=' + encodeURIComponent(user.username) + '">' + user.username + '</a></h3>' +
                             '<p>Email: ' + user.email + '</p>' +
                             '<p>Role: ' + (user.isAdmin ? 'Admin' : 'User') + '</p>' +
+                            '<button onclick="deleteUser(\'' + user.username + '\')">Delete</button>' + // Add the delete button here
                         '</div>';
                     
                     // Append the user HTML to the user-list container
@@ -60,6 +61,23 @@ $(document).ready(function() {
         }
     });
 });
+
+//Function to delete a user
+function deleteUser(username) {
+    $.ajax({
+        url: 'http://localhost:8080/unisphereREST/rest/Users/' + username,  // Adjust the URL to match your REST service
+        method: 'DELETE',
+        success: function(response) {
+            console.log("User deleted: " + username);
+            // Remove the user's element from the DOM, assuming each user has a corresponding div or row
+            $('.user-item[data-username="' + username + '"]').remove();
+        },
+        error: function(error) {
+            console.error('Error deleting user:', error);
+        }
+    });
+}
+
 </script>
 
 </body>

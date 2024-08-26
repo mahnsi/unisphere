@@ -219,4 +219,17 @@ public class UserDAO extends DAO {
             ex.printStackTrace();
         }
     }
+    public boolean delete(String username) {
+        String query = "DELETE FROM User WHERE username = ?";
+        try (Connection connection = getConnection();
+             PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setString(1, username);
+            int rowsAffected = stmt.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return false;
+        }
+    }
+
 }

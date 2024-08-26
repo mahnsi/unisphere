@@ -12,6 +12,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -149,5 +150,25 @@ public class UserService {
         // Return a success response with the updated payment information
         return Response.ok(updatedPayment).build();
     }
+    
+    @DELETE
+    @Path("/{username}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteUser(@PathParam("username") String username) {
+        // Check if the user exists
+        User user = userDao.getUserByUsername(username);
+        if (user == null) {
+            return Response.status(Response.Status.NOT_FOUND).entity("{\"message\":\"User not found\"}").build();
+        }
+
+        // Delete the user
+        boolean isDeleted = userDao.delete(username);
+        if (isDeleted) {
+            return Response.ok("{\"message\":\"User deleted successfully\"}").build();
+        } else {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("{\"message\":\"User could not be deleted\"}").build();
+        }
+    }
+
     
 }
