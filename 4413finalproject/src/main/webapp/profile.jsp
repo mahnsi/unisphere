@@ -44,10 +44,10 @@
             
             <div id="orders" class="section" style="display: none;">
 			    <h2>Order History</h2>
-			    <div id="orderList">
-			        <!-- Orders will be dynamically injected here -->
-			    </div>
+			    <ul id="orderList"></ul>
+			    <div id="orderDetails" style="display: none;"></div>
 			</div>
+
             
 
             <div id="addresses" class="section" style="display: none;">

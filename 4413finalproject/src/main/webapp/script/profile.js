@@ -125,61 +125,89 @@ $(document).ready(function() {
           });
       });
 
-      function showSection(section, element) {
-          document.querySelectorAll('.section').forEach(section => {
-              section.style.display = 'none';
-          });
+	  function showSection(section, element) {
+	      document.querySelectorAll('.section').forEach(section => {
+	          section.style.display = 'none';
+	      });
 
-          document.getElementById(section).style.display = 'block';
+	      document.getElementById(section).style.display = 'block';
 
-          document.querySelectorAll('.nav-panel a').forEach(navItem => {
-              navItem.classList.remove('active');
-          });
+	      document.querySelectorAll('.nav-panel a').forEach(navItem => {
+	          navItem.classList.remove('active');
+	      });
 
-          element.classList.add('active');
-          if (section === 'orders') {
-              fetchOrders();
-          }
-      }
+	      element.classList.add('active');
+	      if (section === 'orders') {
+	          fetchOrders();
+	      }
+	  }
+
       
-      function fetchOrders() {
-          $.ajax({
-              url: 'http://localhost:8080/unisphereREST/rest/Orders/getOrdersByUsername/' + $('#username').val(),
-              method: 'GET',
-              dataType: 'json',
-              success: function(orders) {
-                  $('#orderList').empty();  // Clear the existing order list
+	  function fetchOrders() {
+	      $.ajax({
+	          url: 'http://localhost:8080/unisphereREST/rest/Orders/getOrdersByUsername/' + $('#username').val(),
+	          method: 'GET',
+	          dataType: 'json',
+	          success: function(orders) {
+	              $('#orderList').empty();  // Clear the existing order list
 
-                  if (orders.length === 0) {
-                      $('#orderList').append('<p>No orders found.</p>');
-                      return;
-                  }
+	              if (orders.length === 0) {
+	                  $('#orderList').append('<p>No orders found.</p>');
+	                  return;
+	              }
 
-                  orders.forEach(function(order) {
-                      var orderHtml = `
-                          <div class="order">
-                              <h3>Order ID: ${order.id}</h3>
-                              <p><strong>Date:</strong> ${order.date}</p>
-                              <p><strong>Total:</strong> $${order.total}</p>
-                              <h4>Items:</h4>
-                              <ul>`;
-                      
-                      order.cart.forEach(function(item) {
-                          orderHtml += `<li>${item.title} - $${item.price}</li>`;
-                      });
+	              orders.forEach(function(order) {
+	                  $('#orderList').append(
+	                      `<li><a href="#" onclick="showOrderDetails(${order.id})">Order ID: ${order.id}</a></li>`
+	                  );
+	              });
+	          },
+	          error: function(jqXHR, textStatus, errorThrown) {
+	              console.error("Error fetching orders:", textStatus, errorThrown);
+	              $('#orderList').append('<p>Error loading order history. Please try again later.</p>');
+	          }
+	      });
+	  }
+	  
+	  function showOrderDetails(orderId) {
+	      $.ajax({
+	          url: 'http://localhost:8080/unisphereREST/rest/Orders/getOrderById/' + orderId,
+	          method: 'GET',
+	          dataType: 'json',
+	          success: function(order) {
+	              $('#orderDetails').empty();  // Clear previous order details
 
-                      orderHtml += `
-                              </ul>
-                          </div>
-                          <hr>
-                      `;
+	              var orderHtml = `
+	                  <h3>Order ID: ${order.id}</h3>
+	                  <p><strong>Date:</strong> ${order.date}</p>
+	                  <p><strong>Total:</strong> $${order.total}</p>
+	                  <h4>Items:</h4>
+	                  <ul>`;
 
-                      $('#orderList').append(orderHtml);
-                  });
-              },
-              error: function(jqXHR, textStatus, errorThrown) {
-                  console.error("Error fetching orders:", textStatus, errorThrown);
-                  $('#orderList').append('<p>Error loading order history. Please try again later.</p>');
-              }
-          });
-      }
+	              order.cart.items.forEach(function(item) {
+	                  orderHtml += `<li>${item.title} - $${item.price}</li>`;
+	              });
+
+	              orderHtml += `
+	                  </ul>
+	                  <button type="button" onclick="backToOrderList()">Back to Order History</button>
+	              `;
+
+	              $('#orderDetails').append(orderHtml);
+
+	              // Hide the order list and show the order details
+	              $('#orderList').hide();
+	              $('#orderDetails').show();
+	          },
+	          error: function(jqXHR, textStatus, errorThrown) {
+	              console.error("Error fetching order details:", textStatus, errorThrown);
+	              $('#orderDetails').append('<p>Error loading order details. Please try again later.</p>');
+	          }
+	      });
+	  }
+
+	  function backToOrderList() {
+	      $('#orderDetails').hide();
+	      $('#orderList').show();
+	  }
+
