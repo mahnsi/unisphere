@@ -69,7 +69,7 @@
 
             </form>
             
-                    <hr>
+            <hr>
             
             <h2>Payment</h2>
             <div class="input-group">
@@ -106,10 +106,6 @@
             
         </section>
         
-
-        
-        
-        
         <section class="order-summary">
             <h3>Order Summary</h3>
             <p id="shipping-cost">Shipping: $5.00</p>
@@ -121,7 +117,6 @@
         </section>
     </main>
 
-<script src = "script/checkout.js"> </script>
-
+    <script src="script/checkout.js"></script>
 </body>
 </html>

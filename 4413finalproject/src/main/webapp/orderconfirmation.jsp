@@ -6,16 +6,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Order Confirmation</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="cart_wishlist_checkout.css">
-</head>
+    <link rel="stylesheet" href="style/cart_wishlist_checkout.css">
 
+</head>
 <body>
 <%@ include file="header.html" %>
 
 <main class="orderconfirmation">
     <h2>Thank You for Your Order!</h2>
-    <!-- Display the order number dynamically -->
     <h2>Order #<%= request.getParameter("orderNumber") %></h2>
     
     <div class="button-group">
