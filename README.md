@@ -1,6 +1,4 @@
 # 4413project
-# h
-
 
 # READ ME - HOW TO RUN
 
