@@ -1,13 +1,11 @@
 <!DOCTYPE html>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ include file="header.html" %>
 <html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Checkout Page</title>
     <link rel="stylesheet" href="style/cart_wishlist_checkout.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
 <body>
@@ -29,7 +27,7 @@
 
                 <!-- Existing Address Section -->
                 <div id="existing-address-section">
-                    <p id="existing-address">  Address Info loaded here..</p>
+                    <p id="existing-address">Address Info loaded here..</p>
                 </div>
 
                 <!-- New Address Section -->
@@ -66,74 +64,67 @@
                     </div>
                 </div>
             </form>
+        </section>
         
-<hr>
+        <hr>
         
-            <h2>Payment</h2>
-            <div class="input-group">
-                <label>
-                    <input type="radio" name="payment-option" value="saved" checked> Use Saved Payment Method
-                </label>
-                <label>
-                    <input type="radio" name="payment-option" value="new"> Enter New Payment Method
-                </label>
-            </div>
-
-            <!-- Saved Payment Method Section -->
-            <div id="saved-payment-section">
-                <p id="saved-payment">saved Payment info loaded here..</p>
-            </div>
-
-            <!-- New Payment Method Section -->
-            <div id="new-payment-section" style="display: none;">
-                <div class="input-group">
-                    <label for="card-number">Card Number</label>
-                    <input type="text" id="card-number" name="card-number">
-                </div>
-                <div class="input-row">
-                    <div class="input-group">
-                        <label for="expiry-date">Expiry Date</label>
-                        <input type="text" id="expiry-date" name="expiry-date" placeholder="MM/YY">
-                    </div>
-                    <div class="input-group">
-                        <label for="cvv">CVV</label>
-                        <input type="text" id="cvv" name="cvv">
-                    </div>
-                </div>
-            </div>
-       </section>
-
         <section class="order-summary">
             <h3>Order Summary</h3>
-            <p>Shipping:</p>
-            <p>Tax:</p>
-            <p>Discount:</p>
-            <p><strong>Estimated Total $0.00</strong></p>
+            <p id="shipping-cost">Shipping: $5.00</p>
+            <p id="tax">Tax: $0.00</p>
+            <p id="discount">Discount: $0.00</p>
+            <p><strong id="subtotal">Subtotal: $0.00</strong></p>
+            <p><strong id="estimated-total">Estimated Total: $0.00</strong></p>
             <button class="checkout-button" id="place-order-button">Place Order</button>
         </section>
     </main>
 
-   <script>
+<script>
     $(document).ready(function() {
+        // Fetch the cart data and update the order summary
         $.ajax({
-            url: 'http://localhost:8080/unisphereREST/rest/Auth/session',
+            url: 'http://localhost:8080/unisphereREST/rest/Cart/getCart',
             method: 'GET',
             dataType: 'json',
-            xhrFields: {
-                withCredentials: true
-            },
-            success: function(response) {
-                console.log("User data from session:", response);
-                let username = response.username;
-
-                // Load existing address
-                fetchExistingAddressandPayment(username);
-
+            success: function(cart) {
+                console.log("Cart data:", cart);
+                updateOrderSummary(cart);
             },
             error: function(jqXHR, textStatus, errorThrown) {
-                console.error("Error fetching session data:", textStatus, errorThrown);
+                console.error("Error fetching cart data:", textStatus, errorThrown);
             }
         });
+
+        function updateOrderSummary(cart) {
+            // Ensure that the cart data is valid before accessing its properties
+            if (!cart || typeof cart.totalPrice !== 'number') {
+                console.error("Cart data is not valid:", cart);
+                return;
+            }
+
+            // Debugging the cart items and total price
+            console.log("Total Price:", cart.totalPrice);
+            console.log("Items in Cart:", cart.items);
+
+            // Variables
+            let subtotal = cart.totalPrice || 0; // Use the totalPrice directly from the cart data
+            console.log("Calculated Subtotal:", subtotal); // Debugging subtotal calculation
+
+            let shipping = 5.00; // Example flat rate shipping
+            console.log("Flat Shipping Rate:", shipping); // Debugging shipping calculation
+
+            let tax = subtotal * 0.13; // Assuming 13% tax rate
+            console.log("Calculated Tax:", tax); // Debugging tax calculation
+
+            let total = subtotal + shipping + tax;
+            console.log("Final Estimated Total:", total); // Debugging final total calculation
+
+            // Update the order summary on the page
+            $('#subtotal').text(`Subtotal: $${subtotal.toFixed(2)}`);
+            $('#shipping-cost').text(`Shipping: $${shipping.toFixed(2)}`);
+            $('#tax').text(`Tax: $${tax.toFixed(2)}`);
+            $('#estimated-total').text(`Estimated Total: $${total.toFixed(2)}`);
+        }
 
         // Handle address option changes
         $("input[name='address-option']").change(function() {
@@ -157,42 +148,6 @@
             }
         });
 
-        function fetchExistingAddressandPayment(username) {
-            $.ajax({
-                url: "http://localhost:8080/unisphereREST/rest/Users/getAllUserInfo/" + username,
-                method: "GET",
-                success: function(response) {
-                	console.log("success fetching all user info");
-                	if(response){
-	                    let address = response.address; 
-	                    let payment = response.payment;
-	                    $("#existing-address").text(
-	                    	    address.firstName + " " + address.lastName + "\n" +
-	                    	    address.streetAddress + ", " + address.apartment + "\n" +
-	                    	    address.city + ", " + address.province
-	                    	);
-	
-	                    	$("#saved-payment").text(
-	                    	    payment.cardHolderName + "\n" +
-	                    	    payment.cardNumber + ", " + payment.expiryDate + "\n" +
-	                    	    payment.cvv
-	                    	);
-                	}
-                	
-                	else{
-                		$("#existing-address").text("No Saved Address. Please enter one below or on your profile.");
-	
-	                    $("#saved-payment").text("No Saved Payment. Please enter one below or on your profile.");
-                		
-                	}
-
-                },
-                error: function() {
-                	console.log("hellor");
-                }
-            });
-        }
-
         $("#place-order-button").click(function() {
             processOrder();
         });
@@ -200,7 +155,7 @@
         function processOrder() {
             let addressOption = $("input[name='address-option']:checked").val();
             let paymentOption = $("input[name='payment-option']:checked").val();
-            
+
             let formData = {
                 addressOption: addressOption,
                 paymentOption: paymentOption
@@ -244,7 +199,6 @@
                 }
             });
         }
-
     });
 </script>
 
