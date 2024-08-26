@@ -16,6 +16,7 @@ $(document).ready(function() {
         }
     });
 
+    // Fetch user session data
     $.ajax({
         url: 'http://localhost:8080/unisphereREST/rest/Auth/session',
         method: 'GET',
@@ -52,6 +53,7 @@ $(document).ready(function() {
         $('#estimated-total').text(`Estimated Total: $${total.toFixed(2)}`);
     }
 
+    // Handle address option change
     $("input[name='address-option']").change(function() {
         if ($(this).val() === "existing") {
             $("#existing-address-section").show();
@@ -93,6 +95,7 @@ $(document).ready(function() {
         });
     }
 
+    // Handle payment option change
     $("input[name='payment-option']").change(function() {
         if ($(this).val() === "saved") {
             $("#saved-payment-section").show();
@@ -103,6 +106,7 @@ $(document).ready(function() {
         }
     });
 
+    // Handle the place order button click
     $("#place-order-button").click(function() {
         processOrder();
     });
@@ -111,6 +115,7 @@ $(document).ready(function() {
         let addressOption = $("input[name='address-option']:checked").val();
         let paymentOption = $("input[name='payment-option']:checked").val();
 
+        // Create the formData object to hold order details
         formData.address = addressOption === "new" ? {
             firstName: $("#first-name").val() || null,
             lastName: $("#last-name").val() || null,
@@ -130,14 +135,24 @@ $(document).ready(function() {
 
         console.log("Form Data being sent: ", JSON.stringify(formData, null, 2));
 
-        // Generate a random order number for the confirmation
-        let randomOrderNumber = Math.floor(Math.random() * 1000000000);  // Generates a random 9-digit order number
-
-        // Proceed with "placing" the order and redirect to the confirmation page
-        console.log("Generated Order Number:", randomOrderNumber);
-
-        // Simulate order processing (could be saved to backend in real cases)
-        // Redirect to the order confirmation page with the generated order number
-        window.location.href = 'orderconfirmation.jsp?orderNumber=' + randomOrderNumber;
+        // Send the order data to the server
+        $.ajax({
+            url: "http://localhost:8080/unisphereREST/rest/Orders",
+            method: "POST",
+            data: JSON.stringify(formData),
+            contentType: "application/json",
+            success: function(response) {
+                // On success, redirect to order confirmation page
+                if (response.orderNumber) {
+                    window.location.href = 'orderconfirmation.jsp?orderNumber=' + response.orderNumber;
+                } else {
+                    alert("Order was processed, but no order number was returned. Please check your order history.");
+                }
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                alert("Error processing your order. Please try again.");
+                console.error("Order processing error:", textStatus, errorThrown);
+            }
+        });
     }
 });

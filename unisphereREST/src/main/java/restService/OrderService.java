@@ -1,8 +1,10 @@
 package restService;
+
 import model.*;
 import dao.*;
 
 import java.util.List;
+import java.util.Random;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
@@ -22,34 +24,29 @@ import javax.ws.rs.core.Response;
 @Path("Orders")
 public class OrderService {
 	
-	 private OrderDAO orderDao;
+	private OrderDAO orderDao;
 
-    @Context
-    private ServletContext servletContext;
+	@Context
+	private ServletContext servletContext;
 
-    @PostConstruct
-    public void init() {
-        orderDao = new OrderDAO(servletContext);
-    }
+	@PostConstruct
+	public void init() {
+		orderDao = new OrderDAO(servletContext);
+	}
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Order> getAllOrders(){
-		
 		List<Order> olist = orderDao.getAllOrders();
 		return olist;
 	}
-	
 	
 	@GET
 	@Path("/getOrdersByUsername/{username}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Order> getOrderbyOrdername(@PathParam("username") String uname){
-		
 		List<Order> olist = orderDao.getOrdersByUsername(uname);
 		return olist;
-		
-		
 	}
 	
 	@GET
@@ -64,12 +61,17 @@ public class OrderService {
 	}
 	
 	@POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response createOrder(Order order) {
-		orderDao.insert(order);
-		return null;
-    }
-	
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response createOrder(Order order) {
+		// Generate a random order number
+		String orderNumber = String.valueOf(new Random().nextInt(999999999));
+		order.setOrderNumber(orderNumber);
 
+		// Save the order with the generated order number
+		orderDao.insert(order);
+
+		// Return the order number in the response
+		return Response.ok(order).build();
+	}
 }
