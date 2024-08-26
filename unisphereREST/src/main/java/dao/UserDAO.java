@@ -13,6 +13,7 @@ import java.util.List;
 import javax.servlet.ServletContext;
 
 public class UserDAO extends DAO {
+	 private Connection connection;
 
     public UserDAO(ServletContext context) {
         super(context);
@@ -76,9 +77,9 @@ public class UserDAO extends DAO {
 
     public User getFullUserByUsername(String username) {
         User user = null;
-        String query = "SELECT u.*, a.*, p.* FROM User u " +
-                       "LEFT JOIN Address a ON u.address_id = a.id " +
-                       "LEFT JOIN Payment p ON u.payment_id = p.id " +
+        String query = "SELECT * FROM User u " +
+                       "JOIN Address a ON u.address_id = a.id " +
+                       "JOIN Payment p ON u.payment_id = p.id " +
                        "WHERE u.username = ?";
 
         try (Connection connection = getConnection();
@@ -96,31 +97,25 @@ public class UserDAO extends DAO {
                     user = new User(username, email, firstName, lastName, password);
                     user.setIsAdmin(isAdmin);
 
-                    // Set Address
-                    int addressId = rs.getInt("a.id");
-                    if (addressId > 0) {
-                        Address address = new Address();
-                        address.setId(addressId);
-                        address.setStreetAddress(rs.getString("address_line_1"));
-                        address.setApartment(rs.getString("address_line_2"));
-                        address.setCity(rs.getString("city"));
-                        address.setProvince(rs.getString("province"));
-                        address.setPostalCode(rs.getString("postalcode"));
-                        address.setCountry(rs.getString("country"));
-                        user.setAddress(address);
-                    }
+                    Address address = new Address();
+                    address.setStreetAddress(rs.getString("street_address"));
+                    address.setFirstName(rs.getString("fname"));
+                    address.setLastName(rs.getString("lname"));
+                    address.setApartment(rs.getString("apt"));
+                    address.setCity(rs.getString("city"));
+                    address.setProvince(rs.getString("province"));
+                    address.setPostalCode(rs.getString("postalcode"));
+                    address.setCountry(rs.getString("country"));
+                    user.setAddress(address);
 
-                    // Set Payment
-                    int paymentId = rs.getInt("p.id");
-                    if (paymentId > 0) {
-                        Payment payment = new Payment();
-                        payment.setId(paymentId);
-                        payment.setCardHolderName(rs.getString("card_holder_name"));
-                        payment.setCardNumber(rs.getString("card_number"));
-                        payment.setExpirationDate(rs.getString("expiry"));
-                        payment.setCvv(rs.getString("cvv"));
-                        user.setPayment(payment);
-                    }
+
+                    Payment payment = new Payment();
+                    payment.setCardHolderName(rs.getString("card_holder_name"));
+                    payment.setCardNumber(rs.getString("card_number"));
+                    payment.setExpirationDate(rs.getString("expiry"));
+                    payment.setCvv(rs.getString("cvv"));
+                    user.setPayment(payment);
+                    
                 }
             }
 
@@ -172,7 +167,8 @@ public class UserDAO extends DAO {
     }
 
     public void updateAddress(User user, Address updatedAddress) {
-        String query = "UPDATE Address SET address_line_1 = ?, address_line_2 = ?, city = ?, province = ?, postalcode = ?, country = ? WHERE id = ?";
+    	String query = "UPDATE Address SET street_address = ?, apt = ?, city = ?, province = ?, postalcode = ?, country = ? " +
+                "WHERE id = (SELECT address_id FROM User WHERE username = ?)";
 
         try (Connection connection = getConnection();
              PreparedStatement stmt = connection.prepareStatement(query)) {
@@ -183,8 +179,15 @@ public class UserDAO extends DAO {
             stmt.setString(4, updatedAddress.getProvince());
             stmt.setString(5, updatedAddress.getPostalCode());
             stmt.setString(6, updatedAddress.getCountry());
-            stmt.setInt(7, user.getAddress().getId());
+            stmt.setString(7, user.getUsername());
             stmt.executeUpdate();
+            
+            int rowsAffected = stmt.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("Address updated successfully. Rows affected: " + rowsAffected);
+            } else {
+                System.out.println("No address was updated.");
+            }
 
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -192,7 +195,8 @@ public class UserDAO extends DAO {
     }
 
     public void updatePayment(User user, Payment updatedPayment) {
-        String query = "UPDATE Payment SET card_holder_name = ?, card_number = ?, expiry = ?, cvv = ? WHERE id = ?";
+        String query = "UPDATE Payment SET card_holder_name = ?, card_number = ?, expiry = ?, cvv = ? "
+        		+ "WHERE id = (select payment_id FROM User WHERE username =  ?)";
 
         try (Connection connection = getConnection();
              PreparedStatement stmt = connection.prepareStatement(query)) {
@@ -201,8 +205,15 @@ public class UserDAO extends DAO {
             stmt.setString(2, updatedPayment.getCardNumber());
             stmt.setString(3, updatedPayment.getExpirationDate());
             stmt.setString(4, updatedPayment.getCvv());
-            stmt.setInt(5, user.getPayment().getId());
+            stmt.setString(5, user.getUsername());
             stmt.executeUpdate();
+            
+            int rowsAffected = stmt.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("Payment updated successfully. Rows affected: " + rowsAffected);
+            } else {
+                System.out.println("No payment was updated.");
+            }
 
         } catch (SQLException ex) {
             ex.printStackTrace();

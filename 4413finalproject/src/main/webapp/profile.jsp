@@ -45,11 +45,11 @@
             <div id="addresses" class="section" style="display: none;">
                 <h2>My Addresses</h2>
                 <form id="addressForm">
-                    <label for="addressLine1">Address Line 1:</label>
-                    <input type="text" id="addressLine1" name="addressLine1"><br>
-
-                    <label for="addressLine2">Address Line 2:</label>
-                    <input type="text" id="addressLine2" name="addressLine2"><br>
+                    <label for="streetAddress">Street Address</label>
+                    <input type="text" id="streetAddress" name="streetAddress"><br>
+                    
+                    <label for="apt">Apt. / Suite</label>
+                    <input type="text" id="apt" name="apt"><br>
 
                     <label for="city">City:</label>
                     <input type="text" id="city" name="city"><br>
@@ -102,14 +102,14 @@
                     withCredentials: true 
                 },
                 success: function(response) {
-                    $('#usernameDisplay').text(response.firstName);
+                    $('#usernameDisplay').text(response.username);
                     $('#firstName').val(response.firstName);
                     $('#lastName').val(response.lastName);
                     $('#username').val(response.username);
 
                     // Set the address fields
-                    $('#addressLine1').val(response.address.streetAddress);
-                    $('#addressLine2').val(response.address.apartment);
+                    $('#streetAddress').val(response.address.streetAddress);
+                    $('#apt').val(response.address.apartment);
                     $('#city').val(response.address.city);
                     $('#province').val(response.address.province);
                     $('#postalCode').val(response.address.postalCode);
@@ -157,8 +157,7 @@
             // Handle the update address button click
             $('#updateAddressButton').click(function() {
                 var updatedAddress = {
-                    addressLine1: $('#addressLine1').val(),
-                    addressLine2: $('#addressLine2').val(),
+                	streetAddress: $('#streetAddress').val(),
                     city: $('#city').val(),
                     province: $('#province').val(),
                     postalCode: $('#postalCode').val(),
@@ -166,8 +165,8 @@
                 };
 
                 $.ajax({
-                    url: 'http://localhost:8080/unisphereREST/rest/Auth/updateAddress',
-                    method: 'POST',
+                    url: "http://localhost:8080/unisphereREST/rest/Users/updateAddress/" + $('#username').val(),
+                    method: 'PUT',
                     contentType: 'application/json',
                     data: JSON.stringify(updatedAddress),
                     success: function(response) {
@@ -184,13 +183,13 @@
                 var updatedPayment = {
                     cardHolderName: $('#cardHolderName').val(),
                     cardNumber: $('#cardNumber').val(),
-                    expiry: $('#expiry').val(),
+                    expirationDate: $('#expiry').val(),
                     cvv: $('#cvv').val()
                 };
 
                 $.ajax({
-                    url: 'http://localhost:8080/unisphereREST/rest/Auth/updatePayment',
-                    method: 'POST',
+                    url: 'http://localhost:8080/unisphereREST/rest/Users/updatePayment/' + $('#username').val(),
+                    method: 'PUT',
                     contentType: 'application/json',
                     data: JSON.stringify(updatedPayment),
                     success: function(response) {
