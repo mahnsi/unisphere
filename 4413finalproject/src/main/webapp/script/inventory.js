@@ -73,17 +73,9 @@ $(document).ready(function() {
                                     '<h3>' + product.title + '</h3>' +
                                     '<p>Price: $' + product.price.toFixed(2) + '</p>' +
                                     '<p>Stock: <span id="STOCKNUM">' +  product.stock + '</span></p>' +
-                                    '<p>Sold: ' + product.sold + '</p>' +
                                 '</a>' +
                                 '<label for="update-quantity-' + product.id + '">Update Stock:</label>' +
-                                '<select id="update-quantity-' + product.id + '" class="update-quantity">' +
-                                    '<option value="0">0</option>' +
-                                    '<option value="1">1</option>' +
-                                    '<option value="2">2</option>' +
-                                    '<option value="5">5</option>' +
-                                    '<option value="10">10</option>' +
-                                    '<option value="20">20</option>' +
-                                '</select>' +
+								'<input id="update-quantity-' + product.id + '" class="update-quantity" type="number" min="0" value="1">'+
                                 '<button class="update-btn" data-id="' + product.id + '">Update</button>' +
                             '</div>';
                         

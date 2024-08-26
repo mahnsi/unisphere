@@ -286,6 +286,7 @@ public class OrderDAO extends DAO {
                 itemStmt.setInt(2, item.getProduct().getId());
                 itemStmt.setInt(3, item.getQuantity());
                 itemStmt.addBatch();
+                updateProductQuantity(item.getProduct().getId(), item.getProduct().getStock() - item.getQuantity());
             }
             int[] itemRowsAffected = itemStmt.executeBatch();
             System.out.println("Ordered items insert affected " + itemRowsAffected.length + " row(s)");
@@ -298,5 +299,31 @@ public class OrderDAO extends DAO {
             e.printStackTrace();
         }
     }
+    
+    public boolean updateProductQuantity(int id, int quantity) {
+	    // Define the SQL update query
+		System.out.println("orderDAO updateProductQuantity called");
+	    String sql = "UPDATE product SET inventory_count = ? WHERE id = ?";
+
+	    // Use try-with-resources to ensure resources are closed
+	    try (Connection connection = getConnection(); // Method to obtain a database connection
+	         PreparedStatement statement = connection.prepareStatement(sql)) {
+
+	        // Set parameters for the SQL query
+	        statement.setInt(1, quantity); // Set the quantity
+	        statement.setInt(2, id); // Set the product ID
+
+	        // Execute the update
+	        int rowsAffected = statement.executeUpdate();
+	        System.out.println(rowsAffected);
+	        // Check if the update was successful
+	        return rowsAffected > 0; // Return true if at least one row was updated, otherwise false
+
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        System.out.println("dao fail");
+	        return false;
+	    }
+	}
 
 }

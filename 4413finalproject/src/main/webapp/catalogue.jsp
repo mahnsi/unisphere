@@ -40,8 +40,6 @@
 		            <!-- Subcategories will be populated dynamically -->
 		        </select>
 		
-		        <label for="price">Price:</label>
-		        <input type="range" id="price" name="price_minmax" min="0" max="1000" step="10">
 		
 		        <label for="sort">Sort By:</label>
 		        <select id="sort" name="sort">

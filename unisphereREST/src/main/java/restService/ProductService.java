@@ -104,6 +104,7 @@ public class ProductService {
 	public List<Product> getProductsByKeyword(@PathParam("key") String key){
     	System.out.println("REST getProductsByKeyword called");
     	List<Product> products = productDAO.getProductsByKeyword(key);
+    	System.out.println("h"+products.size());
     	catalogue.setProducts(products);
         return products;
 		

@@ -272,14 +272,16 @@ public class ProductDAO extends DAO {
 	}
 
 	public List<Product> getProductsByKeyword(String key) {
+		System.out.println("dao getProductsByKeyword" + key);
 		List<Product> products = new ArrayList<>();
 
         try {
             connection = getConnection();//expiration date on featured
             String query = "select * from product where title like ? or description like ?";
             PreparedStatement stmt = connection.prepareStatement(query);
-            stmt.setString(1, key);
-            stmt.setString(2, key);
+            stmt.setString(1, "%" + key + "%");
+            stmt.setString(2, "%" + key + "%");
+
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
@@ -287,16 +289,17 @@ public class ProductDAO extends DAO {
                 float price = rs.getFloat("price");
                 String title = rs.getString("title");
                 String description = rs.getString("description");
-                int categoryId = rs.getInt("category_id");
+                int subcategoryId = rs.getInt("subcategory_id");
 
                 Product product = new Product();
                 product.setId(id);
                 product.setPrice(price);
                 product.setTitle(title);
                 product.setDescription(description);
-                product.setCategory(categoryId); // Store category ID directly
+                product.setSubCategory(subcategoryId); // Store category ID directly
 
                 products.add(product);
+                System.out.println("dao size=" + products.size());
             }
 
         } catch (SQLException ex) {

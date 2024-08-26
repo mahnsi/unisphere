@@ -1,6 +1,8 @@
 $(document).ready(function() {
     // Get the category from the URL parameters
     var category = new URLSearchParams(window.location.search).get('category');
+	
+	var search = new URLSearchParams(window.location.search).get('search');
 
     // Populate subcategories based on the selected category
     if (category) {
@@ -27,16 +29,21 @@ $(document).ready(function() {
                 console.log("Failed to load subcategories:", error);
             }
         });
-    } else {
-        // If no category is specified, just load all products
-        $("#subcategory").prop('disabled', true); 
-        loadProducts();
-    }
+    } 
+	else{
+		// If no category is specified, just load all products
+		        $("#subcategory").prop('disabled', true); 
+		        loadProducts();
+	}
 
     // Load products based on the selected subcategory or all products
     function loadProducts(sortval) {
         var subcategory = $("#subcategory").val();
         var url = "http://localhost:8080/unisphereREST/rest/Products/";
+		
+		if(search){
+			url="http://localhost:8080/unisphereREST/rest/Products/getProductsByKeyword/" + encodeURIComponent(search);
+		}
 
         if (category && category !== 'All') {
             url += "getProductsByCategory/" + encodeURIComponent(category);
