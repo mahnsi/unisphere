@@ -4,6 +4,7 @@ import java.sql.Date;
 
 public class Order {
 	
+	private int id;
 	private Cart cart;
 	private Address address;
 	private Payment payment;
@@ -51,5 +52,13 @@ public class Order {
 	
 	public void setOrderedOn(Date ordered_on) {
 		this.ordered_on = ordered_on;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 }

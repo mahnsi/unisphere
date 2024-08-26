@@ -21,29 +21,47 @@ public class OrderDAO extends DAO{
     
     public List<Order> getAllOrders() {
         List<Order> orders = new ArrayList<>();
-        String query = "SELECT * FROM Orders o join ordered_item oi"+
-        "on o.id = oi.order_id";
-        
-        try (PreparedStatement stmt = connection.prepareStatement(query);
-             ResultSet rs = stmt.executeQuery()) {
-             
-            while (rs.next()) {
+        String orderQuery = "SELECT * FROM Orders";
+        String itemQuery = "SELECT * FROM Ordered_Item oi JOIN Products p ON oi.product_id = p.id WHERE oi.order_id = ?";
+
+        try (PreparedStatement orderStmt = connection.prepareStatement(orderQuery);
+             ResultSet orderRs = orderStmt.executeQuery()) {
+            
+            while (orderRs.next()) {
+                int orderId = orderRs.getInt("id");
                 Order order = new Order();
-                // Assuming Order class has appropriate setters
-                //order.setOrderId(rs.getInt("order_id"));
-                //order.setUsername(rs.getString("username"));
-                //order.setOrderDate(rs.getDate("order_date"));
-                // Add other fields as necessary
+                order.setId(orderId);
+                //order.setItems(new ArrayList<>());
+                
+                // Retrieve items for this order
+                try (PreparedStatement itemStmt = connection.prepareStatement(itemQuery)) {
+                    itemStmt.setInt(1, orderId);
+                    try (ResultSet itemRs = itemStmt.executeQuery()) {
+                        while (itemRs.next()) {
+                            CartItem item = new CartItem();
+                            
+                            Product product = new Product();
+                            product.setId(itemRs.getInt("product_id"));
+                            product.setTitle(itemRs.getString("product_name"));
+                            product.setPrice(itemRs.getFloat("product_price"));
+                            
+                            item.setProduct(product);
+                            item.setQuantity(itemRs.getInt("quantity"));
+                            
+                            //order.getCart().add(item);
+                        }
+                    }
+                }
                 
                 orders.add(order);
             }
-            
         } catch (SQLException e) {
             e.printStackTrace();  // Proper error handling should be implemented
         }
         
         return orders;
     }
+
     
     public List<Order> getOrdersByUsername(String username) {
     	return null;

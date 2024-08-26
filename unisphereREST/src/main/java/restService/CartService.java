@@ -90,7 +90,8 @@ public class CartService {
     public Response updateQuantity(@Context HttpServletRequest request, JsonObject jsonRequest) {
         try {
             int productId = jsonRequest.getInt("productId");
-            int quantity = jsonRequest.getInt("quantity"); // Ensure this is directly an integer
+            String quantityStr = jsonRequest.getString("quantity");
+            int quantity = Integer.parseInt(quantityStr);
 
             Cart cart;
             User user = getSessionUser(request);
