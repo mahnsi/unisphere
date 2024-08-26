@@ -27,7 +27,11 @@ $(document).ready(function() {
                 success: function(cart) {
                     let cartItems = cart.items;
                     let total = cart.totalPrice;
-
+					if (cartItems.length === 0) {
+					                $('.cart-items').html('<p class="empty-cart">Your cart is empty.</p>');
+					                $('#estimated-total').text('$0.00'); // Reset the total if cart is empty
+					                return; // Exit the function early
+					            }
                     // Loop through the cart items
                     $.each(cartItems, function(index, item) {
                         let product = item.product;
@@ -117,6 +121,7 @@ $(document).ready(function() {
                 },
                 error: function(error) {
                     console.error('Error updating cart item:', error);
+					alert("Cart Quantity must not exceed inventory!");
                 }
             });
         }

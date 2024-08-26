@@ -7,6 +7,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Profile</title>
+    <link rel="stylesheet" href="style/profile.css">
 </head>
 <body>
     <%@ include file="header.html" %>
@@ -18,8 +19,8 @@
             <ul>
                 <li><a id="nav-info" onclick="showSection('info', this)">My Info</a></li>
                 <li><a id="nav-orders" onclick="showSection('orders', this)">Order History</a></li>
-                <li><a id="nav-payments" onclick="showSection('payments', this)">My Payments</a></li>
-                <li><a id="nav-address" onclick="showSection('addresses', this)">My Addresses</a></li>
+                <li><a id="nav-payments" onclick="showSection('payments', this)">My Payment</a></li>
+                <li><a id="nav-address" onclick="showSection('addresses', this)">My Address</a></li>
             </ul>
         </div>
 
@@ -51,7 +52,7 @@
             
 
             <div id="addresses" class="section" style="display: none;">
-                <h2>My Addresses</h2>
+                <h2>My Address</h2>
                 <form id="addressForm">
                     <label for="streetAddress">Street Address</label>
                     <input type="text" id="streetAddress" name="streetAddress"><br>
@@ -77,7 +78,7 @@
             </div>
 
             <div id="payments" class="section" style="display: none;">
-                <h2>My Payments</h2>
+                <h2>My Payment Method</h2>
                 <form id="paymentForm">
                     <label for="cardHolderName">Card Holder Name:</label>
                     <input type="text" id="cardHolderName" name="cardHolderName"><br>

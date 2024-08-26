@@ -4,6 +4,7 @@ import model.Product;
 import model.User;
 import model.Cart;
 import dao.CartDAO;
+import dao.ProductDAO;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
@@ -19,6 +20,7 @@ import javax.json.JsonObject;
 public class CartService {
 
     private CartDAO cartDAO;
+    private ProductDAO productDAO;
 
     @Context
     private ServletContext context;
@@ -26,6 +28,7 @@ public class CartService {
     @PostConstruct
     public void init() {
         cartDAO = new CartDAO(context);
+        productDAO = new ProductDAO(context);
     }
 
     @GET
@@ -51,17 +54,26 @@ public class CartService {
     @Produces(MediaType.TEXT_PLAIN)
     public Response addToCart(@Context HttpServletRequest request, Product product) {
         System.out.println("addtocart service called");
+        
+        
+        // get session cart
+        Cart cart = getSessionCart(request);
+
+        if(cart.getCartItemByProductId(product.getId())!=null && product.getStock( ) <= cart.getCartItemByProductId(product.getId()).getQuantity()) {
+            	return Response.status(Response.Status.BAD_REQUEST)
+                        .entity("Insufficient stock for the product")
+                        .build();
+         }
+        
         User user = getSessionUser(request);
         if (user != null) {
             cartDAO.addToCart(user.getUsername(), product);
             System.out.println("success add to cart -from service");
             return Response.ok("Product added to user cart").build();
-        } else {
-            // get session cart
-            Cart cart = getSessionCart(request);
-            cart.add(product);
-            return Response.ok("Product added to session cart").build();
-        }
+        } 
+            
+        cart.add(product);
+        return Response.ok("Product added to session cart").build();
     }
 
     @PUT
@@ -70,17 +82,18 @@ public class CartService {
     @Produces(MediaType.TEXT_PLAIN)
     public Response removeFromCart(@Context HttpServletRequest request, int productid) {
         Cart cart;
+        // get session cart
+        cart = getSessionCart(request);
+        cart.remove(productid);
+        
         User user = getSessionUser(request);
         if (user != null) {
             cart = cartDAO.getCartByUsername(user.getUsername());
             cartDAO.removeFromCart(user.getUsername(), productid);
             return Response.ok("Product removed from cart").build();
-        } else {
-            // get session cart
-            cart = getSessionCart(request);
-            cart.remove(productid);
-            return Response.ok("Product removed from session cart").build();
-        }
+        } 
+        
+        return Response.ok("Product removed from session cart").build();
     }
 
     @PUT
@@ -95,15 +108,25 @@ public class CartService {
 
             Cart cart;
             User user = getSessionUser(request);
+            cart = getSessionCart(request);
+            
+            if(cart.getCartItemByProductId(productId)!=null && productDAO.getProductById(productId).getStock( ) < quantity) {
+            	return Response.status(Response.Status.BAD_REQUEST)
+                        .entity("Insufficient stock for the product")
+                        .build();
+         }
+            
+            
+            cart.updateQuantity(productId, quantity);
+            
             if (user != null) {
                 cart = cartDAO.getCartByUsername(user.getUsername());
                 cartDAO.updateQuantity(user.getUsername(), productId, quantity);
                 return Response.ok("User Cart updated successfully").build();
-            } else {
-                cart = getSessionCart(request);
-                cart.updateQuantity(productId, quantity);
-                return Response.ok("Product quantity updated from session cart").build();
             }
+                
+            return Response.ok("Product quantity updated from session cart").build();
+            
         } catch (Exception e) {
             e.printStackTrace();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)

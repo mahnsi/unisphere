@@ -5,9 +5,10 @@ import java.util.Map;
 import java.util.List;
 
 public class Cart {
-	User owner;
-	float totalPrice;
-	List <CartItem> items;
+	private static Cart instance;
+	private User owner;
+	private float totalPrice;
+	private List <CartItem> items;
 	
 	private int offer;
 	
@@ -15,6 +16,7 @@ public class Cart {
 		items = new ArrayList<>();
 
 	}
+	
 	
 	public void add(Product product) {
         // Check if the product already exists in the cart
@@ -62,6 +64,18 @@ public class Cart {
 	public List <CartItem> getItems(){
 		return items;
 	}
+	
+	public CartItem getCartItemByProductId(int productid) {
+		for (CartItem item : items) {
+            if (item.getProduct().getId() == productid) {
+                return item;
+            }
+            
+		}
+		
+		return null;
+		
+	}
 
 	public void setOffer(int offer_id) {
 		this.offer = offer_id;
@@ -70,6 +84,14 @@ public class Cart {
 	
 	public int getOffer() {
 		return offer;
+	}
+
+	public User getOwner() {
+		return owner;
+	}
+
+	public void setOwner(User owner) {
+		this.owner = owner;
 	}
 
 

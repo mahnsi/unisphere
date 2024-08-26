@@ -15,7 +15,7 @@
             <div class="cart-items">
                 <!-- Cart items will be appended here by jQuery -->
             </div>
-            <button class="continue-shopping">Continue Shopping</button>
+            <a href="catalogue.jsp"> <button class="continue-shopping">Continue Shopping</button></a>
         </section>
         
         <section class="order-summary">

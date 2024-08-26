@@ -149,6 +149,7 @@ public class ProductDAO extends DAO {
                 String title = rs.getString("title");
                 String description = rs.getString("description");
                 int subcategoryId = rs.getInt("subcategory_id");
+                int stock = rs.getInt("inventory_count");
 
                 product = new Product();
                 product.setId(id);
@@ -156,6 +157,7 @@ public class ProductDAO extends DAO {
                 product.setTitle(title);
                 product.setDescription(description);
                 product.setSubCategory(subcategoryId); // Store category ID directly
+                product.setStock(stock);
             }
 
         } catch (SQLException ex) {
