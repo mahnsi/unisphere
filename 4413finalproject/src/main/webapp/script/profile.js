@@ -142,7 +142,6 @@ $(document).ready(function() {
 	      }
 	  }
 
-      
 	  function fetchOrders() {
 	      $.ajax({
 	          url: 'http://localhost:8080/unisphereREST/rest/Orders/getOrdersByUsername/' + $('#username').val(),
@@ -158,7 +157,7 @@ $(document).ready(function() {
 
 	              orders.forEach(function(order) {
 	                  $('#orderList').append(
-	                      `<li><a href="#" onclick="showOrderDetails(${order.id})">Order ID: ${order.id}</a></li>`
+	                      `<li><a href="#" onclick="showOrderDetails(${order.id})">Order Number: ${order.orderNumber} - Total: $${order.total}</a></li>`
 	                  );
 	              });
 	          },
@@ -168,6 +167,7 @@ $(document).ready(function() {
 	          }
 	      });
 	  }
+
 	  
 	  function showOrderDetails(orderId) {
 	      $.ajax({
@@ -178,7 +178,7 @@ $(document).ready(function() {
 	              $('#orderDetails').empty();  // Clear previous order details
 
 	              var orderHtml = `
-	                  <h3>Order ID: ${order.id}</h3>
+	                  <h3>Order Number: ${order.orderNumber}</h3>
 	                  <p><strong>Date:</strong> ${order.date}</p>
 	                  <p><strong>Total:</strong> $${order.total}</p>
 	                  <h4>Items:</h4>
@@ -205,6 +205,7 @@ $(document).ready(function() {
 	          }
 	      });
 	  }
+
 
 	  function backToOrderList() {
 	      $('#orderDetails').hide();
