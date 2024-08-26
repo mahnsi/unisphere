@@ -55,7 +55,7 @@ $(document).ready(function() {
 					    error: function(err) {
 					        if (err.status === 409) {
 					            $('#wishlist-message').text("Item is already in wishlist");
-					        } else {
+					        } else if (err.status === 401){
 					            $('#wishlist-message').text("Sign in to access wishlist.");
 					        }
 					        console.error('Error adding to wishlist:', err);

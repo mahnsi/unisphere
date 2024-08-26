@@ -53,6 +53,7 @@ public class WishlistDAO extends DAO {
     }
 
     public int insertIntoWishlist(Product product, String username) {
+    	int ret = 2;
         try {
             connection = getConnection();
             int rowsInserted = 0;
@@ -61,6 +62,7 @@ public class WishlistDAO extends DAO {
             checkStmt.setString(1, username);
             checkStmt.setInt(2, product.getId());
             ResultSet rs = checkStmt.executeQuery();
+            
 
             if (rs.next() && rs.getInt(1) > 0) {
                 System.out.println("Product already in the wishlist");
@@ -77,13 +79,14 @@ public class WishlistDAO extends DAO {
                 System.out.println("Product added to wishlist: " + product.getTitle());
             } else {
                 System.out.println("Failed to add product to wishlist: " + product.getTitle());
+                ret = 0;
             }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             closeConnection(connection);
         }
-        return 1;
+        return ret;
     }
 
     public void removeFromWishlist(String username, int productId) {

@@ -37,6 +37,11 @@ public class WishlistService {
     @Produces(MediaType.TEXT_PLAIN)
     public Response addToWishlist(@PathParam("username") String uname, Product product) {
     	System.out.println("add to wishlist service called");
+    	if (uname == null){
+        	return Response.status(Response.Status.UNAUTHORIZED) // 401 Unauthorized
+                    .entity("You need to be signed in to access this resource")
+                    .build();
+        }
     	int h = wishlistDao.insertIntoWishlist(product, uname);
         if(h > 1) {
         	return Response.ok("Product added to wishlist").build();
@@ -53,6 +58,7 @@ public class WishlistService {
                     .entity("You need to be signed in to access this resource")
                     .build();
         }
+        
         
     }
 
