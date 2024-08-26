@@ -21,8 +21,12 @@ public class OrderDAO extends DAO{
     
     public List<Order> getAllOrders() {
         List<Order> orders = new ArrayList<>();
-        String orderQuery = "SELECT * FROM Orders";
-        String itemQuery = "SELECT * FROM Ordered_Item oi JOIN Product p ON oi.product_id = p.id WHERE oi.order_id = ?";
+        String orderQuery = "SELECT *"+
+                            "FROM Orders o " +
+                            "JOIN Ordered_Item oi ON o.id = oi.order_id " +
+                            "JOIN Product p ON oi.product_id = p.id " +
+                            "JOIN Payment pay ON o.payment_id = pay.id " +
+                            "JOIN Address addr ON o.address_id = addr.id";
 
         try (Connection connection = getConnection();
              PreparedStatement orderStmt = connection.prepareStatement(orderQuery);
@@ -34,20 +38,34 @@ public class OrderDAO extends DAO{
                 order.setId(orderId);
                 order.setCart(new Cart());  // Initialize the cart for this order
 
-                // Retrieve items for this order
-                try (PreparedStatement itemStmt = connection.prepareStatement(itemQuery)) {
-                    itemStmt.setInt(1, orderId);
-                    try (ResultSet itemRs = itemStmt.executeQuery()) {
-                        while (itemRs.next()) {
-                            Product product = new Product();
-                            product.setId(itemRs.getInt("product_id"));
-                            product.setTitle(itemRs.getString("title"));
-                            product.setPrice(itemRs.getFloat("price"));
+                // Populate the Payment and Address objects
+                Payment payment = new Payment();
+                payment.setId(orderRs.getInt("payment_id"));
+                payment.setCardHolderName(orderRs.getString("card_holder_name"));
+                payment.setExpirationDate(orderRs.getString("expiry"));
+                payment.setCardNumber(orderRs.getString("card_number"));
+                payment.setCvv(orderRs.getString("cvv"));
+                
+                order.setPayment(payment);
 
-                            order.getCart().add(product);  // Add product to the order's cart
-                        }
-                    }
-                }
+                Address address = new Address();
+                address.setId(orderRs.getInt("address_id"));
+                address.setStreetAddress(orderRs.getString("street_address"));
+                address.setCity(orderRs.getString("city"));
+                address.setPostalCode(orderRs.getString("postalcode"));
+                address.setProvince(orderRs.getString("province"));
+                address.setCountry(orderRs.getString("country"));
+                address.setFirstName(orderRs.getString("fname"));
+                address.setLastName(orderRs.getString("lname"));                
+                order.setAddress(address);
+
+                // Populate the cart with products
+                Product product = new Product();
+                product.setId(orderRs.getInt("product_id"));
+                product.setTitle(orderRs.getString("title"));
+                product.setPrice(orderRs.getFloat("price"));
+
+                order.getCart().add(product);  // Add product to the order's cart
 
                 orders.add(order);  // Add order to the list
             }
@@ -57,6 +75,7 @@ public class OrderDAO extends DAO{
 
         return orders;
     }
+
 
 
     
