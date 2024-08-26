@@ -25,6 +25,7 @@ import javax.ws.rs.core.Response;
 public class OrderService {
 	
 	private OrderDAO orderDao;
+	private UserDAO userDao;
 
 	@Context
 	private ServletContext servletContext;
@@ -32,6 +33,7 @@ public class OrderService {
 	@PostConstruct
 	public void init() {
 		orderDao = new OrderDAO(servletContext);
+		userDao  = new UserDAO (servletContext);
 	}
 	
 	@GET
@@ -64,13 +66,15 @@ public class OrderService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response createOrder(Order order) {
+		System.out.println("rest createOrder called");
 		// Generate a random order number
-		String orderNumber = String.valueOf(new Random().nextInt(999999999));
-		order.setOrderNumber(orderNumber);
+		int orderNumber = new Random().nextInt(999999999);
+
+		order.setId(orderNumber);
 
 		// Save the order with the generated order number
 		orderDao.insert(order);
-
+		userDao.clearCart(order.getCreatedBy());
 		// Return the order number in the response
 		return Response.ok(order).build();
 	}

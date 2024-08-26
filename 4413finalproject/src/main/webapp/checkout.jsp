@@ -54,6 +54,10 @@
                         <label for="apartment">Apt/Suite/Buzzer/Etc.</label>
                         <input type="text" id="apartment" name="apartment">
                     </div>
+                    <div class="input-group full-width">
+                        <label for="country">Country</label>
+                        <input type="text" id="country" name="country">
+                    </div>
                     <br>
                     <div class="input-row">
                         <div class="input-group">
@@ -63,6 +67,10 @@
                         <div class="input-group">
                             <label for="province">Province</label>
                             <input type="text" id="province" name="province">
+                        </div>
+                        <div class="input-group">
+                            <label for="postal-code">Postal Code</label>
+                            <input type="text" id="postal-code" name="postal-code">
                         </div>
                     </div>
                 </div>
@@ -88,6 +96,11 @@
 
             <!-- New Payment Method Section -->
             <div id="new-payment-section" style="display: none;">
+	            <div class="input-group">
+	                    <label for="card-holder-name">Card Holder Name</label>
+	                    <input type="text" id="card-holder-name" name="card-holder-name">
+	                </div>
+                
                 <div class="input-group">
                     <label for="card-number">Card Number</label>
                     <input type="text" id="card-number" name="card-number">

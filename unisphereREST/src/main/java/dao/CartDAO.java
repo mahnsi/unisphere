@@ -20,6 +20,7 @@ public class CartDAO extends DAO{
     public Cart getCartByUsername(String username) {
     	System.out.println("DAO getcartbyuser called");
         Cart cart = new Cart();
+        cart.setOwner(username);
 
         try {
             String query = "SELECT * from cart_item join product p on product_id = p.id where added_by = '" + username + "'";
