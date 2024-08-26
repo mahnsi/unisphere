@@ -21,7 +21,7 @@
                     <img src="product-images/supplies.jpg" alt="Top-Rated Supplies">
                 </div>
                 <div class="banner-content">
-                    <h2> hjhkdjbnhjh  Top-Rated Supplies</h2>
+                    <h2>Top-Rated Supplies</h2>
                     <p>Start the School Year Right!</p>
                     <a href="catalogue.jsp" class="btn">Shop Now</a>
                 </div>
