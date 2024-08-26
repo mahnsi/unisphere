@@ -219,7 +219,7 @@ public class UserDAO extends DAO {
             ex.printStackTrace();
         }
     }
-<<<<<<< HEAD
+
     public boolean delete(String username) {
         String query = "DELETE FROM User WHERE username = ?";
         try (Connection connection = getConnection();
@@ -232,8 +232,6 @@ public class UserDAO extends DAO {
             return false;
         }
     }
-
-=======
 
     public void clearCart(String username) {
         String query = "DELETE FROM CART_ITEM WHERE added_by = ?";
@@ -256,5 +254,4 @@ public class UserDAO extends DAO {
     }
 
 
->>>>>>> 2bbf824eb4dea0c72c349ee6473a581051e9f744
 }
