@@ -52,6 +52,17 @@ public class OrderService {
 		
 	}
 	
+	@GET
+	@Path("/getOrderById/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Order getOrderbyId(@PathParam("id") int id){
+		
+		Order order = orderDao.getOrderbyId(id);
+		return order;
+		
+		
+	}
+	
 	@POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
