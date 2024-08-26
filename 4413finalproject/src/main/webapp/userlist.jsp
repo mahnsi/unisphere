@@ -24,7 +24,7 @@ $(document).ready(function() {
     // URL of the endpoint to fetch users
     const apiUrl = "http://localhost:8080/unisphereREST/rest/Users";
     
-    console.log("hi"); // Check if the script is running
+    console.log("Script running"); // Check if the script is running
     
     // Fetch users from the API
     $.ajax({
@@ -40,10 +40,14 @@ $(document).ready(function() {
                 // Iterate through the list of users and create HTML for each user
                 users.forEach(function(user) {
                     const userHtml = 
-                        '<div class="user-item">' +
+                        '<div class="user-item" data-username="' + user.username + '">' +
                             '<h3><a href="profile.jsp?mode=admin&username=' + encodeURIComponent(user.username) + '">' + user.username + '</a></h3>' +
-                            '<p>Email: ' + user.email + '</p>' +
+                            '<p>Email: <span class="email-display">' + user.email + '</span>' +
+                            '<input type="email" class="email-edit" value="' + user.email + '" style="display:none;" /></p>' +
                             '<p>Role: ' + (user.isAdmin ? 'Admin' : 'User') + '</p>' +
+                            '<button onclick="toggleEditEmail(\'' + user.username + '\')">Edit</button>' +
+                            '<button onclick="saveEmail(\'' + user.username + '\')" style="display:none;">Save</button>' +
+                            '<button onclick="deleteUser(\'' + user.username + '\')">Delete</button>' +
                         '</div>';
                     
                     // Append the user HTML to the user-list container
@@ -60,6 +64,53 @@ $(document).ready(function() {
         }
     });
 });
+
+// Function to toggle between display and edit mode for email
+function toggleEditEmail(username) {
+    const userItem = $('.user-item[data-username="' + username + '"]');
+    userItem.find('.email-display').toggle();
+    userItem.find('.email-edit').toggle();
+    userItem.find('button:contains("Edit")').toggle();
+    userItem.find('button:contains("Save")').toggle();
+}
+
+function saveEmail(username) {
+    const userItem = $('.user-item[data-username="' + username + '"]');
+    const newEmail = userItem.find('.email-edit').val();
+
+    $.ajax({
+        url: 'http://localhost:8080/unisphereREST/rest/Users/' + username,
+        method: 'PUT',
+        contentType: 'application/json',
+        data: JSON.stringify({ email: newEmail }),
+        success: function(response) {
+            console.log("Email updated for user: " + username);
+            userItem.find('.email-display').text(newEmail);
+            toggleEditEmail(username);
+        },
+        error: function(error) {
+            console.error('Error updating email:', error);
+        }
+    });
+}
+
+
+
+// Function to delete a user
+function deleteUser(username) {
+    $.ajax({
+        url: 'http://localhost:8080/unisphereREST/rest/Users/' + username,  // Adjust the URL to match your REST service
+        method: 'DELETE',
+        success: function(response) {
+            console.log("User deleted: " + username);
+            // Remove the user's element from the DOM
+            $('.user-item[data-username="' + username + '"]').remove();
+        },
+        error: function(error) {
+            console.error('Error deleting user:', error);
+        }
+    });
+}
 </script>
 
 </body>
