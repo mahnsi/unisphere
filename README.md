@@ -6,10 +6,10 @@
 
 Maven zip file uploaded , can import and run with additional path changes.
 
-1. RUN the UnisphereREST using Tomcat 9.0
-2. RUN the EECS4413 final peoject main folder.
+1. RUN the UnisphereREST using Tomcat 9.0. (backend)
+2. RUN the EECS4413finalproject folder. (frontend)
 3. The website should run.
-4. Our SQL .db file is inside unisphereREST project
+4. Our SQLite .db file is inside unisphereREST project webapp folder
 5. Images are already uploaded into project file, no need to change pathways. They should upload on their own.
 
 
