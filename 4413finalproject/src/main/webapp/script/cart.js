@@ -30,6 +30,8 @@ $(document).ready(function() {
 					if (cartItems.length === 0) {
 					                $('.cart-items').html('<p class="empty-cart">Your cart is empty.</p>');
 					                $('#estimated-total').text('$0.00'); // Reset the total if cart is empty
+									$('.checkout-button').prop('disabled', true);
+									$('#empty-msg').text('Please add items to the cart to check out.');
 					                return; // Exit the function early
 					            }
                     // Loop through the cart items

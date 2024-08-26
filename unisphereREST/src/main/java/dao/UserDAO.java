@@ -219,4 +219,26 @@ public class UserDAO extends DAO {
             ex.printStackTrace();
         }
     }
+
+    public void clearCart(String username) {
+        String query = "DELETE FROM CART_ITEM WHERE added_by = ?";
+
+        try (Connection connection = getConnection();
+             PreparedStatement stmt = connection.prepareStatement(query)) {
+
+            stmt.setString(1, username);
+            int rowsAffected = stmt.executeUpdate();
+
+            if (rowsAffected > 0) {
+                System.out.println("Cart items cleared successfully. Rows affected: " + rowsAffected);
+            } else {
+                System.out.println("No items found in the cart for the specified user.");
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+
 }

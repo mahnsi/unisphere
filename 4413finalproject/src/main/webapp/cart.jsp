@@ -24,6 +24,7 @@
             <p>Discount: <span id="discount">Offers applied at checkout</span></p>
             <p><strong>Subtotal: <span id="estimated-total">$0.00</span></strong></p>
             <button class="checkout-button">Checkout</button>
+            <p id = "empty-msg"></p>
         </section>
     </main>
 

@@ -6,7 +6,7 @@ import java.util.List;
 
 public class Cart {
 	private static Cart instance;
-	private User owner;
+	private String owner;
 	private float totalPrice;
 	private List <CartItem> items;
 	
@@ -86,11 +86,11 @@ public class Cart {
 		return offer;
 	}
 
-	public User getOwner() {
+	public String getOwner() {
 		return owner;
 	}
 
-	public void setOwner(User owner) {
+	public void setOwner(String owner) {
 		this.owner = owner;
 	}
 

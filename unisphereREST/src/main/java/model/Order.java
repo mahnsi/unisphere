@@ -4,12 +4,11 @@ import java.sql.Date;
 
 public class Order {
 	
-	private int id;
+	private Integer id;
 	private Cart cart;
 	private Address address;
 	private Payment payment;
 	private Date ordered_on;
-	private String orderNumber;  
     private String createdBy;  // New field to store the username of the user who created the order
     private float total;  // Assuming there's a total field as well
 
@@ -34,7 +33,7 @@ public class Order {
 
     // Other getters and setters...
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -74,13 +73,6 @@ public class Order {
         this.ordered_on = ordered_on;
     }
 
-    public String getOrderNumber() {
-        return orderNumber;
-    }
-
-    public void setOrderNumber(String orderNumber) {
-        this.orderNumber = orderNumber;
-    }
 
     public float getTotal() {
         return total;

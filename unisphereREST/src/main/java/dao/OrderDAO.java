@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,6 +76,7 @@ public class OrderDAO extends DAO {
 
         return orders;
     }
+    
 
     public List<Order> getOrdersByUsername(String username) {
         List<Order> orders = new ArrayList<>();
@@ -198,21 +200,85 @@ public class OrderDAO extends DAO {
     }
 
     public void insert(Order order) {
-        String insertOrderQuery = "INSERT INTO Orders (id, created_by, payment_id, address_id, order_number, total) VALUES (?, ?, ?, ?, ?, ?)";
+        System.out.println("DAO insert order called");
+        
+        String insertPaymentQuery = "INSERT INTO Payment (card_holder_name, expiry, card_number, cvv) VALUES (?, ?, ?, ?)";
+        String insertAddressQuery = "INSERT INTO Address (street_address, city, postalcode, province, country, fname, lname) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String insertOrderQuery = "INSERT INTO Orders (id, created_by, payment_id, address_id, total) VALUES (?, ?, ?, ?, ?)";
         String insertOrderedItemQuery = "INSERT INTO Ordered_Item (order_id, product_id, quantity) VALUES (?, ?, ?)";
 
         try (Connection connection = getConnection();
+             PreparedStatement paymentStmt = connection.prepareStatement(insertPaymentQuery, Statement.RETURN_GENERATED_KEYS);
+             PreparedStatement addressStmt = connection.prepareStatement(insertAddressQuery, Statement.RETURN_GENERATED_KEYS);
              PreparedStatement orderStmt = connection.prepareStatement(insertOrderQuery);
              PreparedStatement itemStmt = connection.prepareStatement(insertOrderedItemQuery)) {
 
-            // Insert the order
+            // Insert Payment
+            Payment payment = order.getPayment();
+            paymentStmt.setString(1, payment.getCardHolderName());
+            paymentStmt.setString(2, payment.getExpirationDate());
+            paymentStmt.setString(3, payment.getCardNumber());
+            paymentStmt.setString(4, payment.getCvv());
+            paymentStmt.executeUpdate();
+
+            // Retrieve the generated payment ID
+            try (ResultSet paymentRs = paymentStmt.getGeneratedKeys()) {
+                if (paymentRs.next()) {
+                    int paymentId = paymentRs.getInt(1);
+                    System.out.println("generated payment id:"+ paymentId);
+                    payment.setId(paymentId); // Set the ID to the payment object
+                } else {
+                    throw new SQLException("Inserting payment failed, no ID obtained.");
+                }
+            }
+
+            // Insert Address
+            Address address = order.getAddress();
+            addressStmt.setString(1, address.getStreetAddress());
+            addressStmt.setString(2, address.getCity());
+            addressStmt.setString(3, address.getPostalCode());
+            addressStmt.setString(4, address.getProvince());
+            addressStmt.setString(5, address.getCountry());
+            addressStmt.setString(6, address.getFirstName());
+            addressStmt.setString(7, address.getLastName());
+            addressStmt.executeUpdate();
+
+            // Retrieve the generated address ID
+            try (ResultSet addressRs = addressStmt.getGeneratedKeys()) {
+                if (addressRs.next()) {
+                    int addressId = addressRs.getInt(1);
+                    System.out.println("generated address id:"+ addressId);
+                    address.setId(addressId); // Set the ID to the address object
+                } else {
+                    throw new SQLException("Inserting address failed, no ID obtained.");
+                }
+            }
+            
+            // Insert the Order with payment and address IDs
             orderStmt.setInt(1, order.getId());
             orderStmt.setString(2, order.getCreatedBy());
-            orderStmt.setInt(3, order.getPayment().getId());
-            orderStmt.setInt(4, order.getAddress().getId());
-            orderStmt.setString(5, order.getOrderNumber()); // Set the random order number
-            orderStmt.setFloat(6, order.getTotal());
-            orderStmt.executeUpdate();
+            System.out.println("createddd by: " + order.getCreatedBy());
+            orderStmt.setInt(3, payment.getId());  // Use the generated payment ID
+            orderStmt.setInt(4, address.getId());  // Use the generated address ID
+            orderStmt.setFloat(5, order.getTotal());
+            int orderRowsAffected = orderStmt.executeUpdate();
+            
+            int orderId;
+            try (ResultSet orderRs = orderStmt.getGeneratedKeys()) {
+                if (orderRs.next()) {
+                    orderId = orderRs.getInt(1);
+                    System.out.println("Generated order ID: " + orderId);
+                    order.setId(orderId); // Set the ID to the order object
+                } else {
+                    throw new SQLException("Inserting order failed, no ID obtained.");
+                }
+            }
+            
+            System.out.println("Order insert affected " + orderRowsAffected + " row(s)");
+
+            if (orderRowsAffected == 0) {
+                throw new SQLException("Inserting order failed, no rows affected.");
+            }
 
             // Insert ordered items
             for (CartItem item : order.getCart().getItems()) {
@@ -221,10 +287,16 @@ public class OrderDAO extends DAO {
                 itemStmt.setInt(3, item.getQuantity());
                 itemStmt.addBatch();
             }
-            itemStmt.executeBatch();
+            int[] itemRowsAffected = itemStmt.executeBatch();
+            System.out.println("Ordered items insert affected " + itemRowsAffected.length + " row(s)");
+
+            if (itemRowsAffected.length == 0) {
+                throw new SQLException("Inserting ordered items failed, no rows affected.");
+            }
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+
 }

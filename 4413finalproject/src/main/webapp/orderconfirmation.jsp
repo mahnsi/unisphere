@@ -17,7 +17,7 @@
     <h2>Order #<%= request.getParameter("orderNumber") %></h2>
     
     <div class="button-group">
-        <a href="profile.jsp?order=1"><button class="confirmation-button">View Order Details</button></a>
+        <a href="profile.jsp?order=<%= request.getParameter("orderNumber") %>"><button class="confirmation-button">View Order Details</button></a>
         <a href="home.jsp"><button class="confirmation-button">Continue Shopping</button></a>
     </div>
 </main>

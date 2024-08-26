@@ -157,7 +157,7 @@ $(document).ready(function() {
 
 	              orders.forEach(function(order) {
 	                  $('#orderList').append(
-	                      `<li><a href="#" onclick="showOrderDetails(${order.id})">Order Number: ${order.orderNumber} - Total: $${order.total}</a></li>`
+	                      `<li><a href="#" onclick="showOrderDetails(${order.id})">Order Number: ${order.id} - Total: $${order.cart.totalPrice}</a></li>`
 	                  );
 	              });
 	          },
@@ -178,14 +178,14 @@ $(document).ready(function() {
 	              $('#orderDetails').empty();  // Clear previous order details
 
 	              var orderHtml = `
-	                  <h3>Order Number: ${order.orderNumber}</h3>
+	                  <h3>Order Number: ${order.id}</h3>
 	                  <p><strong>Date:</strong> ${order.date}</p>
-	                  <p><strong>Total:</strong> $${order.total}</p>
+	                  <p><strong>Total:</strong> $${order.cart.totalPrice}</p>
 	                  <h4>Items:</h4>
 	                  <ul>`;
 
 	              order.cart.items.forEach(function(item) {
-	                  orderHtml += `<li>${item.title} - $${item.price}</li>`;
+	                  orderHtml += `<li>${item.product.title} -   $${item.product.price} -   quantity: ${item.quantity}</li>`;
 	              });
 
 	              orderHtml += `

@@ -1,5 +1,7 @@
 $(document).ready(function() {
     let formData = {};
+    let existingAddress = null;
+    let existingPayment = null;
 
     // Fetch the cart data and update the order summary
     $.ajax({
@@ -26,7 +28,7 @@ $(document).ready(function() {
         },
         success: function(response) {
             console.log("User data from session:", response);
-            let username = response.username;
+            username = response.username;
             fetchExistingAddressandPayment(username);
         },
         error: function(jqXHR, textStatus, errorThrown) {
@@ -69,20 +71,21 @@ $(document).ready(function() {
             url: "http://localhost:8080/unisphereREST/rest/Users/getAllUserInfo/" + username,
             method: "GET",
             success: function(response) {
-                console.log("success fetching all user info");
-                if(response){
-                    let address = response.address; 
-                    let payment = response.payment;
+                console.log("Success fetching all user info");
+                if (response) {
+                    existingAddress = response.address;
+                    existingPayment = response.payment;
+
                     $("#existing-address").text(
-                        address.firstName + " " + address.lastName + "\n" +
-                        address.streetAddress + ", " + address.apartment + "\n" +
-                        address.city + ", " + address.province
+                        existingAddress.firstName + " " + existingAddress.lastName + "\n" +
+                        existingAddress.streetAddress + ", " + "\n" +
+                        existingAddress.city + ", " + existingAddress.province + ", " + existingAddress.country
                     );
 
                     $("#saved-payment").text(
-                        payment.cardHolderName + "\n" +
-                        payment.cardNumber + ", " + payment.expiryDate + "\n" +
-                        payment.cvv
+                        existingPayment.cardHolderName + "\n" +
+                        existingPayment.cardNumber + ", " + existingPayment.expirationDate + "\n" +
+                        existingPayment.cvv
                     );
                 } else {
                     $("#existing-address").text("No Saved Address. Please enter one below or on your profile.");
@@ -108,30 +111,48 @@ $(document).ready(function() {
 
     // Handle the place order button click
     $("#place-order-button").click(function() {
-        processOrder();
+        $.ajax({
+            url: 'http://localhost:8080/unisphereREST/rest/Auth/session',
+            method: 'GET',
+            dataType: 'json',
+            xhrFields: {
+                withCredentials: true
+            },
+            success: function(response) {
+                console.log("User data from session:", response);
+                username = response.username;
+                processOrder(username);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.error("Error fetching session data:", textStatus, errorThrown);
+            }
+        });
     });
 
-    function processOrder() {
+    function processOrder(username) {
         let addressOption = $("input[name='address-option']:checked").val();
         let paymentOption = $("input[name='payment-option']:checked").val();
 
-        // Create the formData object to hold order details
         formData.address = addressOption === "new" ? {
             firstName: $("#first-name").val() || null,
             lastName: $("#last-name").val() || null,
             streetAddress: $("#street-address").val() || null,
             apartment: $("#apartment").val() || null,
             city: $("#city").val() || null,
-            province: $("#province").val() || null
-        } : null;
+            province: $("#province").val() || null,
+            postalCode: $("#postal-code").val() || null,
+            country: $("#country").val() || null
+        } : existingAddress;
 
         formData.payment = paymentOption === "new" ? {
+            cardHolderName: $("#card-holder-name").val() || null,
             cardNumber: $("#card-number").val() || null,
-            expiryDate: $("#expiry-date").val() || null,
+            expirationDate: $("#expiry-date").val() || null,
             cvv: $("#cvv").val() || null
-        } : null;
+        } : existingPayment;
 
         formData.cart = formData.cart || {}; // Ensure the cart is attached to the order
+        formData.createdBy = username;
 
         console.log("Form Data being sent: ", JSON.stringify(formData, null, 2));
 
@@ -142,12 +163,8 @@ $(document).ready(function() {
             data: JSON.stringify(formData),
             contentType: "application/json",
             success: function(response) {
-                // On success, redirect to order confirmation page
-                if (response.orderNumber) {
-                    window.location.href = 'orderconfirmation.jsp?orderNumber=' + response.orderNumber;
-                } else {
-                    alert("Order was processed, but no order number was returned. Please check your order history.");
-                }
+				console.log(response);
+                window.location.href = 'orderconfirmation.jsp?orderNumber=' + response.id;
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 alert("Error processing your order. Please try again.");
