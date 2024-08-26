@@ -45,11 +45,11 @@
             <div id="addresses" class="section" style="display: none;">
                 <h2>My Addresses</h2>
                 <form id="addressForm">
-                    <label for="addressLine1">Street Address</label>
-                    <input type="text" id="streetAddress" name="addressLine1"><br>
+                    <label for="streetAddress">Street Address</label>
+                    <input type="text" id="streetAddress" name="streetAddress"><br>
                     
                     <label for="apt">Apt. / Suite</label>
-                    <input type="text" id="streetAddress" name="addressLine1"><br>
+                    <input type="text" id="apt" name="apt"><br>
 
                     <label for="city">City:</label>
                     <input type="text" id="city" name="city"><br>
@@ -102,13 +102,13 @@
                     withCredentials: true 
                 },
                 success: function(response) {
-                    $('#usernameDisplay').text(response.firstName);
+                    $('#usernameDisplay').text(response.username);
                     $('#firstName').val(response.firstName);
                     $('#lastName').val(response.lastName);
                     $('#username').val(response.username);
 
                     // Set the address fields
-                    $('#streetAddress').text(response.address.streetAddress);
+                    $('#streetAddress').val(response.address.streetAddress);
                     $('#apt').val(response.address.apartment);
                     $('#city').val(response.address.city);
                     $('#province').val(response.address.province);
@@ -165,8 +165,8 @@
                 };
 
                 $.ajax({
-                    url: 'http://localhost:8080/unisphereREST/rest/Users/updateAddress',
-                    method: 'POST',
+                    url: "http://localhost:8080/unisphereREST/rest/Users/updateAddress/" + $('#username').val(),
+                    method: 'PUT',
                     contentType: 'application/json',
                     data: JSON.stringify(updatedAddress),
                     success: function(response) {
@@ -183,13 +183,13 @@
                 var updatedPayment = {
                     cardHolderName: $('#cardHolderName').val(),
                     cardNumber: $('#cardNumber').val(),
-                    expiry: $('#expiry').val(),
+                    expirationDate: $('#expiry').val(),
                     cvv: $('#cvv').val()
                 };
 
                 $.ajax({
-                    url: 'http://localhost:8080/unisphereREST/rest/Users/updatePayment',
-                    method: 'POST',
+                    url: 'http://localhost:8080/unisphereREST/rest/Users/updatePayment/' + $('#username').val(),
+                    method: 'PUT',
                     contentType: 'application/json',
                     data: JSON.stringify(updatedPayment),
                     success: function(response) {

@@ -167,7 +167,8 @@ public class UserDAO extends DAO {
     }
 
     public void updateAddress(User user, Address updatedAddress) {
-        String query = "UPDATE Address SET address_line_1 = ?, address_line_2 = ?, city = ?, province = ?, postalcode = ?, country = ? WHERE id = ?";
+    	String query = "UPDATE Address SET street_address = ?, apt = ?, city = ?, province = ?, postalcode = ?, country = ? " +
+                "WHERE id = (SELECT address_id FROM User WHERE username = ?)";
 
         try (Connection connection = getConnection();
              PreparedStatement stmt = connection.prepareStatement(query)) {
@@ -178,8 +179,15 @@ public class UserDAO extends DAO {
             stmt.setString(4, updatedAddress.getProvince());
             stmt.setString(5, updatedAddress.getPostalCode());
             stmt.setString(6, updatedAddress.getCountry());
-            stmt.setInt(7, user.getAddress().getId());
+            stmt.setString(7, user.getUsername());
             stmt.executeUpdate();
+            
+            int rowsAffected = stmt.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("Address updated successfully. Rows affected: " + rowsAffected);
+            } else {
+                System.out.println("No address was updated.");
+            }
 
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -187,7 +195,8 @@ public class UserDAO extends DAO {
     }
 
     public void updatePayment(User user, Payment updatedPayment) {
-        String query = "UPDATE Payment SET card_holder_name = ?, card_number = ?, expiry = ?, cvv = ? WHERE id = ?";
+        String query = "UPDATE Payment SET card_holder_name = ?, card_number = ?, expiry = ?, cvv = ? "
+        		+ "WHERE id = (select payment_id FROM User WHERE username =  ?)";
 
         try (Connection connection = getConnection();
              PreparedStatement stmt = connection.prepareStatement(query)) {
@@ -196,8 +205,15 @@ public class UserDAO extends DAO {
             stmt.setString(2, updatedPayment.getCardNumber());
             stmt.setString(3, updatedPayment.getExpirationDate());
             stmt.setString(4, updatedPayment.getCvv());
-            stmt.setInt(5, user.getPayment().getId());
+            stmt.setString(5, user.getUsername());
             stmt.executeUpdate();
+            
+            int rowsAffected = stmt.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("Payment updated successfully. Rows affected: " + rowsAffected);
+            } else {
+                System.out.println("No payment was updated.");
+            }
 
         } catch (SQLException ex) {
             ex.printStackTrace();
