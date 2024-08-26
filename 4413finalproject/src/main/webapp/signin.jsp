@@ -84,6 +84,7 @@ $("#signinform").submit(function(e) {
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 // Handle errors
+               //window.location.href = 'profile.jsp';
                 console.error("Error fetching session data:", textStatus, errorThrown);
             }
         });

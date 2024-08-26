@@ -45,7 +45,7 @@
         <div class="items-container">
             <div class="item-box">
                 <div class="item-image">
-                    <img src="product-images/2.jpg" alt="Product 1">
+                    <img src="product-images/1.jpg" alt="Product 1">
                 </div>
                 <h3>Gel Pen Set</h3>
                 <p>$19.99</p>
@@ -53,7 +53,7 @@
             </div>
             <div class="item-box">
                 <div class="item-image">
-                    <img src="product-images/3.jpg" alt="Product 2">
+                    <img src="product-images/2.jpg" alt="Product 2">
                 </div>
                 <h3>Algorithms - Dasgupta</h3>
                 <p>$29.99</p>
@@ -61,7 +61,7 @@
             </div>
             <div class="item-box">
                 <div class="item-image">
-                    <img src="product-images/4.jpg" alt="Product 3">
+                    <img src="product-images/3.jpg" alt="Product 3">
                 </div>
                 <h3>I heart UniSphere Cap</h3>
                 <p>$39.99</p>
@@ -69,7 +69,7 @@
             </div>
             <div class="item-box">
                 <div class="item-image">
-                    <img src="product-images/5.jpg" alt="Product 4">
+                    <img src="product-images/4.jpg" alt="Product 4">
                 </div>
                 <h3>BIC Mechanical Pencils</h3>
                 <p>$49.99</p>

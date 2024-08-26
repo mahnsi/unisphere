@@ -65,10 +65,11 @@ public class AuthService {
         return Response.ok("{\"message\":\"Logged out successfully\"}").build();
     }
 
+    
     @GET
     @Path("/session")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getSessionUser(@Context HttpServletRequest request) {
+    public Response getsuSessionUser(@Context HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         if (session != null) {
             User user = (User) session.getAttribute("user");

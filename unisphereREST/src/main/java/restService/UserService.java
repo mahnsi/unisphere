@@ -61,6 +61,7 @@ public class UserService {
     @Produces(MediaType.APPLICATION_JSON)
     public Response createUser(User user) {
         // Check if the user with the same username or email already exists
+    	System.out.println("rest createUser");
         User existingUser = userDao.getUserByUsername(user.getUsername());
         if (existingUser != null) {
             return Response.status(Response.Status.CONFLICT)

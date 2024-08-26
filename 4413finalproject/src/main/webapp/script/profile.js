@@ -28,7 +28,7 @@ $(document).ready(function() {
                   $('#cvv').val(response.payment.cvv);
               },
               error: function(jqXHR, textStatus, errorThrown) {
-                  console.error("Error fetching session data:", textStatus, errorThrown);
+                  console.error("profile.js: Error fetching session data:", textStatus, errorThrown);
                   window.location.href = 'signin.jsp';
               }
           });
