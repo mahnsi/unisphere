@@ -9,7 +9,8 @@ public class Order {
 	private Address address;
 	private Payment payment;
 	private Date ordered_on;
-	
+	private String orderNumber;  
+
 	public Order(Cart cart) {
 		this.cart = cart;
 	}
@@ -52,6 +53,15 @@ public class Order {
 	
 	public void setOrderedOn(Date ordered_on) {
 		this.ordered_on = ordered_on;
+	}
+
+	// Getter and Setter for Order Number
+	public String getOrderNumber() {
+		return orderNumber;
+	}
+
+	public void setOrderNumber(String orderNumber) {
+		this.orderNumber = orderNumber;
 	}
 
 	public int getId() {
