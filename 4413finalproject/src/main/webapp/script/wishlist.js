@@ -8,10 +8,10 @@ $(document).ready(function() {
 
     // Function to fetch and display wishlist items
     function fetchWishlistItems() {
-        const username = '<%= session.getAttribute("username") %>'; // Fetch the username from the session
+        const user = '<%= session.getAttribute("user") %>'; // Fetch the username from the session
 
         $.ajax({
-            url: "http://localhost:8080/unisphereREST/rest/Wishlist/getWishlistByUsername/" + username,
+            url: "http://localhost:8080/unisphereREST/rest/Wishlist/getWishlistByUsername/" + user.username,
             method: 'GET',
             success: function(wishlist) {
                 let wishlistItems = wishlist.items;
@@ -55,10 +55,10 @@ $(document).ready(function() {
 
     // Function to remove an item from the wishlist
     function removeWishlistItem(productId) {
-        const username = '<%= session.getAttribute("username") %>'; // Fetch the username from the session
+        const user = '<%= session.getAttribute("user") %>'; // Fetch the username from the session
 
         $.ajax({
-            url: 'http://localhost:8080/unisphereREST/rest/Wishlist/RemoveFromWishlist/' + username + '/' + productId,
+            url: 'http://localhost:8080/unisphereREST/rest/Wishlist/RemoveFromWishlist/' + user.username + '/' + productId,
             method: 'DELETE',
             success: function(response) {
                 console.log("Product removed from wishlist: " + productId);

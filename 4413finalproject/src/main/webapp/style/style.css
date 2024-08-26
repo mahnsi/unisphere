@@ -10,6 +10,10 @@ body {
     font-family: Arial, sans-serif;
 }
 
+.wishlist-icon {
+    display: none; /* Hide the icon by default */
+}
+
 header {
     width: 100%;
     background-color: #f8f8f8;

@@ -1,47 +1,46 @@
 <!DOCTYPE html>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-<link rel="stylesheet" href="style/style.css">
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="style/style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>UNISphere</title>
+</head>
+<body>
 <header>
     <div class="promo-banner">Summer Sale 30% OFF New User</div>
     <div class="navbar">
-    
-		<div class="logo">
-		<a href="home.jsp" class="logo">
-		UNISphere
-		</a>
-		</div>
-	
+        <div class="logo">
+            <a href="home.jsp" class="logo">UNISphere</a>
+        </div>
         
         <form class="search-form" method="get" action="catalogue.jsp">
             <input type="text" name="search" placeholder="Search" class="search-bar">
         </form>
         <div class="icons">
-		    <a href="profile.jsp" class="icon user-icon">
-		        <i class="fas fa-user"></i>
-		    </a>
-		    <a href="wishlist.jsp" class="icon wishlist-icon">
-		        <i class="fas fa-heart"></i>
-		    </a>
-		    <a href="cart.jsp" class="icon cart-icon">
-		        <i class="fas fa-shopping-cart"></i>
-		    </a>
-		</div>
-
-
+            <a href="profile.jsp" class="icon user-icon">
+                <i class="fas fa-user"></i>
+            </a>
+            <a href="wishlist.jsp" class="icon wishlist-icon">
+                <i class="fas fa-heart"></i>
+            </a>
+            <a href="cart.jsp" class="icon cart-icon">
+                <i class="fas fa-shopping-cart"></i>
+            </a>
+        </div>
     </div>
     <nav>
         <form class="nav-form" method="get" action="catalogue.jsp">
-		    <ul class="nav-links">
-		        <li><button type="submit" name="category" value="All" class="nav-button">Shop All</button></li>
-		        <li><button type="submit" name="category" value="Merchandise" class="nav-button">Merchandise</button></li>
-		        <li><button type="submit" name="category" value="Supplies" class="nav-button">Supplies</button></li>
-		        <li><button type="submit" name="category" value="Books" class="nav-button">Books</button></li>
-		        <!-- Change the Offers button to a link -->
-		        <li><a href="offers.jsp" class="nav-button">Offers</a></li>
-		    </ul>
-		</form>
-
+            <ul class="nav-links">
+                <li><button type="submit" name="category" value="All" class="nav-button">Shop All</button></li>
+                <li><button type="submit" name="category" value="Merchandise" class="nav-button">Merchandise</button></li>
+                <li><button type="submit" name="category" value="Supplies" class="nav-button">Supplies</button></li>
+                <li><button type="submit" name="category" value="Books" class="nav-button">Books</button></li>
+                <li><a href="offers.jsp" class="nav-button">Offers</a></li>
+            </ul>
+        </form>
     </nav>
 </header>
 <script>
@@ -51,14 +50,17 @@ $(document).ready(function() {
         method: 'GET',
         dataType: 'json',
         success: function(data) {
+        	$('.wishlist-icon').show();
             if (data.isAdmin) {
                 $('.icons').prepend('<a href="admn.jsp" class="icon tool-icon"><i class="fas fa-toolbox"></i></a>');
-                console.log("admi");
             }
         },
         error: function(xhr, status, error) {
+        	$('.wishlist-icon').hide();
             console.error('Error fetching session data:', error);
         }
     });
 });
 </script>
+</body>
+</html>

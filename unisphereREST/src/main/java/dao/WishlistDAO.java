@@ -19,7 +19,7 @@ public class WishlistDAO extends DAO {
     public Wishlist getWishlistByUsername(String username) {
         Wishlist wishlist = new Wishlist();
         try {
-            String query = "SELECT p.* FROM WISHLIST_ITEM wi JOIN PRODUCTS p ON wi.product_id = p.id WHERE wi.saved_by = ?";
+            String query = "SELECT p.* FROM WISHLIST_ITEM wi JOIN PRODUCT p ON wi.product_id = p.id WHERE wi.saved_by = ?";
             connection = getConnection();
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, username);
@@ -52,10 +52,10 @@ public class WishlistDAO extends DAO {
         return wishlist;
     }
 
-    public void insertIntoWishlist(Product product, String username) {
+    public int insertIntoWishlist(Product product, String username) {
         try {
             connection = getConnection();
-
+            int rowsInserted = 0;
             String checkQuery = "SELECT COUNT(*) FROM WISHLIST_ITEM WHERE saved_by = ? AND product_id = ?";
             PreparedStatement checkStmt = connection.prepareStatement(checkQuery);
             checkStmt.setString(1, username);
@@ -64,14 +64,14 @@ public class WishlistDAO extends DAO {
 
             if (rs.next() && rs.getInt(1) > 0) {
                 System.out.println("Product already in the wishlist");
-                return;  // Product already in the wishlist
+                return -1;  // Product already in the wishlist
             }
 
             String insertQuery = "INSERT INTO WISHLIST_ITEM (saved_by, product_id) VALUES (?, ?)";
             PreparedStatement insertStmt = connection.prepareStatement(insertQuery);
             insertStmt.setString(1, username);
             insertStmt.setInt(2, product.getId());
-            int rowsInserted = insertStmt.executeUpdate();
+            rowsInserted = insertStmt.executeUpdate();
 
             if (rowsInserted > 0) {
                 System.out.println("Product added to wishlist: " + product.getTitle());
@@ -83,6 +83,7 @@ public class WishlistDAO extends DAO {
         } finally {
             closeConnection(connection);
         }
+        return 1;
     }
 
     public void removeFromWishlist(String username, int productId) {
