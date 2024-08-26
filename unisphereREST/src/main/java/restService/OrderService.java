@@ -54,7 +54,7 @@ public class OrderService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Order getOrderbyId(@PathParam("id") int id){
 		
-		Order order = orderDao.getOrderbyId(id);
+		Order order = orderDao.getOrderById(id);
 		return order;
 		
 		
