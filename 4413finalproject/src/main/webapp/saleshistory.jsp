@@ -31,7 +31,7 @@
             // Function to fetch orders and display them
             function fetchOrders() {
                 $.ajax({
-                    url: 'http://localhost:8080/unisphereREST/rest/Orders/',
+                    url: 'http://localhost:8080/rest/Orders/',
                     method: 'GET',
                     dataType: 'json',
                     success: function(data) {

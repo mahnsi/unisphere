@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    const apiUrl = "http://localhost:8080/unisphereREST/rest/Products";
+    const apiUrl = "http://localhost:8080/rest/Products";
     
     fetchProducts();
     fetchCategories();
@@ -98,7 +98,7 @@ $(document).ready(function() {
 
     function fetchCategories() {
         $.ajax({
-            url: 'http://localhost:8080/unisphereREST/rest/Products/getAllCategories',
+            url: 'http://localhost:8080/rest/Products/getAllCategories',
             method: 'GET',
             dataType: 'json',
             success: function(categories) {
@@ -118,7 +118,7 @@ $(document).ready(function() {
 
     function fetchSubcategories(categoryId) {
         $.ajax({
-            url: "http://localhost:8080/unisphereREST/rest/Products/getSubcategoriesByCategory/" + $('#category').val(),
+            url: "http://localhost:8080/rest/Products/getSubcategoriesByCategory/" + $('#category').val(),
             method: 'GET',
             dataType: 'json',
             success: function(subcategories) {
@@ -137,7 +137,7 @@ $(document).ready(function() {
 
     function updateInventory(productId, quantity) {
         $.ajax({
-            url: "http://localhost:8080/unisphereREST/rest/Products/updateInventory/?id=" + productId +"&quantity="+ quantity,
+            url: "http://localhost:8080/rest/Products/updateInventory/?id=" + productId +"&quantity="+ quantity,
             method: 'PUT',
             success: function(response) {
             	$('#STOCKNUM').text(quantity);
@@ -162,7 +162,7 @@ $(document).ready(function() {
 
 	            // Send the image file to the server
 	            $.ajax({
-	                url: 'http://localhost:8080/unisphereREST/rest/Products/uploadImage',
+	                url: 'http://localhost:8080/rest/Products/uploadImage',
 	                method: 'POST',
 	                data: formData,
 	                contentType: false,

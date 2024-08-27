@@ -6,7 +6,7 @@ $(document).ready(function() {
     if (orderNumber) {
         // Fetch additional order details if needed
         $.ajax({
-            url: "http://localhost:8080/unisphereREST/rest/Orders/" + orderNumber,
+            url: "http://localhost:8080/rest/Orders/" + orderNumber,
             method: "GET",
             success: function(orderDetails) {
                 // Display additional order details if necessary

@@ -1,7 +1,7 @@
 $(document).ready(function() {
 	var addressid;
 	var paymentid;
-	let url = 'http://localhost:8080/unisphereREST/rest/Auth/session';
+	let url = 'http://localhost:8080/rest/Auth/session';
 	
 		function getQueryParam(param) {
 		        var urlParams = new URLSearchParams(window.location.search);
@@ -12,7 +12,7 @@ $(document).ready(function() {
 		console.log("admin mode: "  + isAdminMode);
 		
 		if (isAdminMode){
-			url = 'http://localhost:8080/unisphereREST/rest/Users/getAllUserInfo/' + getQueryParam('username');
+			url = 'http://localhost:8080/rest/Users/getAllUserInfo/' + getQueryParam('username');
 		}
 	
           // Get the current user information from the session
@@ -69,7 +69,7 @@ $(document).ready(function() {
               };
 
               $.ajax({
-                  url: 'http://localhost:8080/unisphereREST/rest/Users/updateUser',
+                  url: 'http://localhost:8080/rest/Users/updateUser',
                   method: 'PUT',
                   contentType: 'application/json',
                   data: JSON.stringify(updatedUser),
@@ -94,7 +94,7 @@ $(document).ready(function() {
               };
 
               $.ajax({
-                  url: "http://localhost:8080/unisphereREST/rest/Users/updateAddress/" + $('#username').val(),
+                  url: "http://localhost:8080/rest/Users/updateAddress/" + $('#username').val(),
                   method: 'PUT',
                   contentType: 'application/json',
                   data: JSON.stringify(updatedAddress),
@@ -119,7 +119,7 @@ $(document).ready(function() {
               };
 
               $.ajax({
-                  url: 'http://localhost:8080/unisphereREST/rest/Users/updatePayment/' + $('#username').val(),
+                  url: 'http://localhost:8080/rest/Users/updatePayment/' + $('#username').val(),
                   method: 'PUT',
                   contentType: 'application/json',
                   data: JSON.stringify(updatedPayment),
@@ -135,7 +135,7 @@ $(document).ready(function() {
           // Handle logout button click
           $('#logoutButton').click(function() {
               $.ajax({
-                  url: 'http://localhost:8080/unisphereREST/rest/Auth/logout', 
+                  url: 'http://localhost:8080/rest/Auth/logout', 
                   method: 'POST',
                   xhrFields: {
                       withCredentials: true 
@@ -169,7 +169,7 @@ $(document).ready(function() {
 
 	  function fetchOrders() {
 	      $.ajax({
-	          url: 'http://localhost:8080/unisphereREST/rest/Orders/getOrdersByUsername/' + $('#username').val(),
+	          url: 'http://localhost:8080/rest/Orders/getOrdersByUsername/' + $('#username').val(),
 	          method: 'GET',
 	          dataType: 'json',
 	          success: function(orders) {
@@ -196,7 +196,7 @@ $(document).ready(function() {
 	  
 	  function showOrderDetails(orderId) {
 	      $.ajax({
-	          url: 'http://localhost:8080/unisphereREST/rest/Orders/getOrderById/' + orderId,
+	          url: 'http://localhost:8080/rest/Orders/getOrderById/' + orderId,
 	          method: 'GET',
 	          dataType: 'json',
 	          success: function(order) {
