@@ -86,4 +86,5 @@ public class User {
     public void setPayment(Payment payment) {
         this.payment = payment;
     }
+
 }

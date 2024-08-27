@@ -1,10 +1,7 @@
 $(document).ready(function() {
     const apiUrl = "http://localhost:8080/unisphereREST/rest/Products";
     
-    // Fetch and display products
     fetchProducts();
-
-    // Fetch categories on page load
     fetchCategories();
 
     // Event handler for category selection
@@ -19,7 +16,7 @@ $(document).ready(function() {
 
     // Show the Add Product Form when the button is clicked
     $('#add-product-btn').on('click', function() {
-        $('#add-product-form').slideToggle(); // Toggle the visibility of the form
+        $('#add-product-form').slideToggle(); 
     });
 
     // Handle the submission of the new product form
@@ -73,6 +70,7 @@ $(document).ready(function() {
                                     '<h3>' + product.title + '</h3>' +
                                     '<p>Price: $' + product.price.toFixed(2) + '</p>' +
                                     '<p>Stock: <span id="STOCKNUM">' +  product.stock + '</span></p>' +
+									'<p>Sold: <span>' +  product.sold + '</span></p>' +
                                 '</a>' +
                                 '<label for="update-quantity-' + product.id + '">Update Stock:</label>' +
 								'<input id="update-quantity-' + product.id + '" class="update-quantity" type="number" min="0" value="1">'+

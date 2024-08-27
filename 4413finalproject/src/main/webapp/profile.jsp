@@ -35,7 +35,7 @@
                     <input type="text" id="lastName" name="lastName"><br>
 
                     <label for="username">Username:</label>
-                    <input type="text" id="username" name="username"><br>
+                    <input type="text" id="username" name="username" readonly><br>
 
                     <button type="button" id="updateButton">Update</button>
                     <p id="updateMessage" style="color: green; display: none;">Successfully updated</p>

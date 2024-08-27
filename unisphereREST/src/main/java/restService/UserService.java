@@ -2,6 +2,7 @@ package restService;
 
 import model.User;
 import model.Address;
+import model.Cart;
 import model.Payment;
 import dao.UserDAO;
 
@@ -22,6 +23,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import org.json.JSONObject;
 
 @Path("Users")
 public class UserService {
@@ -52,14 +55,16 @@ public class UserService {
     @GET
     @Path("/getAllUserInfo/{username}")
     @Produces(MediaType.APPLICATION_JSON)
-    public User getFullUserbyUsername(@PathParam("username") String uname) {
-        return userDao.getFullUserByUsername(uname);
+    public Response getFullUserbyUsername(@PathParam("username") String uname) {
+    	System.out.println("userservice getAllUserInfo called ");
+        User user = userDao.getFullUserByUsername(uname);
+        return Response.ok(user).build();
     }
     
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createUser(User user) {
+    public Response createUser(User user, @Context HttpServletRequest request) {
         // Check if the user with the same username or email already exists
     	System.out.println("rest createUser");
         User existingUser = userDao.getUserByUsername(user.getUsername());
@@ -69,6 +74,8 @@ public class UserService {
         }
 
         // Save the new user
+        userDao.setCart(user, getSessionCart(request));
+        
         boolean isCreated = userDao.insert(user);
         if (isCreated) {
             return Response.status(Response.Status.CREATED).entity(user).build();
@@ -77,30 +84,29 @@ public class UserService {
                            .entity("User could not be created").build();
         }
     }
-
+    
     @PUT
-    @Path("/update/{username}")
+    @Path("/updateUser")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateUser(@PathParam("username") String oldUsername, User updatedUser, @Context HttpServletRequest request) {
-        // Check if the user exists
-        User existingUser = userDao.getUserByUsername(oldUsername);
-        if (existingUser == null) {
-            return Response.status(Response.Status.NOT_FOUND).entity("{\"message\":\"User not found\"}").build();
+    public Response updateUser(String jsonInput) {
+        JSONObject json = new JSONObject(jsonInput);
+        String firstName = json.getString("firstName");
+        String lastName = json.getString("lastName");
+        String uname = json.getString("username");
+
+        User user = userDao.getFullUserByUsername(uname);
+            if (user != null) {
+                user.setFirstName(firstName);
+                user.setLastName(lastName);
+
+                userDao.update(uname, user);
+
+                return Response.ok(user).build();
+            } else {
+                return Response.status(Response.Status.UNAUTHORIZED).entity("No user in session").build();
+            }
         }
-
-        // Update the user information, including the username
-        userDao.update(oldUsername, updatedUser);
-
-        // Update the session with the new user details
-        HttpSession session = request.getSession(false);
-        if (session != null) {
-            session.setAttribute("user", updatedUser);
-        }
-
-        // Return a success response with the updated user information
-        return Response.ok(updatedUser).build();
-    }
 
     @PUT
     @Path("/updateAddress/{username}")
@@ -116,12 +122,6 @@ public class UserService {
         // Update the user's address
         user.setAddress(updatedAddress);
         userDao.updateAddress(user, updatedAddress);
-
-        // Update the session with the new address details
-        HttpSession session = request.getSession(false);
-        if (session != null) {
-            session.setAttribute("user", user);
-        }
 
         // Return a success response with the updated address information
         return Response.ok(updatedAddress).build();
@@ -142,11 +142,6 @@ public class UserService {
         user.setPayment(updatedPayment);
         userDao.updatePayment(user, updatedPayment);
 
-        // Update the session with the new payment details
-        HttpSession session = request.getSession(false);
-        if (session != null) {
-            session.setAttribute("user", user);
-        }
 
         // Return a success response with the updated payment information
         return Response.ok(updatedPayment).build();
@@ -169,6 +164,23 @@ public class UserService {
         } else {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("{\"message\":\"User could not be deleted\"}").build();
         }
+    }
+    
+    public Cart getSessionCart(@Context HttpServletRequest request) {
+        HttpSession session = request.getSession(false); // Get existing session
+        if(session == null) {
+            System.out.println("null session (getSessionCart)");
+            session = request.getSession(true); // Create a new session if none exists
+        }
+        Cart cart = (Cart) session.getAttribute("cart");
+
+        if (cart == null) {
+            System.out.println("active session, null cart - creating new cart");
+            cart = new Cart();
+            session.setAttribute("cart", cart);
+        }
+
+        return cart;
     }
 
     

@@ -2,6 +2,7 @@ package restService;
 
 import model.User;
 import model.Address;
+import model.Cart;
 import model.Payment;
 import dao.UserDAO;
 
@@ -83,39 +84,7 @@ public class AuthService {
             return Response.status(Response.Status.UNAUTHORIZED).entity("No session found").build();
         }
     }
-
-    @POST
-    @Path("/updateUser")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response updateUser(String jsonInput, @Context HttpServletRequest request) {
-        JSONObject json = new JSONObject(jsonInput);
-        String firstName = json.getString("firstName");
-        String lastName = json.getString("lastName");
-        String newUsername = json.getString("username");
-
-        HttpSession session = request.getSession(false);
-        if (session != null) {
-            User user = (User) session.getAttribute("user");
-            if (user != null) {
-                String oldUsername = user.getUsername();
-                user.setFirstName(firstName);
-                user.setLastName(lastName);
-                user.setUsername(newUsername);
-
-                userDao.update(oldUsername, user);
-
-                // Update the session with the new username
-                session.setAttribute("user", user);
-
-                return Response.ok(user).build();
-            } else {
-                return Response.status(Response.Status.UNAUTHORIZED).entity("No user in session").build();
-            }
-        } else {
-            return Response.status(Response.Status.UNAUTHORIZED).entity("No session found").build();
-        }
-    }
+    
 
     
 }

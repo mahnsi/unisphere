@@ -1,14 +1,36 @@
 $(document).ready(function() {
+	var addressid;
+	var paymentid;
+	let url = 'http://localhost:8080/unisphereREST/rest/Auth/session';
+	
+		function getQueryParam(param) {
+		        var urlParams = new URLSearchParams(window.location.search);
+		        return urlParams.get(param);
+		    }
+		
+		var isAdminMode = getQueryParam('mode') === 'admin';
+		console.log("admin mode: "  + isAdminMode);
+		
+		if (isAdminMode){
+			url = 'http://localhost:8080/unisphereREST/rest/Users/getAllUserInfo/' + getQueryParam('username');
+		}
+	
           // Get the current user information from the session
           $.ajax({
-              url: 'http://localhost:8080/unisphereREST/rest/Auth/session', 
+              url: url, 
               method: 'GET',
               dataType: 'json',
               xhrFields: {
                   withCredentials: true 
               },
               success: function(response) {
-                  $('#usernameDisplay').text(response.username);
+				if(isAdminMode){
+					$('#usernameDisplay').text(" admin. Viewing profile: " + response.username);
+				}
+				else{
+					$('#usernameDisplay').text(response.username);
+				}
+                  
                   $('#firstName').val(response.firstName);
                   $('#lastName').val(response.lastName);
                   $('#username').val(response.username);
@@ -26,6 +48,11 @@ $(document).ready(function() {
                   $('#cardNumber').val(response.payment.cardNumber);
                   $('#expiry').val(response.payment.expirationDate);
                   $('#cvv').val(response.payment.cvv);
+				  
+				  paymentid = response.payment.id;
+				  addressid = response.address.id;
+				  console.log(response.address.id);
+				  console.log(response.payment.id);
               },
               error: function(jqXHR, textStatus, errorThrown) {
                   console.error("profile.js: Error fetching session data:", textStatus, errorThrown);
@@ -42,17 +69,12 @@ $(document).ready(function() {
               };
 
               $.ajax({
-                  url: 'http://localhost:8080/unisphereREST/rest/Auth/updateUser',
-                  method: 'POST',
+                  url: 'http://localhost:8080/unisphereREST/rest/Users/updateUser',
+                  method: 'PUT',
                   contentType: 'application/json',
                   data: JSON.stringify(updatedUser),
                   success: function(response) {
-                      $('#usernameDisplay').text(updatedUser.firstName);
                       $('#updateMessage').show().delay(3000).fadeOut();
-
-                      // Update the username display
-                      $('#usernameDisplay').text(updatedUser.firstName);
-                      $('#username').val(updatedUser.username);
                   },
                   error: function(jqXHR, textStatus, errorThrown) {
                       console.error("Error updating user info:", textStatus, errorThrown);
@@ -67,7 +89,8 @@ $(document).ready(function() {
                   city: $('#city').val(),
                   province: $('#province').val(),
                   postalCode: $('#postalCode').val(),
-                  country: $('#country').val()
+                  country: $('#country').val(),
+				  id: addressid
               };
 
               $.ajax({
@@ -82,6 +105,7 @@ $(document).ready(function() {
                       console.error("Error updating address:", textStatus, errorThrown);
                   }
               });
+			  
           });
 
           // Handle the update payment button click
@@ -90,7 +114,8 @@ $(document).ready(function() {
                   cardHolderName: $('#cardHolderName').val(),
                   cardNumber: $('#cardNumber').val(),
                   expirationDate: $('#expiry').val(),
-                  cvv: $('#cvv').val()
+                  cvv: $('#cvv').val(),
+				  id: paymentid
               };
 
               $.ajax({
@@ -157,7 +182,7 @@ $(document).ready(function() {
 
 	              orders.forEach(function(order) {
 	                  $('#orderList').append(
-	                      `<li><a href="#" onclick="showOrderDetails(${order.id})">Order Number: ${order.id} - Total: $${order.cart.totalPrice}</a></li>`
+	                      `<li><a href="#" onclick="showOrderDetails(${order.id})">Order Number: ${order.id} - Total: $${order.total}</a></li>`
 	                  );
 	              });
 	          },
@@ -180,7 +205,7 @@ $(document).ready(function() {
 	              var orderHtml = `
 	                  <h3>Order Number: ${order.id}</h3>
 	                  <p><strong>Date:</strong> ${order.date}</p>
-	                  <p><strong>Total:</strong> $${order.cart.totalPrice}</p>
+	                  <p><strong>Total:</strong> $${order.total}</p>
 	                  <h4>Items:</h4>
 	                  <ul>`;
 

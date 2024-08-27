@@ -9,8 +9,8 @@ public class Order {
 	private Address address;
 	private Payment payment;
 	private Date ordered_on;
-    private String createdBy;  // New field to store the username of the user who created the order
-    private float total;  // Assuming there's a total field as well
+    private String createdBy; 
+    private float total; 
 
     // Constructors, getters, and setters...
 

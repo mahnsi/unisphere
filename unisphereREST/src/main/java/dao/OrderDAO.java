@@ -67,7 +67,7 @@ public class OrderDAO extends DAO {
                 product.setPrice(orderRs.getFloat("price"));
 
                 order.getCart().add(product);  // Add product to the order's cart
-
+                order.setTotal(orderRs.getFloat("total"));
                 orders.add(order);  // Add order to the list
             }
         } catch (SQLException e) {
@@ -129,7 +129,7 @@ public class OrderDAO extends DAO {
                     product.setPrice(orderRs.getFloat("price"));
 
                     order.getCart().add(product);  // Add product to the order's cart
-
+                    order.setTotal(orderRs.getFloat("total"));
                     orders.add(order);  // Add order to the list
                 }
             }
@@ -159,6 +159,7 @@ public class OrderDAO extends DAO {
                     order = new Order();
                     order.setId(orderId);
                     order.setCart(new Cart());  // Initialize the cart for this order
+                    order.setTotal(orderRs.getFloat("total"));
 
                     // Populate the Payment and Address objects
                     Payment payment = new Payment();
@@ -190,12 +191,14 @@ public class OrderDAO extends DAO {
                         product.setPrice(orderRs.getFloat("price"));
 
                         order.getCart().add(product);  // Add product to the order's cart
+                        order.getCart().updateQuantity(product.getId(), orderRs.getInt("quantity"));
                     } while (orderRs.next());
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();  // Proper error handling should be implemented
         }
+        
         return order;
     }
 
@@ -261,6 +264,7 @@ public class OrderDAO extends DAO {
             orderStmt.setInt(3, payment.getId());  // Use the generated payment ID
             orderStmt.setInt(4, address.getId());  // Use the generated address ID
             orderStmt.setFloat(5, order.getTotal());
+            System.out.println("order total dao : " + order.getTotal());
             int orderRowsAffected = orderStmt.executeUpdate();
             
             int orderId;
@@ -284,9 +288,10 @@ public class OrderDAO extends DAO {
             for (CartItem item : order.getCart().getItems()) {
                 itemStmt.setInt(1, order.getId());
                 itemStmt.setInt(2, item.getProduct().getId());
+                System.out.println("ordereditemquantity:"+item.getQuantity());
                 itemStmt.setInt(3, item.getQuantity());
                 itemStmt.addBatch();
-                updateProductQuantity(item.getProduct().getId(), item.getProduct().getStock() - item.getQuantity());
+                updateProductQuantity(item.getProduct().getId(), item.getProduct().getStock() - item.getQuantity(), item.getProduct().getSold() + item.getQuantity());
             }
             int[] itemRowsAffected = itemStmt.executeBatch();
             System.out.println("Ordered items insert affected " + itemRowsAffected.length + " row(s)");
@@ -300,18 +305,19 @@ public class OrderDAO extends DAO {
         }
     }
     
-    public boolean updateProductQuantity(int id, int quantity) {
+    public boolean updateProductQuantity(int id, int x, int y) {
 	    // Define the SQL update query
 		System.out.println("orderDAO updateProductQuantity called");
-	    String sql = "UPDATE product SET inventory_count = ? WHERE id = ?";
+		String sql = "UPDATE product SET inventory_count = ?, purchase_count = ? WHERE id = ?";
 
 	    // Use try-with-resources to ensure resources are closed
 	    try (Connection connection = getConnection(); // Method to obtain a database connection
 	         PreparedStatement statement = connection.prepareStatement(sql)) {
 
 	        // Set parameters for the SQL query
-	        statement.setInt(1, quantity); // Set the quantity
-	        statement.setInt(2, id); // Set the product ID
+	        statement.setInt(1, x); // Set the inventory count
+	        statement.setInt(2, y); // Set sold count
+	        statement.setInt(3, id); // Set the product ID
 
 	        // Execute the update
 	        int rowsAffected = statement.executeUpdate();

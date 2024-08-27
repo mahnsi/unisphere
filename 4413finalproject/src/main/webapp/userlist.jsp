@@ -45,8 +45,6 @@ $(document).ready(function() {
                             '<p>Email: <span class="email-display">' + user.email + '</span>' +
                             '<input type="email" class="email-edit" value="' + user.email + '" style="display:none;" /></p>' +
                             '<p>Role: ' + (user.isAdmin ? 'Admin' : 'User') + '</p>' +
-                            '<button onclick="toggleEditEmail(\'' + user.username + '\')">Edit</button>' +
-                            '<button onclick="saveEmail(\'' + user.username + '\')" style="display:none;">Save</button>' +
                             '<button onclick="deleteUser(\'' + user.username + '\')">Delete</button>' +
                         '</div>';
                     
@@ -64,37 +62,6 @@ $(document).ready(function() {
         }
     });
 });
-
-// Function to toggle between display and edit mode for email
-function toggleEditEmail(username) {
-    const userItem = $('.user-item[data-username="' + username + '"]');
-    userItem.find('.email-display').toggle();
-    userItem.find('.email-edit').toggle();
-    userItem.find('button:contains("Edit")').toggle();
-    userItem.find('button:contains("Save")').toggle();
-}
-
-function saveEmail(username) {
-    const userItem = $('.user-item[data-username="' + username + '"]');
-    const newEmail = userItem.find('.email-edit').val();
-
-    $.ajax({
-        url: 'http://localhost:8080/unisphereREST/rest/Users/' + username,
-        method: 'PUT',
-        contentType: 'application/json',
-        data: JSON.stringify({ email: newEmail }),
-        success: function(response) {
-            console.log("Email updated for user: " + username);
-            userItem.find('.email-display').text(newEmail);
-            toggleEditEmail(username);
-        },
-        error: function(error) {
-            console.error('Error updating email:', error);
-        }
-    });
-}
-
-
 
 // Function to delete a user
 function deleteUser(username) {

@@ -66,13 +66,14 @@ public class CartService {
          }
         
         User user = getSessionUser(request);
+        cart.add(product);
         if (user != null) {
             cartDAO.addToCart(user.getUsername(), product);
             System.out.println("success add to cart -from service");
             return Response.ok("Product added to user cart").build();
         } 
             
-        cart.add(product);
+        
         return Response.ok("Product added to session cart").build();
     }
 

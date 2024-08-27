@@ -73,7 +73,7 @@ public class Product {
     }
     
     public int getSold() {
-        return this.stock;
+        return this.sold;
     }
     
     public void setSold(int s) {
