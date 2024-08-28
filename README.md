@@ -6,6 +6,8 @@
 
 Maven zip file uploaded , can import and run with additional path changes.
 
+**- step 1: clone this repo**
+
 1. RUN the UnisphereREST using Tomcat 9.0. (backend)
 2. RUN the EECS4413finalproject folder. (frontend)
 3. The website should run.
