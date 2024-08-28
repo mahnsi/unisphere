@@ -7,7 +7,7 @@ $(document).ready(function() {
     if (itemId) {
         // Fetch the product data from the server
         $.ajax({
-            url: 'http://localhost:8080/rest/Products/getProductById/' + itemId,
+            url: 'http://localhost:8080/unisphereREST/rest/Products/getProductById/' + itemId,
             method: 'GET',
             success: function(product) {
                 // Dynamically update the page with the product data
@@ -21,7 +21,7 @@ $(document).ready(function() {
                 $('#add-to-cart-btn').on('click', function() {
                     // Fetch the current user session
                     $.ajax({
-                        url: 'http://localhost:8080/rest/Cart/addToCart',
+                        url: 'http://localhost:8080/unisphereREST/rest/Cart/addToCart',
                         method: 'POST',
                         contentType: 'application/json',
                         data: JSON.stringify(product),
@@ -45,7 +45,7 @@ $(document).ready(function() {
                 $('.wishlistButton').on('click', function() {
                     // Add the product to the wishlist
 					$.ajax({
-					    url: 'http://localhost:8080/rest/Wishlist/AddToWishlist/' + user.username,
+					    url: 'http://localhost:8080/unisphereREST/rest/Wishlist/AddToWishlist/' + user.username,
 					    method: 'POST',
 					    contentType: 'application/json',
 					    data: JSON.stringify(product),

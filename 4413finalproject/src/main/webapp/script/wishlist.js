@@ -11,7 +11,7 @@ $(document).ready(function() {
         const user = '<%= session.getAttribute("user") %>'; // Fetch the username from the session
 
         $.ajax({
-            url: "http://localhost:8080/rest/Wishlist/getWishlistByUsername/" + user.username,
+            url: "http://localhost:8080/unisphereREST/rest/Wishlist/getWishlistByUsername/" + user.username,
             method: 'GET',
             success: function(wishlist) {
                 let wishlistItems = wishlist.items;
@@ -58,7 +58,7 @@ $(document).ready(function() {
         const user = '<%= session.getAttribute("user") %>'; // Fetch the username from the session
 
         $.ajax({
-            url: 'http://localhost:8080/rest/Wishlist/RemoveFromWishlist/' + user.username + '/' + productId,
+            url: 'http://localhost:8080/unisphereREST/rest/Wishlist/RemoveFromWishlist/' + user.username + '/' + productId,
             method: 'DELETE',
             success: function(response) {
                 console.log("Product removed from wishlist: " + productId);

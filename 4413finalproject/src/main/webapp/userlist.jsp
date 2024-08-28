@@ -22,7 +22,7 @@
 <script>
 $(document).ready(function() {
     // URL of the endpoint to fetch users
-    const apiUrl = "http://localhost:8080/rest/Users";
+    const apiUrl = "http://localhost:8080/unisphereREST/rest/Users";
     
     console.log("Script running"); // Check if the script is running
     
@@ -66,7 +66,7 @@ $(document).ready(function() {
 // Function to delete a user
 function deleteUser(username) {
     $.ajax({
-        url: 'http://localhost:8080/rest/Users/' + username,  // Adjust the URL to match your REST service
+        url: 'http://localhost:8080/unisphereREST/rest/Users/' + username,  // Adjust the URL to match your REST service
         method: 'DELETE',
         success: function(response) {
             console.log("User deleted: " + username);

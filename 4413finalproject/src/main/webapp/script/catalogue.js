@@ -7,7 +7,7 @@ $(document).ready(function() {
     // Populate subcategories based on the selected category
     if (category) {
         $.ajax({
-            url: "http://localhost:8080/rest/Products/getSubcategoriesByCategory/" + encodeURIComponent(category),
+            url: "http://localhost:8080/unisphereREST/rest/Products/getSubcategoriesByCategory/" + encodeURIComponent(category),
             type: "GET",
             dataType: "json",
             success: function(subcategories) {
@@ -39,10 +39,10 @@ $(document).ready(function() {
     // Load products based on the selected subcategory or all products
     function loadProducts(sortval) {
         var subcategory = $("#subcategory").val();
-        var url = "http://localhost:8080/rest/Products/";
+        var url = "http://localhost:8080/unisphereREST/rest/Products/";
 		
 		if(search){
-			url="http://localhost:8080/rest/Products/getProductsByKeyword/" + encodeURIComponent(search);
+			url="http://localhost:8080/unisphereREST/rest/Products/getProductsByKeyword/" + encodeURIComponent(search);
 		}
 
         if (category && category !== 'All') {
@@ -56,7 +56,7 @@ $(document).ready(function() {
 
         if (subcategory && subcategory !== 'all') {
         	console.log("subcatselected");
-            url = "http://localhost:8080/rest/Products/getProductsBySubcategory/" + encodeURIComponent(subcategory);
+            url = "http://localhost:8080/unisphereREST/rest/Products/getProductsBySubcategory/" + encodeURIComponent(subcategory);
             console.log(url);
         } else {
             url += (category && category !== 'All') ? "/" : "";
@@ -64,7 +64,7 @@ $(document).ready(function() {
 		
 		if (sortval) {
 
-		         url = `http://localhost:8080/rest/Products/sort/${sortval}`
+		         url = `http://localhost:8080/unisphereREST/rest/Products/sort/${sortval}`
 
 			}
 

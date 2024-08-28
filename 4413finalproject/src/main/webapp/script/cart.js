@@ -5,7 +5,7 @@ $(document).ready(function() {
 
 		        // Check if the user is authenticated
 		        $.ajax({
-		            url: 'http://localhost:8080/rest/Auth/session', 
+		            url: 'http://localhost:8080/unisphereREST/rest/Auth/session', 
 		            method: 'GET',
 		            success: function(response) {
 
@@ -22,7 +22,7 @@ $(document).ready(function() {
         // function to display cart items for the session
         function fetchCartItems() {
             $.ajax({
-                url: "http://localhost:8080/rest/Cart/getCart/",
+                url: "http://localhost:8080/unisphereREST/rest/Cart/getCart/",
                 method: 'GET',
                 success: function(cart) {
                     let cartItems = cart.items;
@@ -87,7 +87,7 @@ $(document).ready(function() {
         //functions to dynamically update views based on selection
         function removeCartItem(productId) {
             $.ajax({
-                url: 'http://localhost:8080/rest/Cart/removeFromCart/',
+                url: 'http://localhost:8080/unisphereREST/rest/Cart/removeFromCart/',
                 method: 'PUT',
                 contentType: 'text/plain',
                 data: productId.toString(),
@@ -110,7 +110,7 @@ $(document).ready(function() {
                 return;
         	}
             $.ajax({
-                url: 'http://localhost:8080/rest/Cart/updateQuantity/',
+                url: 'http://localhost:8080/unisphereREST/rest/Cart/updateQuantity/',
                 method: 'PUT',
                 contentType: 'application/json',
                 data: JSON.stringify({

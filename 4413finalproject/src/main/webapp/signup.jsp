@@ -68,7 +68,7 @@ $("#signUpForm").submit(function(e) {
     
     // Register the user
     $.ajax({
-        url: "http://localhost:8080/rest/Users",
+        url: "http://localhost:8080/unisphereREST/rest/Users",
         type: 'POST',
         contentType: 'application/json',
         data: JSON.stringify(userData), 
@@ -77,7 +77,7 @@ $("#signUpForm").submit(function(e) {
 
             //after creation, log the new user in to set session and redirect to profile
             $.ajax({
-                url: "http://localhost:8080/rest/Auth/login",
+                url: "http://localhost:8080/unisphereREST/rest/Auth/login",
                 type: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify({

@@ -48,7 +48,7 @@ $("#signinform").submit(function(e) {
     };
     
     $.ajax({
-    	url: "http://localhost:8080/rest/Auth/login",
+    	url: "http://localhost:8080/unisphereREST/rest/Auth/login",
         type: 'POST',
         contentType: 'application/json',
         data: JSON.stringify(credentials), 
@@ -73,7 +73,7 @@ $("#signinform").submit(function(e) {
     $(document).ready(function() {
         // Make the AJAX request to the backend to get the session data
         $.ajax({
-            url: 'http://localhost:8080/rest/Auth/session',
+            url: 'http://localhost:8080/unisphereREST/rest/Auth/session',
             method: 'GET',
             dataType: 'json',
             xhrFields: {

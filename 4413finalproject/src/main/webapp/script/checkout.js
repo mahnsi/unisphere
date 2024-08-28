@@ -6,7 +6,7 @@ $(document).ready(function() {
 
     // Fetch the cart data and update the order summary
     $.ajax({
-        url: 'http://localhost:8080/rest/Cart/getCart',
+        url: 'http://localhost:8080/unisphereREST/rest/Cart/getCart',
         method: 'GET',
         dataType: 'json',
         success: function(cart) {
@@ -21,7 +21,7 @@ $(document).ready(function() {
 
     // Fetch user session data
     $.ajax({
-        url: 'http://localhost:8080/rest/Auth/session',
+        url: 'http://localhost:8080/unisphereREST/rest/Auth/session',
         method: 'GET',
         dataType: 'json',
         xhrFields: {
@@ -69,7 +69,7 @@ $(document).ready(function() {
 
     function fetchExistingAddressandPayment(username) {
         $.ajax({
-            url: "http://localhost:8080/rest/Users/getAllUserInfo/" + username,
+            url: "http://localhost:8080/unisphereREST/rest/Users/getAllUserInfo/" + username,
             method: "GET",
             success: function(response) {
                 console.log("Success fetching all user info");
@@ -126,7 +126,7 @@ $(document).ready(function() {
     // Handle the place order button click
     $("#place-order-button").click(function() {
         $.ajax({
-            url: 'http://localhost:8080/rest/Auth/session',
+            url: 'http://localhost:8080/unisphereREST/rest/Auth/session',
             method: 'GET',
             dataType: 'json',
             xhrFields: {
@@ -204,7 +204,7 @@ $(document).ready(function() {
 
         // Send the order data to the server
         $.ajax({
-            url: "http://localhost:8080/rest/Orders",
+            url: "http://localhost:8080/unisphereREST/rest/Orders",
             method: "POST",
             data: JSON.stringify(formData),
             contentType: "application/json",
