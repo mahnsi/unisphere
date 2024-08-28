@@ -4,8 +4,7 @@
 
 
 
-Maven zip file uploaded , can import and run with additional path changes.
-
+Maven zip file uploaded on eclass , can import and run with additional path changes.
 
 
 1. RUN the UnisphereREST using Tomcat 9.0. (backend)
@@ -15,13 +14,13 @@ Maven zip file uploaded , can import and run with additional path changes.
 5. Images are already uploaded into project file, no need to change pathways. They should upload on their own.
 
 
+**NOTE: --> Github code contains a few last minute fixes and will run better than the file submitted on e-class
+**- step 1: clone this repo**
 
+**
 
 -------------------------------------------------------
 
 NOTE: The deployment ran into some issues. If deployment is able to work we will add another README with the link , as advised by the professor.
 
-
---> Github code contains a few last minute fixes and will run better than the file submitted on e-class
-**- step 1: clone this repo**
 
