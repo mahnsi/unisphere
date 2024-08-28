@@ -18,3 +18,5 @@ Maven zip file uploaded , can import and run with additional path changes.
 -------------------------------------------------------
 
 NOTE: The deployment ran into some issues. If deployment is able to work we will add another README with the link , as advised by the professor.
+
+--> Github code contains a few last minute fixes and will run better than the file submitted on e-class
