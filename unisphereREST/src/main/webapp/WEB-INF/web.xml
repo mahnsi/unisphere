@@ -22,7 +22,7 @@
   </servlet>
 <servlet-mapping>
    <servlet-name>JerseyNew</servlet-name>
-    <url-pattern>/rest/*</url-pattern>
+    <url-pattern>/unisphereREST/rest/*</url-pattern>
   </servlet-mapping>
   
 </web-app>
